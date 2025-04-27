@@ -11,5 +11,12 @@ public class Project {
       private  File zipDirectory; // öğrencilerin ziplerinin bulunduğu klasör
       private  List<StudentSubmission> submissions;
 
+      public void addSubmission(StudentSubmission submission) {
+            if(submissions == null){
+                  throw new IllegalStateException("Submissions list is not initialized.");
+            }
+            submissions.add(submission);
+      }
+
 
 }

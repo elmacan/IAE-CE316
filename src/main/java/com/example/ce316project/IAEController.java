@@ -20,13 +20,11 @@ public class IAEController extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Label label=new Label("elma");
 
-        VBox vbox=new VBox(20);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().add(label);
+        FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
 
-        Scene scene=new Scene(vbox,400,300);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
         stage.show();
 
