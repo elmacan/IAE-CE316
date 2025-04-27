@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ce316project.IAEController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TableView fx:id="studentTable" prefWidth="600" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="studentNumberColumn" text="Student Number" prefWidth="150"/>
+            <TableColumn fx:id="compileStatusColumn" text="Compile Status" prefWidth="150"/>
+            <TableColumn fx:id="runStatusColumn" text="Run Status" prefWidth="150"/>
+            <TableColumn fx:id="outputMatchColumn" text="Output Match" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button fx:id="helpButton" text="Help"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="backButton" text="Back"/>
+    </HBox>
+
+</VBox>
