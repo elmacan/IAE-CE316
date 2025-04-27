@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ce316project.IAEController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+
+        <VBox spacing="10" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+            <children>
+                <GridPane hgap="10" vgap="10" alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="150"/>
+                        <ColumnConstraints minWidth="400"/>
+                        <ColumnConstraints minWidth="100"/>
+                    </columnConstraints>
+
+                    <!-- Project Name -->
+                    <Label text="Project Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="projectNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <!-- Select Configuration -->
+                    <Label text="Select Configuration:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="configurationComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <!-- Source File -->
+                    <Label text="Source File:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="sourceFileField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Button text="Browse" fx:id="browseSourceButton" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+
+                    <!-- Arguments -->
+                    <Label text="Arguments:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextArea fx:id="argumentsArea" prefRowCount="5" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    <Button text="Browse" fx:id="browseArgumentsButton" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+
+                    <!-- Expected Output File -->
+                    <Label text="Expected Output File:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="expectedOutputFileField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    <Button text="Browse" fx:id="browseOutputButton" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+                </GridPane>
+
+
+                <Pane VBox.vgrow="ALWAYS"/>
+
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <padding>
+                        <Insets top="20" right="20" bottom="30" left="10"/>
+                    </padding>
+                    <Button text="Cancel" fx:id="cancelButton"/>
+                    <Button text="Compare And Run" fx:id="compareRunButton"/>
+                    <Button text="Create Project" fx:id="createProjectButton"/>
+                </HBox>
+            </children>
+            <padding>
+                <Insets top="40" right="10" bottom="20" left="10"/>
+            </padding>
+        </VBox>
+    </children>
+
+
+</AnchorPane>

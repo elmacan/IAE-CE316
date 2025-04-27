@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ce316project.IAEController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <children>
+        <BorderPane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+
+            <center>
+                <VBox spacing="15" alignment="CENTER">
+                    <padding>
+                        <Insets top="50" right="20" bottom="20" left="20"/>
+                    </padding>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Language:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <ComboBox fx:id="languageComboBox" prefWidth="250">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Java"/>
+                                    <String fx:value="Python"/>
+                                    <String fx:value="C++"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </HBox>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Language Type:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <ComboBox fx:id="languageTypeComboBox" prefWidth="250">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Static"/>
+                                    <String fx:value="Dynamic"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </HBox>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Compiler Path:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <Button text="Browse" fx:id="browseCompilerButton"/>
+                        <TextField fx:id="compilerPathField" text="javac" prefWidth="200"/>
+                    </HBox>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Parameters:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <TextField fx:id="sourceFileField" text="Main.java" prefWidth="300"/>
+                    </HBox>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Runner Command:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <TextField fx:id="runnerCommandField" text="java" prefWidth="300"/>
+                    </HBox>
+
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Comparator Command:" prefWidth="150" alignment="CENTER_RIGHT"/>
+                        <TextField fx:id="comparatorCommandField" text="diff" prefWidth="300"/>
+                    </HBox>
+                </VBox>
+            </center>
+
+
+            <bottom>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <padding>
+                        <Insets top="10" right="20" bottom="30" left="10"/>
+                    </padding>
+                    <Button text="Cancel" fx:id="cancelButton"/>
+                    <Button text="Save Config" fx:id="saveConfigButton"/>
+                </HBox>
+            </bottom>
+
+        </BorderPane>
+    </children>
+
+
+</AnchorPane>
