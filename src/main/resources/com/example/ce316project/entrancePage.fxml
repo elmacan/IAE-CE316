@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.IAEController"
+            fx:controller="com.example.ce316project.EntranceController"
             prefHeight="400.0" prefWidth="600.0">
     <VBox spacing="15.0" alignment="CENTER" layoutX="100.0" layoutY="50.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
         <padding>
@@ -21,7 +21,7 @@
 
         <Button fx:id="createNewProjectButton" text="Create a New Project" prefWidth="200"/>
         <Button fx:id="previousProjectsButton" text="Previous Projects" prefWidth="200"/>
-        <Button fx:id="listConfigurationsButton" text="List Configurations" prefWidth="200"/>
+        <Button fx:id="listConfigurationsButton" text="List Configurations" prefWidth="200" onAction="#onListConfigurationsButtonClick"/>
         <Button fx:id="helpMenuButton" text="Help Menu" prefWidth="200"/>
         <Button fx:id="userGuideButton" text="User Guide" prefWidth="200"/>
     </VBox>

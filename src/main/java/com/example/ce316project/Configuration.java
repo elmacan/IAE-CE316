@@ -8,6 +8,7 @@ public class Configuration {
     private boolean isCompiled;   //true
 
     @Override
+
     public String toString() {
         return "Configuration{" +
                 "languageName='" + languageName + '\'' +
@@ -15,5 +16,8 @@ public class Configuration {
                 ", language parameter ='" +languageParameters + '\'' +
                 ", runCommand='" + runCommand + '\'' +
                 '}';
+    }
+    public String getLanguageName() {
+        return languageName;
     }
 }
