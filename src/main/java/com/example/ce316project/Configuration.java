@@ -8,6 +8,12 @@ public class Configuration {
     private boolean isCompiled;   //true
 
 
+    public Configuration(String languagePath, String languageParameters, boolean isCompiled) {
+        this.languagePath = languagePath;
+        this.languageParameters = languageParameters;
+        this.isCompiled = isCompiled;
+    }
+
     public String generateCompileCommand(String sourceFileName) {   //gcc elma.c -o elma.exe
         if (!isCompiled) return "";
 

@@ -34,7 +34,13 @@ public class IAEController extends Application {
         stage.setScene(scene);
 
         StudentSubmission s=new StudentSubmission(); //deneme
-        s.findSourceFile();
+        //s.findSourceFile();
+        Configuration configuration=new Configuration("gcc","-o elma.exe",true);
+        Configuration config2=new Configuration("javac","",true);
+        //configuration.setLanguagePath("C:\\Program Files (x86)\\winlibs-x86_64-posix-seh-gcc-15.1.0-mingw-w64ucrt-12.0.0-r1\\mingw64\\bin\\gcc.exe");
+       // s.compile(configuration);
+        //tam path girince ya da gcc,javac girince de compile yapıyor
+        s.compile(config2);
         //stage.show();
 
 
