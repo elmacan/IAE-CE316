@@ -14,7 +14,7 @@
 
     <!-- Alt kısım için HBox: Butonları yatay koyacağız -->
     <HBox spacing="20" layoutX="20.0" layoutY="350.0" prefHeight="40.0" prefWidth="560.0" alignment="CENTER">
-        <Button fx:id="addConfigButton" text="Add Configuration" prefWidth="200.0"  />
+        <Button fx:id="addConfigButton" text="Add Configuration" prefWidth="200.0" onAction="#onAddConfigurationButtonClick" />
         <Button fx:id="backButton" text="Back" prefWidth="200.0" />
     </HBox>
 
