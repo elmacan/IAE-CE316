@@ -64,5 +64,11 @@ import java.io.File;
 
                       return true;
                }
+
+               public Result getResult() {
+                      return result;
+               }
         }
+
+
 

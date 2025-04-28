@@ -38,6 +38,8 @@ public class IAEController extends Application {
 
     public static void main(String[] args) {
         launch();
+
+        //parse deneme yanılma
         try {
             FileReader reader = new FileReader("src/main/resources/com/example/ce316project/configs.json");
             Gson gson = new Gson();
