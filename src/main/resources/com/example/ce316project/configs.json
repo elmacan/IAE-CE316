@@ -1,0 +1,23 @@
+[
+  {
+    "languageName": "Java",
+    "languagePath": "C:/Program Files/Java/jdk-21/bin/javac.exe",
+    "languageParameters": "",
+    "runCommand": "java Main",
+    "isCompiled": true
+  },
+  {
+    "languageName": "C++",
+    "languagePath": "C:/MinGW/bin/g++.exe",
+    "languageParameters": "-o main",
+    "runCommand": "./main",
+    "isCompiled": true
+  },
+  {
+    "languageName": "Python",
+    "languagePath": "C:/Python/python.exe",
+    "languageParameters": "",
+    "runCommand": "python main.py",
+    "isCompiled": false
+  }
+]
