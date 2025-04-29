@@ -174,7 +174,54 @@ import java.io.InputStreamReader;
        }
 
 
-               public String getStudentID() {
+       public boolean run(Configuration config, File inputFile, File outputFile) {
+                if (config == null || extractedDirectory == null || !extractedDirectory.exists()) {
+                    result.setRunSuccessfully(false);
+                    result.setErrorLog("Invalid configuration or extraction directory.");
+                    return false;
+                }
+
+                try {
+                    String arguments = "";
+                    if (inputFile != null && inputFile.exists()) {
+                        arguments = Files.readString(inputFile.toPath()).trim();  //input file'ı okuyor
+                    }
+
+                    String runCommand = config.generateRunCommand(arguments);    //komut satırını oluşturuyoruz
+
+                    ProcessBuilder processBuilder = new ProcessBuilder(runCommand.split(" "));
+                    processBuilder.directory(extractedDirectory);
+
+
+                    if (outputFile != null) {
+                        processBuilder.redirectOutput(outputFile);   //output u, output file a yönlendirdik
+                    }
+
+                    Process process = processBuilder.start();
+
+                    int exitCode = process.waitFor();
+
+                    if (exitCode == 0) {
+                        result.setRunSuccessfully(true);
+                        return true;
+                    } else {
+                        result.setRunSuccessfully(false);
+                        result.setErrorLog("Program exited with code " + exitCode);
+                        return false;
+                    }
+
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                    result.setRunSuccessfully(false);
+                    result.setErrorLog("Exception: " + e.getMessage());
+                    return false;
+                }
+            }
+
+
+
+
+            public String getStudentID() {
                       return studentID;
                }
 
