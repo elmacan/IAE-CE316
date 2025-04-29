@@ -47,6 +47,34 @@ public class Configuration {
     }
 
 
+
+    public String generateRunCommand(String arguments) {
+        if (runCommand == null || runCommand.isEmpty()) {
+            throw new IllegalStateException("Run command is not defined!");
+        }
+
+        StringBuilder rCommand = new StringBuilder();
+
+
+        if (runCommand.contains(" ")) {       // runCommand örneğin ./main veya java Main
+            rCommand.append("\"").append(runCommand).append("\"");
+        } else {
+            rCommand.append(runCommand);
+        }
+
+        if (arguments != null && !arguments.isBlank()) {   // girilen inputları da ekliyoruz, mesela sayı, string gibi.
+            rCommand.append(" ").append(arguments);
+        }
+
+        return rCommand.toString();
+    }
+
+
+
+
+
+
+
     public boolean isCompiled() {
         return isCompiled;
     }
