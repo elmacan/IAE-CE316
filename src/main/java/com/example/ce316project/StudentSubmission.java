@@ -24,6 +24,9 @@ import java.io.InputStreamReader;
                       this.zipFile = zipFile;
                       this.result = new Result();
                }
+               public StudentSubmission(){
+
+               }
 
                public boolean extract() {
                       if (zipFile == null || !zipFile.exists()) {
@@ -75,33 +78,47 @@ import java.io.InputStreamReader;
                public Result getResult() {
                       return result;
                }
-        }
 
 
 
-public class StudentSubmission {
-       private  String studentID;
-       private  File zipFile;    //	öğrencinin gönderdiği orijinal ZIP dosyası
-       private  File extractedDirectory;   // ZIP içeriğinin açıldığı klasör
-       private Result result;
-       private String studentOutput;
+              public File findSourceFile(){
+                      //birden fazla varsa main olana bakıyor diğer türlü normal alıyor
+                      if (extractedDirectory == null || !extractedDirectory.exists()) {
+                     throw new IllegalStateException("Extracted directory is not set or does not exist.");
+              }
 
+              String[] sourceExtensions = {".c", ".java", ".cpp", ".py"};
+              File mainFileCandidate = null; // Adı 'main' olan dosyayı aramak için
 
-       public File findSourceFile(){
-              //şimdilik deneme methodu sonra orijinali yapılcak
-              System.out.println("armut");
+              File[] files = extractedDirectory.listFiles();
+              if (files != null) {
+                     for (File file : files) {
+                            if (file.isFile()) {
+                                   for (String extension : sourceExtensions) {
+                                          if (file.getName().toLowerCase().endsWith(extension)) {
+                                                 String baseName = file.getName().substring(0, file.getName().lastIndexOf('.'));
 
-              FileChooser fileChooser=new FileChooser();
-              fileChooser.setTitle("source file seç");
-              Window stage=null;
-              File selectedFile=fileChooser.showOpenDialog(stage);
-             // System.out.println(selectedFile.getAbsolutePath());
-              //System.out.println(configuration.generateCompileCommand(selectedFile.getName()));
+                                                 if (baseName.equalsIgnoreCase("main")) {
+                                                        // Eğer dosya adı 'main' ise doğrudan bunu seç
+                                                        System.out.println("Main source file found: " + file.getAbsolutePath());
+                                                        return file;
+                                                 } else if (mainFileCandidate == null) {
+                                                        // Main bulunmadıysa, bulduğumuz ilk uygun dosyayı yedek olarak tut
+                                                        mainFileCandidate = file;
+                                                 }
+                                          }
+                                   }
+                            }
+                     }
+              }
 
+              if (mainFileCandidate != null) {
+                     System.out.println("Source file (not named main) found: " + mainFileCandidate.getAbsolutePath());
+                     return mainFileCandidate;
+              }
 
+              throw new IllegalStateException("No source file found in the extracted directory.");
 
-
-       return selectedFile;
        }
 
        public void compile(Configuration configuration){
@@ -157,6 +174,39 @@ public class StudentSubmission {
        }
 
 
+               public String getStudentID() {
+                      return studentID;
+               }
 
+               public void setStudentID(String studentID) {
+                      this.studentID = studentID;
+               }
 
-}
+               public File getZipFile() {
+                      return zipFile;
+               }
+
+               public void setZipFile(File zipFile) {
+                      this.zipFile = zipFile;
+               }
+
+               public File getExtractedDirectory() {
+                      return extractedDirectory;
+               }
+
+               public void setExtractedDirectory(File extractedDirectory) {
+                      this.extractedDirectory = extractedDirectory;
+               }
+
+               public void setResult(Result result) {
+                      this.result = result;
+               }
+
+               public String getStudentOutput() {
+                      return studentOutput;
+               }
+
+               public void setStudentOutput(String studentOutput) {
+                      this.studentOutput = studentOutput;
+               }
+        }
