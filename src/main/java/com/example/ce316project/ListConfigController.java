@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ListCell;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -25,14 +26,11 @@ public class ListConfigController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // JSON dosyasından Configuration listesi oku
-        configurationList = FileManager.loadConfigurations(
-                new File("src/main/resources/com/example/ce316project/configs.json"));
+        configurationList = FileManager.loadConfigurations(new File("configs.json"));
 
         if (configurationList != null) {
             configurationListView.getItems().addAll(configurationList);
 
-            // Sadece languageName gösterimi için (isteğe bağlı ama güzel duruyor)
             configurationListView.setCellFactory(param -> new ListCell<>() {
                 @Override
                 protected void updateItem(Configuration config, boolean empty) {
@@ -40,7 +38,7 @@ public class ListConfigController implements Initializable {
                     if (empty || config == null) {
                         setText(null);
                     } else {
-                        setText(config.getLanguageName()); // sadece dil adını göster
+                        setText(config.getLanguageName());
                     }
                 }
             });
@@ -61,5 +59,37 @@ public class ListConfigController implements Initializable {
     }
     public void updateList(List<Configuration> updatedConfigurations) {
         configurationListView.getItems().setAll(updatedConfigurations);
+    }
+    @FXML
+    private void onImportButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Configuration(s)");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            List<Configuration> imported = FileManager.importConfigurations(selectedFile);
+            configurationListView.getItems().addAll(imported); // Görsel olarak listeye ekle
+            FileManager.saveConfigurations(imported, new File("configs.json")); // Kalıcı olarak kaydet
+        }
+    }
+
+    @FXML
+    private void onExportButtonClick() {
+        Configuration selected = configurationListView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            System.out.println("Export için bir configuration seçmelisiniz.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Configuration");
+        fileChooser.setInitialFileName("configuration.json");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            FileManager.exportConfiguration(selected, file);
+        }
     }
 }

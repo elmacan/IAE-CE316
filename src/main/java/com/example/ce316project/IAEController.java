@@ -37,16 +37,20 @@ public class IAEController extends Application {
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
 
-        StudentSubmission s=new StudentSubmission(); //deneme
-        FileChooser fileChooser=new FileChooser();
-        File selectedzip=fileChooser.showOpenDialog(stage);
-        s.setZipFile(selectedzip);
-        s.extract();
+        stage.show();
 
-        File file=s.findSourceFile();
+        //StudentSubmission s=new StudentSubmission(); //deneme
+        //FileChooser fileChooser=new FileChooser();
+        //File selectedzip=fileChooser.showOpenDialog(stage);
+        //s.setZipFile(selectedzip);
+        //s.extract();
+
+        //File file=s.findSourceFile();
+        //burası yorumdaydı aşağısı
        // System.out.println(selectedzip.getName());
         //System.out.println(s.getExtractedDirectory().getName());
-        System.out.println(file.getName());
+        //burası yorumdaydı yukarısı
+        //System.out.println(file.getName());
 
 
 

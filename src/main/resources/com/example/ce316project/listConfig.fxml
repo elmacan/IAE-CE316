@@ -10,12 +10,15 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.ce316project.ListConfigController"
             prefHeight="400.0" prefWidth="600.0">
-    <ListView fx:id="configurationListView" layoutX="20.0" layoutY="20.0" prefHeight="320.0" prefWidth="560.0"/>
+    <!-- ListView -->
+    <ListView fx:id="configurationListView" layoutX="20.0" layoutY="20.0" prefHeight="320.0" prefWidth="560.0" />
 
     <!-- Alt kısım için HBox: Butonları yatay koyacağız -->
-    <HBox spacing="20" layoutX="20.0" layoutY="350.0" prefHeight="40.0" prefWidth="560.0" alignment="CENTER">
-        <Button fx:id="addConfigButton" text="Add Configuration" prefWidth="200.0" onAction="#onAddConfigurationButtonClick" />
-        <Button fx:id="backButton" text="Back" prefWidth="200.0" />
+    <HBox alignment="CENTER" layoutX="20.0" layoutY="350.0" prefHeight="40.0" prefWidth="560.0" spacing="10">
+        <Button fx:id="backButton" prefWidth="130.0" text="Back" />
+        <Button fx:id="importButton" onAction="#onImportButtonClick" prefWidth="100.0" text="Import" />
+        <Button fx:id="exportButton" onAction="#onExportButtonClick" prefWidth="100.0" text="Export" />
+        <Button fx:id="addConfigButton" onAction="#onAddConfigurationButtonClick" prefWidth="130.0" text="Add Configuration" />
     </HBox>
 
 </AnchorPane>

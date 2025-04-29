@@ -26,15 +26,7 @@
 
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Language:" />
-                        <ComboBox fx:id="languageComboBox" prefHeight="25.0" prefWidth="297.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Java" />
-                                    <String fx:value="Python" />
-                                    <String fx:value="C++" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
+                        <TextField fx:id="languageField" prefHeight="25.0" prefWidth="297.0" />
                     </HBox>
 
 

@@ -7,6 +7,9 @@ public class Configuration {
     private String runCommand;   // ./main [arguments varsa]
     private boolean isCompiled;   //true
 
+    public Configuration() {}
+
+
 
     public Configuration(String languagePath, String languageParameters, boolean isCompiled) {
         this.languagePath = languagePath;
