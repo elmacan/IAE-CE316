@@ -18,8 +18,11 @@ import java.io.InputStreamReader;
                private File extractedDirectory;
                private Result result;
                private String studentOutput;
+               private File actualOutputFile;
 
-               public StudentSubmission(String studentID, File zipFile) {
+
+
+            public StudentSubmission(String studentID, File zipFile) {
                       this.studentID = studentID;
                       this.zipFile = zipFile;
                       this.result = new Result();
@@ -192,9 +195,9 @@ import java.io.InputStreamReader;
                     ProcessBuilder processBuilder = new ProcessBuilder(runCommand.split(" "));
                     processBuilder.directory(extractedDirectory);
 
-
-                    if (outputFile != null) {
-                        processBuilder.redirectOutput(outputFile);   //output u, output file a yönlendirdik
+                    this.actualOutputFile = outputFile;
+                    if (actualOutputFile != null) {
+                        processBuilder.redirectOutput(actualOutputFile);   //output u, output file a yönlendirdik
                     }
 
                     Process process = processBuilder.start();
@@ -217,6 +220,50 @@ import java.io.InputStreamReader;
                     return false;
                 }
             }
+
+
+            public boolean compareOutput(File expectedOutput) {
+                if (expectedOutput == null || actualOutputFile == null ||
+                        !expectedOutput.exists() || !actualOutputFile.exists()) {
+                    result.setOutputMatches(false);
+                    result.setErrorLog("One or both output files are missing.");
+                    return false;
+                }
+
+                try (
+                        BufferedReader expectedReader = new BufferedReader(new FileReader(expectedOutput));
+                        BufferedReader actualReader = new BufferedReader(new FileReader(actualOutputFile))
+                ) {
+                    String expectedLine;
+                    String actualLine;
+
+                    while ((expectedLine = expectedReader.readLine()) != null && (actualLine = actualReader.readLine()) != null) {
+
+                        if (!expectedLine.trim().equals(actualLine.trim())) {
+                            result.setOutputMatches(false);
+                            result.setErrorLog("Output does not match expected output.");
+                            return false;
+                        }
+                    }
+
+
+                    if (expectedReader.readLine() != null || actualReader.readLine() != null) {   //eğer dosyaların boyutları birbirinden farklıysa,
+                        result.setOutputMatches(false);                                           //yani birinin okuması daha önce biterse
+                        result.setErrorLog("Output lengths are different.");
+                        return false;
+                    }
+
+                    result.setOutputMatches(true);
+                    return true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    result.setOutputMatches(false);
+                    result.setErrorLog("Comparison failed: " + e.getMessage());
+                    return false;
+                }
+            }
+
 
 
 
@@ -256,4 +303,12 @@ import java.io.InputStreamReader;
                public void setStudentOutput(String studentOutput) {
                       this.studentOutput = studentOutput;
                }
+
+            public File getOutputFile() {
+                return actualOutputFile;
+            }
+
+            public void setOutputFile(File outputFile) {
+                this.actualOutputFile = outputFile;
+            }
         }
