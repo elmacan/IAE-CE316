@@ -37,30 +37,30 @@ public class IAEController extends Application {
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
 
-        stage.show();
+       // stage.show();
 
-        //StudentSubmission s=new StudentSubmission(); //deneme
-        //FileChooser fileChooser=new FileChooser();
-        //File selectedzip=fileChooser.showOpenDialog(stage);
-        //s.setZipFile(selectedzip);
-        //s.extract();
+        StudentSubmission s=new StudentSubmission(); //deneme
+        FileChooser fileChooser=new FileChooser();
+        File selectedzip=fileChooser.showOpenDialog(stage);
+        s.setZipFile(selectedzip);  //zip seçilmeyince uyarı
+        s.extract();
 
-        //File file=s.findSourceFile();
-        //burası yorumdaydı aşağısı
+
        // System.out.println(selectedzip.getName());
         //System.out.println(s.getExtractedDirectory().getName());
-        //burası yorumdaydı yukarısı
+
         //System.out.println(file.getName());
 
 
 
         //s.findSourceFile();
         //Configuration configuration=new Configuration("gcc","-o elma.exe",true);
-        //Configuration config2=new Configuration("javac","",true);
+        Configuration config2=new Configuration("javac","",true);
         //configuration.setLanguagePath("C:\\Program Files (x86)\\winlibs-x86_64-posix-seh-gcc-15.1.0-mingw-w64ucrt-12.0.0-r1\\mingw64\\bin\\gcc.exe");
        // s.compile(configuration);
         //tam path girince ya da gcc,javac girince de compile yapıyor
-        //s.compile(config2);
+        s.compile(config2);
+
         //stage.show();
 
 

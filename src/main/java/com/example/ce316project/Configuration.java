@@ -1,15 +1,28 @@
 package com.example.ce316project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Configuration {
     private String languageName;    //c
     private String languagePath;    //gcc path
     private String languageParameters;    //-o main      parametre olan [-o]
     private String runCommand;   // ./main [arguments varsa]
     private boolean isCompiled;   //true
+    private static List<String> sourceExtensions = new ArrayList<>(List.of(".c", ".java", ".cpp", ".py"));
+
 
     public Configuration() {}
 
 
+    public Configuration(String languageName, String languagePath, String languageParameters, String runCommand, boolean isCompiled, List<String> sourceExtensions) {
+        this.languageName = languageName;
+        this.languagePath = languagePath;
+        this.languageParameters = languageParameters;
+        this.runCommand = runCommand;
+        this.isCompiled = isCompiled;
+        this.sourceExtensions = sourceExtensions;
+    }
 
     public Configuration(String languagePath, String languageParameters, boolean isCompiled) {
         this.languagePath = languagePath;
@@ -17,7 +30,7 @@ public class Configuration {
         this.isCompiled = isCompiled;
     }
 
-    public String generateCompileCommand(String sourceFileName) {   //gcc elma.c -o elma.exe
+    public String generateCompileCommand(List<String> sourceFileNames) {   //gcc elma.c -o elma.exe
         if (!isCompiled) return "";
 
         StringBuilder command = new StringBuilder();
@@ -34,10 +47,16 @@ public class Configuration {
         }
 
         // source file ekleniyor
-        if (sourceFileName != null && !sourceFileName.isEmpty()) {
-            command.append(" ").append(sourceFileName);
+        if (sourceFileNames != null && !sourceFileNames.isEmpty()) {
+            for (String sourceFileName : sourceFileNames) {
+                if (sourceFileName != null && !sourceFileName.isEmpty()) {
+                    command.append(" ").append(sourceFileName);
+                } else {
+                    throw new IllegalArgumentException("Source file name cannot be empty!");
+                }
+            }
         } else {
-            throw new IllegalArgumentException("Source file name cannot be empty!");
+            throw new IllegalArgumentException("Source file list cannot be empty!");
         }
 
         // Derleme parametreleri ekleniyor
@@ -73,10 +92,13 @@ public class Configuration {
     }
 
 
+    public static List<String> getSourceExtensions() {
+        return sourceExtensions;
+    }
 
-
-
-
+    public static void setSourceExtensions(List<String> sourceExtensions) {
+        Configuration.sourceExtensions = sourceExtensions;
+    }
 
     public boolean isCompiled() {
         return isCompiled;

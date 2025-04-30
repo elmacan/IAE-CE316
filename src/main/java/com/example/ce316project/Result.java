@@ -4,10 +4,12 @@ public class Result {
    private boolean compiledSuccessfully;
    private boolean runSuccessfully;
    private boolean outputMatches;
-   private String errorLog;
+   private StringBuilder errorLog;
 
 
-
+   public Result(){
+      this.errorLog=new StringBuilder();
+   }
    public boolean isCompiledSuccessfully() {
       return compiledSuccessfully;
    }
@@ -33,11 +35,24 @@ public class Result {
    }
 
    public String getErrorLog() {
-      return errorLog;
+      return errorLog.toString();
    }
 
-   public void setErrorLog(String errorLog) {
-      this.errorLog = errorLog;
+
+   public void appendErrorLog(String error) {
+      if (error == null || error.isEmpty()) return;
+
+      // Eğer log henüz başlatılmamışsa, başlat
+      if (errorLog == null) {
+         errorLog = new StringBuilder();
+      }
+
+      if (error != null && !error.isEmpty()) {
+         if (errorLog.length() > 0) {
+            errorLog.append("\n"); // Add a newline before appending
+         }
+         errorLog.append(error);
+      }
    }
 
    @Override

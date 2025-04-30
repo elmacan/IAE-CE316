@@ -1,6 +1,8 @@
 package com.example.ce316project;
 import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -28,7 +30,7 @@ import java.io.InputStreamReader;
                       this.result = new Result();
                }
                public StudentSubmission(){
-
+                    this.result=new Result();
                }
 
                public boolean extract() {
@@ -124,63 +126,80 @@ import java.io.InputStreamReader;
 
        }
 
-       public void compile(Configuration configuration){
-              try {
-                     File sourceFile=findSourceFile();
-                     if (sourceFile==null) {
-                            throw new IllegalStateException("Source file not found! Compilation is not possible.");
-                     }
+
+       public void compile(Configuration configuration) {
+                try {
+
+                    File[] sourceFiles = extractedDirectory.listFiles((dir, name) -> {
+                        for (String extension : Configuration.getSourceExtensions()) {
+                            if (name.toLowerCase().endsWith(extension)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+
+                    if (sourceFiles == null || sourceFiles.length == 0) {
+                        result.setCompiledSuccessfully(false);
+                        result.appendErrorLog("No source files found! Compilation is not possible");
+                        throw new IllegalStateException("No source files found! Compilation is not possible.");
+
+                    }
+
+                    List<String> sourceFileNames = new ArrayList<>();
+                    for (File sourceFile : sourceFiles) {
+                        sourceFileNames.add(sourceFile.getName());
+                    }
+
+                    String compileCommand = configuration.generateCompileCommand(sourceFileNames);
+                    String[] compileParts = compileCommand.split(" ");
+
+                    // ProcessBuilder ile derleme başlatıyoruz
+                    ProcessBuilder pb = new ProcessBuilder(compileParts);
+                    pb.directory(extractedDirectory); // Doğru klasörde çalıştırıyoruz
+                    pb.redirectErrorStream(true); // stdout ve stderr akışlarını birleştir
+                    Process process = pb.start(); // CMD açılır ve komut çalıştırılır
+
+                    // Çıktıyı okuyup ekrana bastırıyoruz
+                    InputStream is = process.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+
+                    int exitCode = process.waitFor(); // Derleme bitene kadar bekliyoruz
 
 
-                     String compileCommand = configuration.generateCompileCommand(sourceFile.getName());
+                    if (exitCode != 0) {
+                        result.setCompiledSuccessfully(false);
+                        result.appendErrorLog("Compilation failed");
+                        System.out.println("Compilation failed!");
+                        System.out.println("Uncompiled source files:");
+                        for (String fileName : sourceFileNames) {
+                            System.out.println(" - " + fileName);
+                        }
+                    } else {
+                        result.setCompiledSuccessfully(true);
+                        System.out.println("Compilation successful!");
+                    }
 
-                     String[] compileParts = compileCommand.split(" ");
+                } catch (IllegalStateException e) {
+                    System.out.println(e.getMessage());
 
-                     // ProcessBuilder ile derleme başlatıyoruz
-                     ProcessBuilder pb = new ProcessBuilder(compileParts);
-                     //pb.directory(extractedDirectory); // Doğru klasörde çalıştırıyoruz
-                     pb.directory(sourceFile.getParentFile());
-                     pb.redirectErrorStream(true); // stdout ve stderr akışlarını birleştir
-                     Process process = pb.start();  //CMD açılır ve komut çalıştırılır
+                } catch (Exception e) {
+                    System.out.println("hata");
+                   e.printStackTrace();
 
-                     // Çıktıyı okuyup ekrana bastırıyoruz
-                     InputStream is = process.getInputStream();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                     String line;
-                     while ((line = reader.readLine()) != null) {
-                            System.out.println(line);
-                     }
+                }
+            }
 
-                     int exitCode = process.waitFor(); // Derleme bitene kadar bekliyoruz
-
-
-                     //result = new Result();
-                     //result.setStudentID(studentID);
-                     //result.setCompiledSuccessfully(exitCode == 0); // exitCode 0 ise başarılıdır
-
-                     if (exitCode != 0) {
-                            System.out.println("Derleme başarısız oldu.");
-                     } else {
-                            System.out.println("Derleme başarılı!");
-                     }
-
-              } catch (Exception e) {
-                     e.printStackTrace();
-                     if (result == null) {
-                          //  result = new Result();
-                          //  result.setStudentID(studentID);
-                     }
-                     //result.setCompiledSuccessfully(false);
-              }
-
-
-       }
 
 
        public boolean run(Configuration config, File inputFile, File outputFile) {
                 if (config == null || extractedDirectory == null || !extractedDirectory.exists()) {
                     result.setRunSuccessfully(false);
-                    result.setErrorLog("Invalid configuration or extraction directory.");
+                    result.appendErrorLog("Invalid configuration or extraction directory.");
                     return false;
                 }
 
@@ -209,14 +228,14 @@ import java.io.InputStreamReader;
                         return true;
                     } else {
                         result.setRunSuccessfully(false);
-                        result.setErrorLog("Program exited with code " + exitCode);
+                        result.appendErrorLog("Program exited with code " + exitCode);
                         return false;
                     }
 
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                     result.setRunSuccessfully(false);
-                    result.setErrorLog("Exception: " + e.getMessage());
+                    result.appendErrorLog("Exception: " + e.getMessage());
                     return false;
                 }
             }
@@ -226,7 +245,7 @@ import java.io.InputStreamReader;
                 if (expectedOutput == null || actualOutputFile == null ||
                         !expectedOutput.exists() || !actualOutputFile.exists()) {
                     result.setOutputMatches(false);
-                    result.setErrorLog("One or both output files are missing.");
+                    result.appendErrorLog("One or both output files are missing.");
                     return false;
                 }
 
@@ -241,7 +260,7 @@ import java.io.InputStreamReader;
 
                         if (!expectedLine.trim().equals(actualLine.trim())) {
                             result.setOutputMatches(false);
-                            result.setErrorLog("Output does not match expected output.");
+                            result.appendErrorLog("Output does not match expected output.");
                             return false;
                         }
                     }
@@ -249,7 +268,7 @@ import java.io.InputStreamReader;
 
                     if (expectedReader.readLine() != null || actualReader.readLine() != null) {   //eğer dosyaların boyutları birbirinden farklıysa,
                         result.setOutputMatches(false);                                           //yani birinin okuması daha önce biterse
-                        result.setErrorLog("Output lengths are different.");
+                        result.appendErrorLog("Output lengths are different.");
                         return false;
                     }
 
@@ -259,7 +278,7 @@ import java.io.InputStreamReader;
                 } catch (IOException e) {
                     e.printStackTrace();
                     result.setOutputMatches(false);
-                    result.setErrorLog("Comparison failed: " + e.getMessage());
+                    result.appendErrorLog("Comparison failed: " + e.getMessage());
                     return false;
                 }
             }
