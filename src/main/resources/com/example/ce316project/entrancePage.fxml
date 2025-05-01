@@ -19,7 +19,7 @@
 
         <Text text="The Integrated Environment" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
-        <Button fx:id="createNewProjectButton" text="Create a New Project" prefWidth="200"/>
+        <Button fx:id="createNewProjectButton" text="Create a New Project" prefWidth="200" onAction="#onCreateNewProjectButtonClick"/>
         <Button fx:id="previousProjectsButton" text="Previous Projects" prefWidth="200"/>
         <Button fx:id="listConfigurationsButton" text="List Configurations" prefWidth="200" onAction="#onListConfigurationsButtonClick"/>
         <Button fx:id="helpMenuButton" text="Help Menu" prefWidth="200"/>

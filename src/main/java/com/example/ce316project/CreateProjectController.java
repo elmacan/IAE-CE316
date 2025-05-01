@@ -64,7 +64,7 @@ public class CreateProjectController implements Initializable {
         }
 
         Project newProject = new Project(name, selectedConfig, input, expectedOutput, new File(zipPath));
-        File projectFile = new File("C:\\Users\\msi\\IdeaProjects\\copy\\projects.json");
+        File projectFile = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\projects.json");
 
         // Yeni yöntemle aynı isimde varsa kaydetme
         boolean added = FileManager.saveProjectIfUnique(newProject, projectFile);

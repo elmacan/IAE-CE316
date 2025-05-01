@@ -33,6 +33,7 @@ public class IAEController extends Application {
         System.out.println("Configuration List: " + configurationList);
         System.out.println("Project List: " + projectList);
         System.out.println("\n");
+        //System.out.println(projectList.get(0).getProjectName());
         System.out.println(projectList.get(0).getProjectName());*/
 
 

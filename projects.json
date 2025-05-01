@@ -12,5 +12,19 @@
     "expectedOutput": "kjhk",
     "zipDirectory": "nnj",
     "submissions": []
+  },
+  {
+    "name": "a",
+    "configuration": {
+      "languageName": "elif",
+      "languagePath": "C:/Program Files/Java/jdk-21/bin/javac.exe",
+      "languageParameters": "",
+      "runCommand": "java Main",
+      "isCompiled": true
+    },
+    "input": "a",
+    "expectedOutput": "h",
+    "zipDirectory": "a",
+    "submissions": []
   }
 ]

@@ -56,7 +56,7 @@
                     </padding>
                     <Button text="Cancel" fx:id="cancelButton" onAction="#onCancelButton"/>
                     <Button text="Compare And Run" fx:id="compareRunButton"/>
-                    <Button text="Create Project" fx:id="createProjectButton"/>
+                    <Button text="Create Project" fx:id="createProjectButton" onAction="#onCreateProjectButton"/>
                 </HBox>
             </children>
             <padding>
