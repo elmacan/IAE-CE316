@@ -24,17 +24,23 @@ public class IAEController extends Application {
     private List<Project> projectList;
     private Project currentProject;
 
-    @Override
-    public void start(Stage stage) throws IOException {
+    //@Override
+    /*public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
-       /* configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"));
+       *//* configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"));
         projectList=FileManager.loadProjects(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\projects.json"));
         System.out.println("Configuration List: " + configurationList);
         System.out.println("Project List: " + projectList);
         System.out.println("\n");
         //System.out.println(projectList.get(0).getProjectName());
-        System.out.println(projectList.get(0).getProjectName());*/
+        System.out.println(projectList.get(0).getProjectName());*//*
+        File configFile = new File("configs.json");
+        File projectFile = new File("projects.json");
+
+        configurationList = FileManager.loadConfigurations(configFile);
+        projectList = FileManager.loadProjects(projectFile);
+
 
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -53,8 +59,9 @@ public class IAEController extends Application {
             s.setZipFile(selectedzip);
             if (s.extract()) { // Ensure extraction is successful
                 Configuration configuration = new Configuration("c", "gcc", "-o elma.exe", "elma.exe", true);
-                s.compile(configuration); // Compile only if extraction succeeded
-                s.run(configuration, ""); // Run only if compilation succeeded
+                Configuration conf = new Configuration("java","javac","","java CE", true);
+                s.compile(conf); // Compile only if extraction succeeded
+                s.run(conf, ""); // Run only if compilation succeeded
             } else {
                 System.out.println("Extraction failed. Cannot proceed.");
             }
@@ -69,7 +76,32 @@ public class IAEController extends Application {
 
 
 
+    }*/
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
+
+
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<Configuration>>(){}.getType();
+
+        try {
+            File configFile = new File(getClass().getResource("/com/example/ce316project/configs.json").toURI());
+            configurationList = FileManager.loadConfigurations(configFile);
+            System.out.println("Loaded " + configurationList.size() + " configurations.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        stage.setTitle("Integrated Application Environment");
+        stage.setScene(scene);
+        stage.show();
     }
+
 
     public static void main(String[] args) {
 
