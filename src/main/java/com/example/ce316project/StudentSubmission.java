@@ -1,7 +1,9 @@
 package com.example.ce316project;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -20,7 +22,7 @@ import java.io.InputStreamReader;
                private File extractedDirectory;
                private Result result;
                private String studentOutput;
-               private File actualOutputFile;
+               //private File actualOutputFile;
 
 
 
@@ -196,52 +198,86 @@ import java.io.InputStreamReader;
 
 
 
-       public boolean run(Configuration config, File inputFile, File outputFile) {
-                if (config == null || extractedDirectory == null || !extractedDirectory.exists()) {
-                    result.setRunSuccessfully(false);
-                    result.appendErrorLog("Invalid configuration or extraction directory.");
-                    return false;
-                }
-
+            public void run(Configuration configuration, String arguments) {
+                File outputFile = new File(extractedDirectory, "student_output.txt");
                 try {
-                    String arguments = "";
-                    if (inputFile != null && inputFile.exists()) {
-                        arguments = Files.readString(inputFile.toPath()).trim();  //input file'ı okuyor
+                    // 1) Kullanıcıdan gelen run komutunu böl
+                    String runCommand = configuration.generateRunCommand(arguments);
+                    List<String> parts = new ArrayList<>(Arrays.asList(runCommand.split(" ")));
+
+                    // 2) extractedDirectory içinden bulmamız gereken parçaları tespit et ve tam yola çevir
+                    File[] files = extractedDirectory.listFiles();
+                    if (files == null) files = new File[0];
+
+                    for (int i = 0; i < parts.size(); i++) {
+                        String p = parts.get(i);
+                        // eğer nokta içeriyor ve yol ayracı içermiyorsa => dosya adı
+                        if (p.contains(".") && !p.contains(File.separator)) {
+                            File matched = null;
+                            for (File f : files) {
+                                if (f.getName().equalsIgnoreCase(p)) {
+                                    matched = f;
+                                    break;
+                                }
+                            }
+                            if (matched == null) {
+                                throw new IllegalStateException(
+                                        "Cannot find file '" + p + "' in " + extractedDirectory.getAbsolutePath()
+                                );
+                            }
+                            parts.set(i, matched.getAbsolutePath());
+                        }
                     }
 
-                    String runCommand = config.generateRunCommand(arguments);    //komut satırını oluşturuyoruz
+                    // 3) ProcessBuilder ile çalıştır
+                    ProcessBuilder pb = new ProcessBuilder(parts);
+                    pb.directory(extractedDirectory);
+                    pb.redirectErrorStream(true);
+                    Process process = pb.start();
 
-                    ProcessBuilder processBuilder = new ProcessBuilder(runCommand.split(" "));
-                    processBuilder.directory(extractedDirectory);
-
-                    this.actualOutputFile = outputFile;
-                    if (actualOutputFile != null) {
-                        processBuilder.redirectOutput(actualOutputFile);   //output u, output file a yönlendirdik
+                    // 4) Çıktıyı oku
+                    InputStream is = process.getInputStream();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(is, StandardCharsets.UTF_8)
+                    );
+                    StringBuilder outputBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                        outputBuilder.append(line).append(System.lineSeparator());
                     }
-
-                    Process process = processBuilder.start();
-
                     int exitCode = process.waitFor();
+                    studentOutput = outputBuilder.toString();
 
-                    if (exitCode == 0) {
-                        result.setRunSuccessfully(true);
-                        return true;
-                    } else {
-                        result.setRunSuccessfully(false);
-                        result.appendErrorLog("Program exited with code " + exitCode);
-                        return false;
+                    // 5) student_output.txt dosyasına yaz
+                    try (FileWriter writer = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
+                        writer.write(studentOutput);
                     }
 
-                } catch (IOException | InterruptedException e) {
+                    // 6) Sonucu güncelle
+                    if (exitCode != 0) {
+                        result.setRunSuccessfully(false);
+                        result.appendErrorLog("Execution failed with exit code " + exitCode);
+                        System.out.println("Execution failed (exit code " + exitCode + ")");
+                    } else {
+                        result.setRunSuccessfully(true);
+                        System.out.println("Execution successful!");
+                    }
+
+                } catch (IllegalStateException e) {
+                    System.out.println("Run Error: " + e.getMessage());
+                    result.setRunSuccessfully(false);
+                    result.appendErrorLog(e.getMessage());
+
+                } catch (Exception e) {
+                    System.out.println("An error occurred during execution:");
                     e.printStackTrace();
                     result.setRunSuccessfully(false);
-                    result.appendErrorLog("Exception: " + e.getMessage());
-                    return false;
+                    result.appendErrorLog(e.toString());
                 }
             }
 
-
-            public boolean compareOutput(File expectedOutput) {
+            /*public boolean compareOutput(File expectedOutput) {
                 if (expectedOutput == null || actualOutputFile == null ||
                         !expectedOutput.exists() || !actualOutputFile.exists()) {
                     result.setOutputMatches(false);
@@ -281,7 +317,7 @@ import java.io.InputStreamReader;
                     result.appendErrorLog("Comparison failed: " + e.getMessage());
                     return false;
                 }
-            }
+            }*/
 
 
 
@@ -323,11 +359,12 @@ import java.io.InputStreamReader;
                       this.studentOutput = studentOutput;
                }
 
-            public File getOutputFile() {
+          /* public File getOutputFile() {
                 return actualOutputFile;
             }
 
             public void setOutputFile(File outputFile) {
                 this.actualOutputFile = outputFile;
-            }
+            }*/
+
         }
