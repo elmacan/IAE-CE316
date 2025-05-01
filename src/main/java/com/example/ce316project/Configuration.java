@@ -9,26 +9,22 @@ public class Configuration {
     private String languageParameters;    //-o main      parametre olan [-o]
     private String runCommand;   // ./main [arguments varsa]
     private boolean isCompiled;   //true
+    private String fileExtansion;
     private static List<String> sourceExtensions = new ArrayList<>(List.of(".c", ".java", ".cpp", ".py"));
 
 
     public Configuration() {}
 
 
-    public Configuration(String languageName, String languagePath, String languageParameters, String runCommand, boolean isCompiled, List<String> sourceExtensions) {
+    public Configuration(String languageName, String languagePath, String languageParameters, String runCommand, boolean isCompiled) {
         this.languageName = languageName;
         this.languagePath = languagePath;
         this.languageParameters = languageParameters;
         this.runCommand = runCommand;
         this.isCompiled = isCompiled;
-        this.sourceExtensions = sourceExtensions;
+
     }
 
-    public Configuration(String languagePath, String languageParameters, boolean isCompiled) {
-        this.languagePath = languagePath;
-        this.languageParameters = languageParameters;
-        this.isCompiled = isCompiled;
-    }
 
     public String generateCompileCommand(List<String> sourceFileNames) {   //gcc elma.c -o elma.exe
         if (!isCompiled) return "";
@@ -77,12 +73,7 @@ public class Configuration {
 
         StringBuilder rCommand = new StringBuilder();
 
-
-        if (runCommand.contains(" ")) {       // runCommand örneğin ./main veya java Main
-            rCommand.append("\"").append(runCommand).append("\"");
-        } else {
-            rCommand.append(runCommand);
-        }
+       rCommand.append(runCommand.trim());
 
         if (arguments != null && !arguments.isBlank()) {   // girilen inputları da ekliyoruz, mesela sayı, string gibi.
             rCommand.append(" ").append(arguments);
