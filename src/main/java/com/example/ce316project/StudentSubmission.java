@@ -37,6 +37,7 @@ public class StudentSubmission {
 
     public boolean extract() {
         if (zipFile == null || !zipFile.exists()) {
+            System.err.println("Error: Zip file is null or does not exist.");
             return false;
         }
 
@@ -66,6 +67,7 @@ public class StudentSubmission {
                     }
                 }
             } catch (IOException e) {
+                System.err.println("Error during extraction: " + e.getMessage());
                 e.printStackTrace();
 
             }
@@ -78,6 +80,11 @@ public class StudentSubmission {
             e.printStackTrace();
             return false;
         }
+        if (extractedDirectory == null || !extractedDirectory.exists()) {
+            System.err.println("Error: Extraction failed, directory not created.");
+            return false;
+        }
+
 
         return true;
     }
