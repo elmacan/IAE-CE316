@@ -28,7 +28,12 @@ public class IAEController extends Application {
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
-        configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\copy\\configs.json"));
+        configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"));
+        projectList=FileManager.loadProjects(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\projects.json"));
+        System.out.println("Configuration List: " + configurationList);
+        System.out.println("Project List: " + projectList);
+        System.out.println("\n");
+        System.out.println(projectList.get(0).getProjectName());
 
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
