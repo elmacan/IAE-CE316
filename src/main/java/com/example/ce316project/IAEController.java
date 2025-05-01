@@ -44,7 +44,7 @@ public class IAEController extends Application {
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
 
-        stage.show();
+        //stage.show();
 
         StudentSubmission s=new StudentSubmission(); //deneme
         //FileChooser fileChooser=new FileChooser();
@@ -52,28 +52,14 @@ public class IAEController extends Application {
         //s.setZipFile(selectedzip);  //zip seçilmeyince uyarı
         //s.extract();
 
+        Configuration configuration=new Configuration("c","gcc","-o elma.exe","elma.exe",true);
+        Configuration config2=new Configuration("java","javac","","java Armut",true);
 
-        // System.out.println(selectedzip.getName());
-        //System.out.println(s.getExtractedDirectory().getName());
+        s.compile(configuration);
 
-        //System.out.println(file.getName());
+        // s.compile(config2);
 
-
-
-        //s.findSourceFile();
-        Configuration configuration=new Configuration("c","gcc","-o main.exe","main",true);
-        Configuration config2=new Configuration("java","javac","","java Main",true);
-        //configuration.setLanguagePath("C:\\Program Files (x86)\\winlibs-x86_64-posix-seh-gcc-15.1.0-mingw-w64ucrt-12.0.0-r1\\mingw64\\bin\\gcc.exe");
-       // s.compile(configuration);
-        //tam path girince ya da gcc,javac girince de compile yapıyor
-        //s.compile(config2);
-        //File file=new File("C:\\Users\\betoz\\Desktop\\oy\\args.txt");
-        //System.out.println(file.getName());
-        //s.run(config2,file);
-
-
-        //stage.show();
-
+        s.run(configuration,"");
 
 
     }
