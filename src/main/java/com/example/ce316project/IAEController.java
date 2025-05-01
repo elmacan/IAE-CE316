@@ -28,6 +28,8 @@ public class IAEController extends Application {
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
+        configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\copy\\configs.json"));
+
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
@@ -37,13 +39,13 @@ public class IAEController extends Application {
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
 
-       // stage.show();
+        stage.show();
 
         StudentSubmission s=new StudentSubmission(); //deneme
-        FileChooser fileChooser=new FileChooser();
-        File selectedzip=fileChooser.showOpenDialog(stage);
-        s.setZipFile(selectedzip);  //zip seçilmeyince uyarı
-        s.extract();
+        //FileChooser fileChooser=new FileChooser();
+        //File selectedzip=fileChooser.showOpenDialog(stage);
+        //s.setZipFile(selectedzip);  //zip seçilmeyince uyarı
+        //s.extract();
 
 
         // System.out.println(selectedzip.getName());
@@ -59,10 +61,10 @@ public class IAEController extends Application {
         //configuration.setLanguagePath("C:\\Program Files (x86)\\winlibs-x86_64-posix-seh-gcc-15.1.0-mingw-w64ucrt-12.0.0-r1\\mingw64\\bin\\gcc.exe");
        // s.compile(configuration);
         //tam path girince ya da gcc,javac girince de compile yapıyor
-        s.compile(config2);
-        File file=new File("C:\\Users\\betoz\\Desktop\\oy\\args.txt");
-        System.out.println(file.getName());
-        s.run(config2,file);
+        //s.compile(config2);
+        //File file=new File("C:\\Users\\betoz\\Desktop\\oy\\args.txt");
+        //System.out.println(file.getName());
+        //s.run(config2,file);
 
 
         //stage.show();

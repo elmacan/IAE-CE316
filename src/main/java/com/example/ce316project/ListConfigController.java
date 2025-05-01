@@ -92,4 +92,18 @@ public class ListConfigController implements Initializable {
             FileManager.exportConfiguration(selected, file);
         }
     }
+    @FXML
+    private void onBackButton(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

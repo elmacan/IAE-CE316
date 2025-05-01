@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.IAEController"
+            fx:controller="com.example.ce316project.CreateProjectController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
 
@@ -54,7 +54,7 @@
                     <padding>
                         <Insets top="20" right="20" bottom="30" left="10"/>
                     </padding>
-                    <Button text="Cancel" fx:id="cancelButton"/>
+                    <Button text="Cancel" fx:id="cancelButton" onAction="#onCancelButton"/>
                     <Button text="Compare And Run" fx:id="compareRunButton"/>
                     <Button text="Create Project" fx:id="createProjectButton"/>
                 </HBox>

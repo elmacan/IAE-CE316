@@ -26,7 +26,7 @@ public class SaveConfigController {
     @FXML private Button browseCompilerButton;
     @FXML private Button saveConfigButton;
 
-    private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\copy\\configs.json");
+    private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json");
 
     @FXML
     private void initialize() {
