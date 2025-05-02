@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,11 +23,11 @@ public class ListConfigController implements Initializable {
     @FXML
     private ListView<Configuration> configurationListView;
 
-    private List<Configuration> configurationList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        configurationList = FileManager.loadConfigurations(new File("configs.json"));
+        //configurationList = FileManager.loadConfigurations(new File("configs.json"));
+        List<Configuration> configurationList=IAEController.configurationList;
 
         if (configurationList != null) {
             configurationListView.getItems().addAll(configurationList);
@@ -70,7 +71,11 @@ public class ListConfigController implements Initializable {
         if (selectedFile != null) {
             List<Configuration> imported = FileManager.importConfigurations(selectedFile);
             configurationListView.getItems().addAll(imported); // Görsel olarak listeye ekle
-            FileManager.saveConfigurations(imported, new File("configs.json")); // Kalıcı olarak kaydet
+
+
+            // Save the updated list to the writable config file   TEKRAR BAKCAM
+            File configFile = new File(IAEController.CONFIG_PATH);
+            FileManager.saveConfigurations(configurationListView.getItems(), configFile);
         }
     }
 

@@ -13,6 +13,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +30,8 @@ public class SaveConfigController {
     @FXML private Button browseCompilerButton;
     @FXML private Button saveConfigButton;
 
-    private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json");
+    private static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
+    //private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"); hatıra kalsın eheh
 
     @FXML
     private void initialize() {
@@ -60,17 +65,23 @@ public class SaveConfigController {
             newConfig.setRunCommand(runnerCommand);
             newConfig.setCompiled(isCompiled);
 
-            List<Configuration> existing = FileManager.loadConfigurations(CONFIG_FILE);
-            if (existing == null) existing = new ArrayList<>();
-            existing.add(newConfig);
-            FileManager.saveConfigurations(existing, CONFIG_FILE);
+            File configFile = getWritableConfigFile();
+            // Add to IAEController's list
+            if (IAEController.configurationList == null) {
+                IAEController.configurationList = new ArrayList<>();
+            }
+            IAEController.configurationList.add(newConfig);
 
-            // Listeye geri dön
+            // Ensure the writable config file exists
+
+            IAEController.configurationList = FileManager.saveConfigurations(List.of(newConfig), configFile);
+
+            // Navigate back to the list view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
 
             ListConfigController listController = loader.getController();
-            listController.updateList(existing);
+            listController.updateList(IAEController.configurationList);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -79,6 +90,24 @@ public class SaveConfigController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private File getWritableConfigFile() throws Exception {
+        File writableFile = new File(CONFIG_PATH);
+
+        // Check if the file already exists; if not, copy it from resources
+        if (!writableFile.exists()) {
+            File parentDir = writableFile.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            try (InputStream resourceStream = getClass().getResourceAsStream("/configs.json")) {
+                if (resourceStream == null) {
+                    throw new FileNotFoundException("Resource 'configs.json' not found in resources.");
+                }
+                Files.copy(resourceStream, writableFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        return writableFile;
     }
 
     @FXML
