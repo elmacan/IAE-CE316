@@ -16,110 +16,108 @@ import javafx.stage.Stage;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IAEController extends Application {
-    private List<Configuration> configurationList;
-    private List<Project> projectList;
+    public static List<Configuration> configurationList;
+    public static List<Project> projectList;
     private Project currentProject;
 
-    //@Override
-    /*public void start(Stage stage) throws IOException {
+    public static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
+    public static final String PROJECT_PATH = System.getProperty("user.home") + "/Documents/iae-app/projects.json";
+
+    @Override
+    public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
-       *//* configurationList = FileManager.loadConfigurations(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"));
-        projectList=FileManager.loadProjects(new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\projects.json"));
+
+        // Dosya nesnelerini oluştur
+        File configFile = new File(CONFIG_PATH);
+        File projectFile = new File(PROJECT_PATH);
+
+        // Klasörü oluştur (Documents/iae-app)
+        File parentDir = configFile.getParentFile();
+        if (!parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        // Eğer dosyalar yoksa, resources içinden kopyala
+        if (!configFile.exists()) {
+            try (InputStream defaultConfig = getClass().getResourceAsStream("/configs.json")) {
+                Files.copy(defaultConfig, configFile.toPath());
+            }
+        }
+
+        if (!projectFile.exists()) {
+            try (InputStream defaultProjects = getClass().getResourceAsStream("/projects.json")) {
+                Files.copy(defaultProjects, projectFile.toPath());
+            }
+        }
+
+        // Dosyalardan yükleme
+        configurationList = FileManager.loadConfigurations(configFile);
+        projectList = FileManager.loadProjects(projectFile);
+        if (projectList == null || projectList.isEmpty()) {
+            System.out.println("Project list is null or empty. Initializing with an empty list.");
+            projectList = new ArrayList<>();
+        }
+
+
+        /*if (projectList == null || projectList.isEmpty()) {
+            System.out.println("Project list is null or empty. Initializing with an empty list.");
+            projectList = new ArrayList<>();
+        }*/
+
+
         System.out.println("Configuration List: " + configurationList);
         System.out.println("Project List: " + projectList);
         System.out.println("\n");
-        //System.out.println(projectList.get(0).getProjectName());
-        System.out.println(projectList.get(0).getProjectName());*//*
-        File configFile = new File("configs.json");
-        File projectFile = new File("projects.json");
 
-        configurationList = FileManager.loadConfigurations(configFile);
-        projectList = FileManager.loadProjects(projectFile);
-
+        if (!projectList.isEmpty()) {
+            System.out.println(projectList.get(0).getProjectName());
+        } else {
+            System.out.println("No projects available in the project list.");
+        }
 
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
 
-
-
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
+        stage.show();
 
-        StudentSubmission s = new StudentSubmission();
+       /* StudentSubmission s = new StudentSubmission();
         FileChooser fileChooser = new FileChooser();
         File selectedzip = fileChooser.showOpenDialog(stage);
 
         if (selectedzip != null) {
             s.setZipFile(selectedzip);
             if (s.extract()) { // Ensure extraction is successful
-                Configuration configuration = new Configuration("c", "gcc", "-o elma.exe", "elma.exe", true);
-                Configuration conf = new Configuration("java","javac","","java CE", true);
-                s.compile(conf); // Compile only if extraction succeeded
-                s.run(conf, ""); // Run only if compilation succeeded
+                Configuration configuration2=new Configuration("java","javac","","java CE",true);
+                s.compile(configuration2); // Compile only if extraction succeeded
+                s.run(configuration2, ""); // Run only if compilation succeeded
             } else {
                 System.out.println("Extraction failed. Cannot proceed.");
             }
         } else {
             System.out.println("No zip file selected.");
-        }
+        }*/
 
 
-       // Configuration configuration=new Configuration("c","gcc","-o elma.exe","elma.exe",true);
-       // Configuration config2=new Configuration("java","javac","","java Armut",true);
+        // Configuration configuration=new Configuration("c","gcc","-o elma.exe","elma.exe",true);
+        // Configuration config2=new Configuration("java","javac","","java Armut",true);
 
 
-
-
-    }*/
-
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
-
-
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<Configuration>>(){}.getType();
-
-        try {
-            File configFile = new File(getClass().getResource("/com/example/ce316project/configs.json").toURI());
-            configurationList = FileManager.loadConfigurations(configFile);
-            System.out.println("Loaded " + configurationList.size() + " configurations.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Integrated Application Environment");
-        stage.setScene(scene);
-        stage.show();
     }
-
 
     public static void main(String[] args) {
 
         launch();
-
-        //parse deneme yanılma
-        try {
-            FileReader reader = new FileReader("src/main/resources/com/example/ce316project/configs.json");
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<Configuration>>(){}.getType();
-            List<Configuration> configurations = gson.fromJson(reader, listType);
-            for (Configuration config : configurations) {
-                System.out.println(config);
-            }
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
 
     }

@@ -18,18 +18,47 @@ public class FileManager {
             .create();
 
 
-    public static void saveConfigurations(List<Configuration> newConfigs, File file) {
+    // YENİ: InputStream üzerinden configurations yükle
+    public static List<Configuration> loadConfigurations(InputStream inputStream) {
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            return gson2.fromJson(reader, new TypeToken<List<Configuration>>() {}.getType());
+        } catch (IOException e) {
+            System.out.println("Error loading configurations from stream: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    // YENİ: InputStream üzerinden projects yükle
+    public static List<Project> loadProjects(InputStream inputStream) {
+        if (inputStream == null) {
+            System.out.println("Error: Input stream for projects is null.");
+            return new ArrayList<>(); // Return an empty list if the stream is null
+        }
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            return gson2.fromJson(reader, new TypeToken<List<Project>>() {}.getType());
+        } catch (IOException e) {
+            System.out.println("Error loading projects from stream: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
+    public static List<Configuration> saveConfigurations(List<Configuration> newConfigs, File file) {
         List<Configuration> existingConfigs = loadConfigurations(file);
         if (existingConfigs == null) {
-            existingConfigs = new ArrayList<>(); // null'sa boş liste ile başlat
+            existingConfigs = new ArrayList<>();
         }
+
         existingConfigs.addAll(newConfigs);
 
         try (Writer writer = new FileWriter(file)) {
-            gson.toJson(existingConfigs, writer);
+            gson2.toJson(existingConfigs, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return existingConfigs;
     }
 
     public static List<Configuration> loadConfigurations(File file) {
@@ -38,7 +67,7 @@ public class FileManager {
             return new ArrayList<>();
         }
         try (FileReader reader = new FileReader(file)) {
-            return gson.fromJson(reader, new TypeToken<List<Configuration>>() {}.getType());
+            return gson2.fromJson(reader, new TypeToken<List<Configuration>>() {}.getType());
         } catch (IOException e) {
             System.out.println("Error loading configurations: " + e.getMessage());
             e.printStackTrace();
@@ -51,9 +80,9 @@ public class FileManager {
             JsonElement jsonElement = JsonParser.parseReader(reader);
 
             if (jsonElement.isJsonArray()) {
-                importedConfigs = gson.fromJson(jsonElement, new TypeToken<List<Configuration>>() {}.getType());
+                importedConfigs = gson2.fromJson(jsonElement, new TypeToken<List<Configuration>>() {}.getType());
             } else if (jsonElement.isJsonObject()) {
-                Configuration single = gson.fromJson(jsonElement, Configuration.class);
+                Configuration single = gson2.fromJson(jsonElement, Configuration.class);
                 importedConfigs.add(single);
             } else {
                 System.out.println("Unsupported JSON format.");
@@ -67,7 +96,7 @@ public class FileManager {
 
     public static void exportConfiguration(Configuration config, File file) {
         try (FileWriter writer = new FileWriter(file)) {
-            gson.toJson(config, writer);
+            gson2.toJson(config, writer);
         } catch (IOException e) {
             System.out.println("Error exporting configuration: " + e.getMessage());
             e.printStackTrace();
@@ -87,14 +116,8 @@ public class FileManager {
         }
     }
 
-    public static boolean saveProjectIfUnique(Project newProject, File file) {
+    public static List<Project> saveProjectIfUnique(Project newProject, File file) {
         List<Project> existingProjects = loadProjects(file);
-        String json = gson2.toJson(existingProjects);
-        System.out.println("Yazılacak JSON:\n" + json);
-        System.out.println("JSON dosyasına yazılıyor: " + file.getAbsolutePath());
-
-
-
         if (existingProjects == null) {
             existingProjects = new ArrayList<>();
         }
@@ -103,20 +126,22 @@ public class FileManager {
                 .anyMatch(p -> p.getProjectName().equalsIgnoreCase(newProject.getProjectName()));
 
         if (nameExists) {
-            return false;  // Aynı isim varsa ekleme
+            return null; // Aynı isim varsa ekleme
         }
 
         existingProjects.add(newProject);
 
         try (Writer writer = new FileWriter(file)) {
-            gson2.toJson(existingProjects, writer);
-            return true;
+            gson2.toJson(existingProjects, writer); // ✅ Pretty-print JSON
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
 
-
+        return existingProjects; // Güncellenmiş listeyi döndür
     }
+
+
+
     //burdaki metodların hepsi static olcak
 }

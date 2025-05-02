@@ -31,9 +31,9 @@ public class CreateProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Configuration> configs = FileManager.loadConfigurations(new File("configs.json"));
-        if (configs != null) {
-            configurationComboBox.setItems(FXCollections.observableArrayList(configs));
+
+        if (IAEController.configurationList != null) {
+            configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
         }
     }
     @FXML
@@ -64,16 +64,20 @@ public class CreateProjectController implements Initializable {
         }
 
         Project newProject = new Project(name, selectedConfig, input, expectedOutput, new File(zipPath));
-        File projectFile = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\projects.json");
 
-        // Yeni yöntemle aynı isimde varsa kaydetme
-        boolean added = FileManager.saveProjectIfUnique(newProject, projectFile);
 
-        if (added) {
+        File projectFile = new File(System.getProperty("user.home") + "/Documents/iae-app/projects.json");
+
+
+        List<Project> updatedList = FileManager.saveProjectIfUnique(newProject, projectFile);
+
+        if (updatedList != null) {
+            IAEController.projectList = updatedList; // liste güncel
             System.out.println("Yeni proje başarıyla eklendi.");
         } else {
             System.out.println("Bu isimde bir proje zaten var. Lütfen farklı bir isim seçin.");
         }
     }
+
 
 }
