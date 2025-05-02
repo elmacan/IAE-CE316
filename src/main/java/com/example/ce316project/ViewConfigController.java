@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ViewConfigController {
 
@@ -60,6 +62,24 @@ public class ViewConfigController {
         languageParamsLabel.setText(config.getLanguageParameters());
         runCommandLabel.setText(config.getRunCommand());
         isCompiledLabel.setText(config.isCompiled() ? "Yes" : "No");
+    }
+
+    @FXML
+    private void onEditClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/editConfig.fxml"));
+            Parent root = loader.load();
+
+            // Edit sayfasına mevcut Configuration'ı aktarıyoruz
+            SaveConfigController controller = loader.getController();
+            controller.setEditingConfiguration(configuration); // Bu methodu SaveConfigController'da yazmalısın
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

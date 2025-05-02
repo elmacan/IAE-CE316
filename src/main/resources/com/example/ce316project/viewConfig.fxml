@@ -41,7 +41,7 @@
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Edit" />
+        <Button text="Edit" onAction="#onEditClick" />
         <Button text="Delete" onAction="#onDeleteClick"/>
         <Button text="Back" onAction="#onBackClick"/>
     </HBox>

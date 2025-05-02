@@ -41,6 +41,8 @@ public class SaveConfigController {
         browseCompilerButton.setOnAction(this::handleBrowseCompiler);
     }
 
+
+    @FXML
     private void handleBrowseCompiler(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Compiler");
