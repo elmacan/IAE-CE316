@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.CreateProjectController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.CreateProjectController">
     <children>
 
         <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="20">
@@ -35,9 +35,9 @@
                     <ComboBox fx:id="configurationComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <!-- Source File -->
-                    <Label text="Zip File:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label text="Zip Directory:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                     <TextField fx:id="sourceFileField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                    <Button fx:id="browseSourceButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#chooseZipFileDirectory" />
+                    <Button fx:id="browseSourceButton" onAction="#chooseZipFileDirectory" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
                     <!-- Arguments -->
                     <Label text="Arguments:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
@@ -61,13 +61,14 @@
                 <Pane VBox.vgrow="ALWAYS" />
 
 
-                <HBox alignment="CENTER_RIGHT" spacing="10">
+                <HBox alignment="CENTER_RIGHT" prefHeight="76.0" prefWidth="319.0" spacing="10">
                     <padding>
                         <Insets bottom="30" left="10" right="20" top="20" />
                     </padding>
                     <Button fx:id="cancelButton" onAction="#onCancelButton" text="Cancel" />
-                    <Button fx:id="compareButton" onAction="#onCompareButtonClick" text="Compare" />
-                    <Button fx:id="runButton" onAction="#onRunButtonClick" text="Run" />
+               <HBox prefHeight="26.0" prefWidth="342.0" />
+                    <Button fx:id="compareButton" managed="false" onAction="#onCompareButtonClick" text="Compare" visible="false" />
+                    <Button fx:id="runButton" managed="false" onAction="#onRunButtonClick" text="Run" visible="false" />
                     <Button fx:id="createProjectButton" onAction="#onCreateProjectButton" text="Create Project" />
                 </HBox>
             </children>

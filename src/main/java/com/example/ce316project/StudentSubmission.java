@@ -37,6 +37,7 @@ public class StudentSubmission {
 
     public boolean extract() {
         if (zipFile == null || !zipFile.exists()) {
+            result.appendErrorLog("Error: Zip file is null or does not exist.");
             System.err.println("Error: Zip file is null or does not exist.");
             return false;
         }
@@ -88,56 +89,6 @@ public class StudentSubmission {
 
         return true;
     }
-
-
-
-
-    public Result getResult() {
-        return result;
-    }
-
-
-
-    public File findSourceFile(){
-        //birden fazla varsa main olana bakıyor diğer türlü normal alıyor
-        if (extractedDirectory == null || !extractedDirectory.exists()) {
-            throw new IllegalStateException("Extracted directory is not set or does not exist.");
-        }
-
-        String[] sourceExtensions = {".c", ".java", ".cpp", ".py"};
-        File mainFileCandidate = null; // Adı 'main' olan dosyayı aramak için
-
-        File[] files = extractedDirectory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    for (String extension : sourceExtensions) {
-                        if (file.getName().toLowerCase().endsWith(extension)) {
-                            String baseName = file.getName().substring(0, file.getName().lastIndexOf('.'));
-
-                            if (baseName.equalsIgnoreCase("main")) {
-                                // Eğer dosya adı 'main' ise doğrudan bunu seç
-                                System.out.println("Main source file found: " + file.getAbsolutePath());
-                                return file;
-                            } else if (mainFileCandidate == null) {
-                                // Main bulunmadıysa, bulduğumuz ilk uygun dosyayı yedek olarak tut
-                                mainFileCandidate = file;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (mainFileCandidate != null) {
-            System.out.println("Source file (not named main) found: " + mainFileCandidate.getAbsolutePath());
-            return mainFileCandidate;
-        }
-
-        throw new IllegalStateException("No source file found in the extracted directory.");
-
-    }
-
 
     public void compile(Configuration configuration) {
 
@@ -332,7 +283,9 @@ public class StudentSubmission {
 
 
 
-
+    public Result getResult() {
+        return result;
+    }
 
     public String getStudentID() {
         return studentID;

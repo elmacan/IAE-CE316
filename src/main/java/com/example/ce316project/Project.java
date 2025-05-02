@@ -32,6 +32,45 @@ public class Project {
             this.zipDirectory = zipDirectory;
             this.submissions = new ArrayList<>();
       }
+
+      public void runAllSubmission() {
+            if (zipDirectory == null || !zipDirectory.exists() || !zipDirectory.isDirectory()) {
+                  throw new IllegalStateException("Invalid zip directory: " + zipDirectory);
+            }
+
+            File[] zipFiles = zipDirectory.listFiles((dir, name) -> name.toLowerCase().endsWith(".zip"));
+            if (zipFiles == null || zipFiles.length == 0) {
+                  System.out.println("No ZIP files found in the directory.");
+                  return;
+            }
+
+            for (File zipFile : zipFiles) {
+                  try {
+                        System.out.println("Processing ZIP file: " + zipFile.getName());
+
+                        StudentSubmission submission = new StudentSubmission();
+                        submission.setZipFile(zipFile);
+                        submission.setStudentID(zipFile.getName());
+
+                        boolean extracted = submission.extract();
+                        if (!extracted) {
+                              System.out.println("Failed to extract ZIP file: " + zipFile.getName());
+                              continue;
+                        }
+
+                        submission.compile(projectConfig);
+                        submission.run(projectConfig, input);
+
+                        addSubmission(submission);
+
+                  } catch (Exception e) {
+                        System.out.println("Error processing ZIP file: " + zipFile.getName());
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+
       public String getProjectName() {
             return projectName;
       }
