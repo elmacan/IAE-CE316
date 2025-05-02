@@ -36,6 +36,14 @@ public class CreateProjectController implements Initializable {
     @FXML
     private ComboBox<Configuration> configurationComboBox;
 
+    @FXML
+    private Button runButton;
+
+    @FXML
+    private Button compareButton;
+    private StudentSubmission currentSubmission;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -105,6 +113,48 @@ public class CreateProjectController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    @FXML
+    private void onRunButtonClick(ActionEvent event) {
+        if (currentSubmission == null) {
+            System.out.println("No submission loaded. Please load a submission first.");
+            return;
+        }
+
+        Configuration selectedConfig = configurationComboBox.getValue();
+        String arguments = argumentsArea.getText();
+
+        if (selectedConfig == null) {
+            System.out.println("Please select a configuration.");
+            return;
+        }
+
+        currentSubmission.run(selectedConfig, arguments);
+        System.out.println("Run method executed.");
+    }
+
+    @FXML
+    private void onCompareButtonClick(ActionEvent event) {
+        if (currentSubmission == null) {
+            System.out.println("No submission loaded. Please load a submission first.");
+            return;
+        }
+
+        File expectedOutputFile = new File(expectedOutputFileField.getText());
+        if (!expectedOutputFile.exists()) {
+            System.out.println("Expected output file does not exist.");
+            return;
+        }
+
+        boolean comparisonResult = currentSubmission.compareOutput(expectedOutputFile);
+        System.out.println("Comparison result: " + comparisonResult);
+    }
+
+
+
+
+
+
 
 }
 

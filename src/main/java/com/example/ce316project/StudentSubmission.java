@@ -22,7 +22,7 @@ public class StudentSubmission {
     private File extractedDirectory;
     private Result result;
     private String studentOutput;
-    //private File actualOutputFile;
+    private File actualOutputFile;
 
 
 
@@ -89,6 +89,9 @@ public class StudentSubmission {
         return true;
     }
 
+
+
+
     public Result getResult() {
         return result;
     }
@@ -137,6 +140,7 @@ public class StudentSubmission {
 
 
     public void compile(Configuration configuration) {
+
         try {
 
             File[] sourceFiles = extractedDirectory.listFiles((dir, name) -> {
@@ -284,7 +288,7 @@ public class StudentSubmission {
         }
     }
 
-            /*public boolean compareOutput(File expectedOutput) {
+            public boolean compareOutput(File expectedOutput) {
                 if (expectedOutput == null || actualOutputFile == null ||
                         !expectedOutput.exists() || !actualOutputFile.exists()) {
                     result.setOutputMatches(false);
@@ -324,7 +328,7 @@ public class StudentSubmission {
                     result.appendErrorLog("Comparison failed: " + e.getMessage());
                     return false;
                 }
-            }*/
+            }
 
 
 

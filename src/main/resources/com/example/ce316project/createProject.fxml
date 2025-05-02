@@ -66,7 +66,8 @@
                         <Insets bottom="30" left="10" right="20" top="20" />
                     </padding>
                     <Button fx:id="cancelButton" onAction="#onCancelButton" text="Cancel" />
-                    <Button fx:id="compareRunButton" text="Compare And Run" />
+                    <Button fx:id="compareButton" onAction="#onCompareButtonClick" text="Compare" />
+                    <Button fx:id="runButton" onAction="#onRunButtonClick" text="Run" />
                     <Button fx:id="createProjectButton" onAction="#onCreateProjectButton" text="Create Project" />
                 </HBox>
             </children>
