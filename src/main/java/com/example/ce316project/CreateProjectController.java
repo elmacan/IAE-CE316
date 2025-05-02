@@ -95,7 +95,7 @@ public class CreateProjectController implements Initializable {
         }
     }
 
-    @FXML
+    /*@FXML
     private void chooseZipFileDirectory(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Submission Directory");
@@ -112,7 +112,73 @@ public class CreateProjectController implements Initializable {
             alert.setContentText("Please select a directory!");
             alert.showAndWait();
         }
+    }*/
+
+    @FXML
+    private void chooseZipFileDirectory(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Student ZIP File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP Files", "*.zip"));
+
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        File selectedZip = fileChooser.showOpenDialog(window);
+
+        if (selectedZip != null && selectedZip.exists()) {
+            sourceFileField.setText(selectedZip.getAbsolutePath());
+
+            // ZIP dosyasından StudentSubmission oluştur ve extract et
+            currentSubmission = new StudentSubmission();
+            currentSubmission.setZipFile(selectedZip);
+
+            boolean extracted = currentSubmission.extract();
+            if (extracted) {
+                System.out.println("ZIP extracted successfully.");
+
+                // Main.java dosyasını bul ve compile et
+                try {
+                    File sourceFile = currentSubmission.findSourceFile(); // Main.java dosyasını bul
+                    if (sourceFile != null && sourceFile.getName().equals("Main.java")) {
+                        String compileCommand = "javac " + sourceFile.getAbsolutePath();
+                        Process compileProcess = Runtime.getRuntime().exec(compileCommand);
+                        int compileExitCode = compileProcess.waitFor();
+
+                        if (compileExitCode == 0) {
+                            System.out.println("Compilation successful.");
+
+                            // Main sınıfını çalıştır
+                            String runCommand = "java -cp " + currentSubmission.getExtractedDirectory().getAbsolutePath() + " Main";
+                            Process runProcess = Runtime.getRuntime().exec(runCommand);
+                            int runExitCode = runProcess.waitFor();
+
+                            if (runExitCode == 0) {
+                                System.out.println("Main class executed successfully.");
+                            } else {
+                                System.out.println("Error: Could not execute Main class.");
+                            }
+                        } else {
+                            System.out.println("Error: Compilation failed.");
+                        }
+                    } else {
+                        System.out.println("Error: Main.java not found in the extracted directory.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("An error occurred during compilation or execution.");
+                }
+            } else {
+                System.out.println("ZIP extraction failed.");
+                currentSubmission = null;
+            }
+        } else {
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a valid ZIP file.");
+            alert.showAndWait();
+        }
     }
+
+
 
     @FXML
     private void onRunButtonClick(ActionEvent event) {
