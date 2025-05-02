@@ -44,6 +44,26 @@ public class ListConfigController implements Initializable {
                 }
             });
         }
+        configurationListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Configuration selected = configurationListView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/viewConfig.fxml"));
+                        Parent root = loader.load();
+
+                        ViewConfigController controller = loader.getController();
+                        controller.setConfiguration(selected);
+
+                        Stage stage = (Stage) configurationListView.getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
     @FXML
     private void onAddConfigurationButtonClick(ActionEvent event) {

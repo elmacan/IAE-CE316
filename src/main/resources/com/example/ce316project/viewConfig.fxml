@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.ce316project.ViewConfigController"
+      fx:id="rootVBox"
+      spacing="10" alignment="TOP_LEFT" >
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label fx:id="configurationDetailsLabel"
+           text="Configuration Details"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Language Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="languageNameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Language Path:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="languagePathLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Compile Parameters:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="languageParamsLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Run Command:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <Label fx:id="runCommandLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+        <Label text="Is Compiled:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <Label fx:id="isCompiledLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Edit" />
+        <Button text="Delete" onAction="#onDeleteClick"/>
+        <Button text="Back" onAction="#onBackClick"/>
+    </HBox>
+</VBox>
+

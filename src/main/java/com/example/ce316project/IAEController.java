@@ -82,6 +82,7 @@ public class IAEController extends Application {
         } else {
             System.out.println("No projects available in the project list.");
         }
+        System.out.println("Configuration List: " + configurationList);
 
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);

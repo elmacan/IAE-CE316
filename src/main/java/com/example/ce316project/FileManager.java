@@ -45,20 +45,12 @@ public class FileManager {
     }
 
 
-    public static List<Configuration> saveConfigurations(List<Configuration> newConfigs, File file) {
-        List<Configuration> existingConfigs = loadConfigurations(file);
-        if (existingConfigs == null) {
-            existingConfigs = new ArrayList<>();
-        }
-
-        existingConfigs.addAll(newConfigs);
-
+    public static void saveConfigurations(List<Configuration> newConfigs, File file) {
         try (Writer writer = new FileWriter(file)) {
-            gson2.toJson(existingConfigs, writer);
+            gson2.toJson(newConfigs, writer); // ✅ SADECE yeni listeyi yaz
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return existingConfigs;
     }
 
     public static List<Configuration> loadConfigurations(File file) {

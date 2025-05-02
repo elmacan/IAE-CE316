@@ -30,8 +30,10 @@ public class SaveConfigController {
     @FXML private Button browseCompilerButton;
     @FXML private Button saveConfigButton;
 
+    private Configuration editingConfig = null;
+
     private static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
-    //private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"); hatıra kalsın eheh
+    //private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"); hatıra kalsın eheh :D
 
     @FXML
     private void initialize() {
@@ -48,6 +50,24 @@ public class SaveConfigController {
         }
     }
 
+    public void setEditingConfiguration(Configuration config) {
+        editingConfig = config;
+
+        languageField.setText(config.getLanguageName());
+        compilerPathField.setText(config.getLanguagePath());
+        sourceFileField.setText(config.getLanguageParameters());
+        runnerCommandField.setText(config.getRunCommand());
+        //isCompiledCheckBox.setSelected(config.isCompiled());
+
+        // Tipi ayarla
+        if (config.isCompiled()) {
+            languageTypeComboBox.setValue("Compiled");
+        } else {
+            languageTypeComboBox.setValue("Interpreted");
+        }
+    }
+
+    @FXML
     private void handleSaveConfig(ActionEvent event) {
         try {
             String language = languageField.getText();
@@ -55,31 +75,31 @@ public class SaveConfigController {
             String compilerPath = compilerPathField.getText();
             String parameters = sourceFileField.getText();
             String runnerCommand = runnerCommandField.getText();
-
-            boolean isCompiled = type.equalsIgnoreCase("Compiled");
+            //boolean isCompiled = isCompiledCheckBox.isSelected();
 
             Configuration newConfig = new Configuration();
             newConfig.setLanguageName(language);
             newConfig.setLanguagePath(compilerPath);
             newConfig.setLanguageParameters(parameters);
             newConfig.setRunCommand(runnerCommand);
-            newConfig.setCompiled(isCompiled);
+            //newConfig.setCompiled(isCompiled);
 
             File configFile = getWritableConfigFile();
-            // Add to IAEController's list
-            if (IAEController.configurationList == null) {
-                IAEController.configurationList = new ArrayList<>();
+
+            if (editingConfig != null) {
+                int index = IAEController.configurationList.indexOf(editingConfig);
+                if (index != -1) {
+                    IAEController.configurationList.set(index, newConfig);
+                }
+            } else {
+                IAEController.configurationList.add(newConfig);
             }
-            IAEController.configurationList.add(newConfig);
 
-            // Ensure the writable config file exists
+            FileManager.saveConfigurations(IAEController.configurationList, configFile);
 
-            IAEController.configurationList = FileManager.saveConfigurations(List.of(newConfig), configFile);
-
-            // Navigate back to the list view
+            // Geri dön
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
-
             ListConfigController listController = loader.getController();
             listController.updateList(IAEController.configurationList);
 
