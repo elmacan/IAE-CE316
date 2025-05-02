@@ -1,16 +1,16 @@
 [
   {
     "languageName": "Java",
-    "languagePath": "C:/Program Files/Java/jdk-21/bin/javac.exe",
+    "languagePath": "javac",
     "languageParameters": "",
     "runCommand": "java Main",
     "isCompiled": true
   },
   {
-    "languageName": "C++",
-    "languagePath": "C:/MinGW/bin/g++.exe",
-    "languageParameters": "-o main",
-    "runCommand": "./main",
+    "languageName": "C",
+    "languagePath": "gcc",
+    "languageParameters": "-o main.exe",
+    "runCommand": "main.exe",
     "isCompiled": true
   },
   {

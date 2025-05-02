@@ -25,7 +25,7 @@ import java.util.List;
 public class IAEController extends Application {
     public static List<Configuration> configurationList;
     public static List<Project> projectList;
-    private Project currentProject;
+    public static Project currentProject;
 
     public static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
     public static final String PROJECT_PATH = System.getProperty("user.home") + "/Documents/iae-app/projects.json";
@@ -67,12 +67,6 @@ public class IAEController extends Application {
         }
 
 
-        /*if (projectList == null || projectList.isEmpty()) {
-            System.out.println("Project list is null or empty. Initializing with an empty list.");
-            projectList = new ArrayList<>();
-        }*/
-
-
         System.out.println("Configuration List: " + configurationList);
         System.out.println("Project List: " + projectList);
         System.out.println("\n");
@@ -91,24 +85,6 @@ public class IAEController extends Application {
         stage.setTitle("Integrated Application Environment");
         stage.setScene(scene);
         stage.show();
-
-       /* StudentSubmission s = new StudentSubmission();
-        FileChooser fileChooser = new FileChooser();
-        File selectedzip = fileChooser.showOpenDialog(stage);
-
-        if (selectedzip != null) {
-            s.setZipFile(selectedzip);
-            if (s.extract()) { // Ensure extraction is successful
-                Configuration configuration2=new Configuration("java","javac","","java CE",true);
-                s.compile(configuration2); // Compile only if extraction succeeded
-                s.run(configuration2, ""); // Run only if compilation succeeded
-            } else {
-                System.out.println("Extraction failed. Cannot proceed.");
-            }
-        } else {
-            System.out.println("No zip file selected.");
-        }*/
-
 
         // Configuration configuration=new Configuration("c","gcc","-o elma.exe","elma.exe",true);
         // Configuration config2=new Configuration("java","javac","","java Armut",true);

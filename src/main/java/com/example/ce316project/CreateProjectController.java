@@ -83,7 +83,7 @@ public class CreateProjectController implements Initializable {
         }
 
         Project newProject = new Project(name, selectedConfig, input, expectedOutput, new File(zipPath));
-
+        IAEController.currentProject=newProject;
 
         File projectFile = new File(System.getProperty("user.home") + "/Documents/iae-app/projects.json");
 
@@ -135,7 +135,7 @@ public class CreateProjectController implements Initializable {
 
     @FXML
     private void onRunButtonClick(ActionEvent event) {
-
+       IAEController.currentProject.runAllSubmission();
     }
 
     @FXML
