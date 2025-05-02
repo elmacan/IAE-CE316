@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.CreateProjectController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.CreateProjectController">
     <children>
 
-        <VBox spacing="10" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+        <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="20">
             <children>
-                <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="10" vgap="10">
                     <columnConstraints>
-                        <ColumnConstraints minWidth="150"/>
-                        <ColumnConstraints minWidth="400"/>
-                        <ColumnConstraints minWidth="100"/>
+                        <ColumnConstraints minWidth="150" />
+                        <ColumnConstraints minWidth="400" />
+                        <ColumnConstraints minWidth="100" />
                     </columnConstraints>
 
                     <!-- Project Name -->
-                    <Label text="Project Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <TextField fx:id="projectNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Project Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="projectNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                     <!-- Select Configuration -->
-                    <Label text="Select Configuration:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <ComboBox fx:id="configurationComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Select Configuration:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="configurationComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <!-- Source File -->
-                    <Label text="Source File:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <TextField fx:id="sourceFileField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                    <Button text="Browse" fx:id="browseSourceButton" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                    <Label text="Zip File:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="sourceFileField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Button fx:id="browseSourceButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#chooseZipFileDirectory" />
 
                     <!-- Arguments -->
-                    <Label text="Arguments:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                    <TextArea fx:id="argumentsArea" prefRowCount="5" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                    <Button text="Browse" fx:id="browseArgumentsButton" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                    <Label text="Arguments:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <TextArea fx:id="argumentsArea" prefRowCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Button fx:id="browseArgumentsButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
                     <!-- Expected Output File -->
-                    <Label text="Expected Output File:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                    <TextField fx:id="expectedOutputFileField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-                    <Button text="Browse" fx:id="browseOutputButton" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+                    <Label text="Expected Output File:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <TextField fx:id="expectedOutputFileField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <Button fx:id="browseOutputButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
                 </GridPane>
 
 
-                <Pane VBox.vgrow="ALWAYS"/>
+                <Pane VBox.vgrow="ALWAYS" />
 
 
-                <HBox spacing="10" alignment="CENTER_RIGHT">
+                <HBox alignment="CENTER_RIGHT" spacing="10">
                     <padding>
-                        <Insets top="20" right="20" bottom="30" left="10"/>
+                        <Insets bottom="30" left="10" right="20" top="20" />
                     </padding>
-                    <Button text="Cancel" fx:id="cancelButton" onAction="#onCancelButton"/>
-                    <Button text="Compare And Run" fx:id="compareRunButton"/>
-                    <Button text="Create Project" fx:id="createProjectButton" onAction="#onCreateProjectButton"/>
+                    <Button fx:id="cancelButton" onAction="#onCancelButton" text="Cancel" />
+                    <Button fx:id="compareRunButton" text="Compare And Run" />
+                    <Button fx:id="createProjectButton" onAction="#onCreateProjectButton" text="Create Project" />
                 </HBox>
             </children>
             <padding>
-                <Insets top="40" right="10" bottom="20" left="10"/>
+                <Insets bottom="20" left="10" right="10" top="40" />
             </padding>
         </VBox>
     </children>
