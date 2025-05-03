@@ -40,12 +40,7 @@ public class StudentSubmission {
         public void setOutput(String output) {
             this.output = output;
         }
-
-
-
-
-
-
+        
     public StudentSubmission(String studentID, File zipFile) {
         this.studentID = studentID;
         this.zipFile = zipFile;
@@ -206,7 +201,7 @@ public class StudentSubmission {
     public void run(Configuration configuration, String arguments) {
         File outputFile = new File(extractedDirectory, "student_output.txt");
         try {
-            // 1) Kullanıcıdan gelen run komutunu böl
+
             String runCommand = configuration.generateRunCommand(arguments);
             List<String> parts = new ArrayList<>(Arrays.asList(runCommand.split(" ")));
 
@@ -216,7 +211,6 @@ public class StudentSubmission {
 
             for (int i = 0; i < parts.size(); i++) {
                 String p = parts.get(i);
-                // eğer nokta içeriyor ve yol ayracı içermiyorsa => dosya adı
                 if (p.contains(".") && !p.contains(File.separator)) {
                     File matched = null;
                     for (File f : files) {
@@ -233,6 +227,15 @@ public class StudentSubmission {
                     parts.set(i, matched.getAbsolutePath());
                 }
             }
+
+            if(!configuration.isCompiled()) {
+                String interpreter = configuration.getLanguagePath();
+                if (interpreter != null && !interpreter.isBlank()) {
+                    parts.add(0, interpreter);
+                }
+            }
+
+            System.out.println("Final RUN command: " + String.join(" ", parts));
 
             // 3) ProcessBuilder ile çalıştır
             ProcessBuilder pb = new ProcessBuilder(parts);
