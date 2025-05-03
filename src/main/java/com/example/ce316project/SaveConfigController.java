@@ -84,6 +84,7 @@ public class SaveConfigController {
             newConfig.setLanguagePath(compilerPath);
             newConfig.setLanguageParameters(parameters);
             newConfig.setRunCommand(runnerCommand);
+            newConfig.setCompiled("Imperative".equalsIgnoreCase(type) ? false : true);
             //newConfig.setCompiled(isCompiled);
 
             File configFile = getWritableConfigFile();
