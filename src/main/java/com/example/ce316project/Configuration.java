@@ -10,7 +10,7 @@ public class Configuration {
     private String runCommand;   // ./main [arguments varsa]
     private boolean isCompiled;   //true
     private String fileExtansion;
-    private static List<String> sourceExtensions = new ArrayList<>(List.of(".c", ".java", ".cpp", ".py"));
+    public static List<String> sourceExtensions = new ArrayList<>(List.of(".c", ".java", ".cpp", ".py"));
 
 
     public Configuration() {}
