@@ -5,7 +5,15 @@ public class Result {
    private boolean runSuccessfully;
    private boolean outputMatches;
    private StringBuilder errorLog;
+   private String studentNumber;
 
+   public String getStudentNumber() {
+      return studentNumber;
+   }
+
+   public void setStudentNumber(String studentNumber) {
+      this.studentNumber = studentNumber;
+   }
 
    public Result(){
       this.errorLog=new StringBuilder();

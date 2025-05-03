@@ -30,6 +30,20 @@ public class StudentSubmission {
     private File actualOutputFile;
 
 
+        private String output; // Bu değişken varsa
+
+        public String getOutput() {
+            return output;
+        }
+
+        public void setOutput(String output) {
+            this.output = output;
+        }
+
+
+
+
+
 
     public StudentSubmission(String studentID, File zipFile) {
         this.studentID = studentID;

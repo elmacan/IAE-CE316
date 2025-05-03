@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -133,43 +134,6 @@ public class CreateProjectController implements Initializable {
     }
 
 
-
-
-    /*@FXML
-    private void onCreateProjectButton() {
-        String name = projectNameField.getText();
-        Configuration selectedConfig = configurationComboBox.getValue();
-        String input = argumentsArea.getText();
-        String expectedOutput = expectedOutputFileField.getText();
-        String zipPath = sourceFileField.getText();
-
-        if (name.isEmpty() || selectedConfig == null || zipPath.isEmpty()) {
-            System.out.println("Lütfen tüm gerekli alanları doldurun.");
-            return;
-        }
-
-        Project newProject = new Project(name, selectedConfig, input, expectedOutput, new File(zipPath));
-        IAEController.currentProject=newProject;
-
-        File projectFile = new File(System.getProperty("user.home") + "/Documents/iae-app/projects.json");
-
-
-        List<Project> updatedList = FileManager.saveProjectIfUnique(newProject, projectFile);
-
-        if (updatedList != null) {
-            IAEController.projectList = updatedList; // liste güncel
-            System.out.println("Yeni proje başarıyla eklendi.");
-            compareButton.setVisible(true);
-            compareButton.setManaged(true);
-            runButton.setVisible(true);
-            runButton.setManaged(true);
-            createProjectButton.setVisible(false);
-            createProjectButton.setManaged(false);
-        } else {
-            System.out.println("Bu isimde bir proje zaten var. Lütfen farklı bir isim seçin.");
-        }
-    }*/
-
     @FXML
     private void chooseZipFileDirectory(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -236,64 +200,66 @@ public class CreateProjectController implements Initializable {
     }
 
 
-
     @FXML
     private void onCompareButtonClick(ActionEvent event) {
-        // 1. Proje ve submission varlığını kontrol et
         if (IAEController.currentProject == null) {
             showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
-            System.out.println("Karşılaştırma Uyarısı: Aktif proje yok.");
             return;
         }
 
         List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
         if (submissions == null || submissions.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Bu proje için hiç submission bulunamadı. Lütfen önce submission'ları çalıştırın.");
-            System.out.println("Karşılaştırma Uyarısı: Submission bulunamadı veya henüz çalıştırılmadı.");
             return;
         }
 
-        // 2. BEKLENEN ÇIKTIYI PROJE NESNESİNDEN AL
         String expectedOutput = IAEController.currentProject.getExpectedOutput();
-        System.out.println("DEBUG: onCompareButtonClick - Projeden alınan beklenen çıktı: '" + expectedOutput + "'"); // Debug log
-
-        // 3. PROJEDE SAKLANAN DEĞERİN boş/null OLMADIĞINI KONTROL ET
         if (expectedOutput == null || expectedOutput.trim().isEmpty()) {
-            // Bu hata artık projenin kendisinin eksik bilgiyle oluşturulduğu anlamına gelir
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Bu proje için tanımlanmış beklenen çıktı boş. Lütfen proje özelliklerini düzenleyin veya oluştururken doğru ayarlandığından emin olun.");
-            System.out.println("Karşılaştırma Hatası: Projede saklanan beklenen çıktı boş veya null.");
-            return; // Projenin verisi hatalıysa çık
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Beklenen çıktı tanımlı değil. Lütfen proje ayarlarını kontrol edin.");
+            return;
         }
 
-        // 4. Karşılaştırılacak submission'ı al (şimdilik ilkini alıyoruz)
+
         StudentSubmission submission = submissions.get(0);
         if (submission == null) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi beklenmedik şekilde null.");
-            System.err.println("Hata: 0 indeksinde null submission bulundu, proje: " + IAEController.currentProject.getProjectName());
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi null.");
             return;
         }
 
-        // 5. Projenin beklenen çıktısını kullanarak karşılaştırmayı yap
-        System.out.println("Submission için çıktı karşılaştırılıyor..."); // Mümkünse submission ID ekle
-        System.out.println("Kullanılan Beklenen Çıktı (projeden): \"" + expectedOutput + "\"");
-        boolean comparisonResult = submission.compareOutput(expectedOutput); // Doğru compareOutput çağrılıyor
+        boolean comparisonResult = submission.compareOutput(expectedOutput);
+        String comparisonText;
 
-        // 6. Sonuçları göster
         if (comparisonResult) {
-            showAlert(Alert.AlertType.INFORMATION, "Karşılaştırma Sonucu", "✅ Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.");
-            System.out.println("✅ Çıktı eşleşiyor.");
+            comparisonText = "✅ Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.\n\n"
+                    + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
+                    + "Öğrenci Çıktısı:\n" + submission.getOutput();
         } else {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Sonucu", "❌ Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor. Detaylar için hata günlüğünü kontrol edin.");
-            System.out.println("❌ Çıktı eşleşmiyor.");
+            comparisonText = "❌ Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor.\n\n"
+                    + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
+                    + "Öğrenci Çıktısı:\n" + submission.getOutput();
         }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ResultPage.fxml"));
+            Parent root = loader.load();
+
+
+            Stage stage = new Stage();
+            stage.setTitle("Karşılaştırma Sonuçları");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Yükleme Hatası", "Sonuç sayfası yüklenirken bir hata oluştu.");
+        }
+
     }
 
 
 
 
 
-
-
+    // showAlert yardımcı metodu
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -301,10 +267,11 @@ public class CreateProjectController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    // Helper method (keep this in your controller)
-
-    // Helper method (keep this in your controller)
-
-
 }
+
+
+
+
+
+
 
