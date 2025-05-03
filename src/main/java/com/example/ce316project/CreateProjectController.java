@@ -86,7 +86,7 @@ public class CreateProjectController implements Initializable {
         // Gerekli alanların boş olup olmadığını kontrol et (expectedOutput dahil)
         if (name.isEmpty() || selectedConfig == null || zipPath.isEmpty() || expectedOutput.isEmpty()) { // expectedOutput kontrolü eklendi
             // Eksik bilgi varsa kullanıcıyı uyar
-            showAlert(Alert.AlertType.WARNING, "Eksik Bilgi", "Lütfen Proje Adı, Konfigürasyon, Kaynak Dizin VE Beklenen Çıktı alanlarını doldurun.");
+            showAlert(Alert.AlertType.WARNING, "Missing Information", "Please fill in the Project Name, Configuration, Source Directory AND Expected Output fields.");
             System.out.println("Proje oluşturma başarısız: Beklenen Çıktı dahil gerekli alanlar eksik.");
             return; // Proje oluşturmayı durdur
         }
@@ -95,7 +95,7 @@ public class CreateProjectController implements Initializable {
         // Kaynak dizinin geçerli olup olmadığını kontrol et
         File zipDirectory = new File(zipPath);
         if (!zipDirectory.exists() || !zipDirectory.isDirectory()) {
-            showAlert(Alert.AlertType.ERROR, "Geçersiz Yol", "Belirtilen kaynak yolu geçerli bir dizin değil.");
+            showAlert(Alert.AlertType.ERROR, "Invalid Path", "The specified source path is not a valid directory.");
             System.out.println("Proje oluşturma başarısız: Geçersiz kaynak dizin yolu.");
             return;
         }
@@ -113,9 +113,9 @@ public class CreateProjectController implements Initializable {
             IAEController.projectList = updatedList; // Statik listeyi güncelle
             IAEController.currentProject = newProject; // Yeni oluşturulan projeyi mevcut proje yap
 
-            System.out.println("Yeni proje '" + name + "' başarıyla oluşturuldu ve kaydedildi.");
+            System.out.println("New project '" + name + "' was created and saved successfully.");
             System.out.println("DEBUG: onCreateProjectButton - IAEController.currentProject ayarlandı. Beklenen Çıktı: '" + IAEController.currentProject.getExpectedOutput() + "'"); // Debug log
-            showAlert(Alert.AlertType.INFORMATION, "Proje Oluşturuldu", "'" + name + "' projesi başarıyla oluşturuldu.");
+            showAlert(Alert.AlertType.INFORMATION, "Project Created", "The project '" + name + "' was created successfully.");
 
             // Run/Compare butonlarını göster, Create butonunu gizle
             compareButton.setVisible(true);
@@ -126,7 +126,7 @@ public class CreateProjectController implements Initializable {
             createProjectButton.setManaged(false);
         } else {
             // Aynı isimde proje varsa kullanıcıyı uyar
-            showAlert(Alert.AlertType.ERROR, "Tekrarlanan Proje", "'" + name + "' adında bir proje zaten mevcut. Lütfen farklı bir isim seçin.");
+            showAlert(Alert.AlertType.ERROR, "Duplicate Project", "A project named '" + name + "' already exists. Please choose a different name.");
             System.out.println("Proje oluşturma başarısız: Proje adı zaten mevcut.");
             // currentProject değişmediği için UI butonlarını değiştirme
         }

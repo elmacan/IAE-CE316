@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -58,10 +59,18 @@ public class StudentSubmission {
                 ZipEntry entry;
                 while ((entry = zipInputStream.getNextEntry()) != null) {
                     File newFile = new File(extractedDirectory, entry.getName());
+
+                    String canonicalDestination = newFile.getCanonicalPath();
+                    String canonicalExtractionRoot = extractedDirectory.getCanonicalPath();
+                    if (!canonicalDestination.startsWith(canonicalExtractionRoot)) {
+                        System.err.println("Error: Attempted to extract outside of target directory.");
+                        result.appendErrorLog("Zip Slip attempt blocked: " + newFile.getAbsolutePath());
+                        return;
+                    }
+
                     if (entry.isDirectory()) {
                         newFile.mkdirs();
                     } else {
-
                         new File(newFile.getParent()).mkdirs();
                         try (FileOutputStream fileOutputStream = new FileOutputStream(newFile)) {
                             byte[] buffer = new byte[1024];
@@ -72,10 +81,11 @@ public class StudentSubmission {
                         }
                     }
                 }
+
             } catch (IOException e) {
                 System.err.println("Error during extraction: " + e.getMessage());
+                result.appendErrorLog("Extraction failed: " + e.getMessage());
                 e.printStackTrace();
-
             }
         });
 
@@ -86,33 +96,36 @@ public class StudentSubmission {
             e.printStackTrace();
             return false;
         }
+
+
+        File[] topLevel = extractedDirectory.listFiles();
+        if (topLevel != null && topLevel.length == 1 && topLevel[0].isDirectory()) {
+            extractedDirectory = topLevel[0];
+        }
+
         if (extractedDirectory == null || !extractedDirectory.exists()) {
             System.err.println("Error: Extraction failed, directory not created.");
             return false;
         }
 
-
         return true;
     }
 
-    public void compile(Configuration configuration) {
 
+   public void compile(Configuration configuration) {
         try {
+            List<File> sourceFiles = listAllSourceFiles(extractedDirectory);
 
-            File[] sourceFiles = extractedDirectory.listFiles((dir, name) -> {
-                for (String extension : Configuration.getSourceExtensions()) {
-                    if (name.toLowerCase().endsWith(extension)) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-
-            if (sourceFiles == null || sourceFiles.length == 0) {
+            if (sourceFiles.isEmpty()) {
                 result.setCompiledSuccessfully(false);
-                result.appendErrorLog("No source files found! Compilation is not possible");
+                result.appendErrorLog("No source files found! Compilation is not possible.");
                 throw new IllegalStateException("No source files found! Compilation is not possible.");
+            }
 
+            if (!configuration.isCompiled()) {
+                System.out.println("This language does not require compilation.");
+                result.setCompiledSuccessfully(true);
+                return;
             }
 
             List<String> sourceFileNames = new ArrayList<>();
@@ -123,13 +136,12 @@ public class StudentSubmission {
             String compileCommand = configuration.generateCompileCommand(sourceFileNames);
             String[] compileParts = compileCommand.split(" ");
 
-            // ProcessBuilder ile derleme başlatıyoruz
             ProcessBuilder pb = new ProcessBuilder(compileParts);
-            pb.directory(extractedDirectory); // Doğru klasörde çalıştırıyoruz
-            pb.redirectErrorStream(true); // stdout ve stderr akışlarını birleştir
-            Process process = pb.start(); // CMD açılır ve komut çalıştırılır
+            pb.directory(extractedDirectory);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
 
-            // Çıktıyı okuyup ekrana bastırıyoruz
+
             InputStream is = process.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
@@ -137,17 +149,11 @@ public class StudentSubmission {
                 System.out.println(line);
             }
 
-            int exitCode = process.waitFor(); // Derleme bitene kadar bekliyoruz
-
-
+            int exitCode = process.waitFor();
             if (exitCode != 0) {
                 result.setCompiledSuccessfully(false);
                 result.appendErrorLog("Compilation failed");
                 System.out.println("Compilation failed!");
-                System.out.println("Uncompiled source files:");
-                for (String fileName : sourceFileNames) {
-                    System.out.println(" - " + fileName);
-                }
             } else {
                 result.setCompiledSuccessfully(true);
                 System.out.println("Compilation successful!");
@@ -155,15 +161,33 @@ public class StudentSubmission {
 
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
-
         } catch (Exception e) {
-            System.out.println("hata");
+            System.out.println("Error during compilation:");
             e.printStackTrace();
-
+            result.setCompiledSuccessfully(false);
+            result.appendErrorLog("Unexpected error: " + e.toString());
         }
     }
 
-
+    public List<File> listAllSourceFiles(File dir) {
+        List<File> sourceFiles = new ArrayList<>();
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    sourceFiles.addAll(listAllSourceFiles(file));
+                } else {
+                    for (String ext : Configuration.sourceExtensions) {
+                        if (file.getName().toLowerCase().endsWith(ext)) {
+                            sourceFiles.add(file);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return sourceFiles;
+    }
 
     public void run(Configuration configuration, String arguments) {
         File outputFile = new File(extractedDirectory, "student_output.txt");
