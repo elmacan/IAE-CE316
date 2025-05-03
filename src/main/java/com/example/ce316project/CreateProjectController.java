@@ -8,17 +8,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -69,7 +70,72 @@ public class CreateProjectController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+
     @FXML
+    private void onCreateProjectButton() {
+        // 1. Read values from UI fields
+        String name = projectNameField.getText().trim();
+        Configuration selectedConfig = configurationComboBox.getValue();
+        String input = argumentsArea.getText(); // Ham girdiyi alalım
+        String expectedOutput = expectedOutputFileField.getText().trim(); // Beklenen çıktıyı alıp trim edelim
+        String zipPath = sourceFileField.getText().trim();
+
+        // --- EKLENEN KONTROL ---
+        // Gerekli alanların boş olup olmadığını kontrol et (expectedOutput dahil)
+        if (name.isEmpty() || selectedConfig == null || zipPath.isEmpty() || expectedOutput.isEmpty()) { // expectedOutput kontrolü eklendi
+            // Eksik bilgi varsa kullanıcıyı uyar
+            showAlert(Alert.AlertType.WARNING, "Eksik Bilgi", "Lütfen Proje Adı, Konfigürasyon, Kaynak Dizin VE Beklenen Çıktı alanlarını doldurun.");
+            System.out.println("Proje oluşturma başarısız: Beklenen Çıktı dahil gerekli alanlar eksik.");
+            return; // Proje oluşturmayı durdur
+        }
+        // --- KONTROL SONU ---
+
+        // Kaynak dizinin geçerli olup olmadığını kontrol et
+        File zipDirectory = new File(zipPath);
+        if (!zipDirectory.exists() || !zipDirectory.isDirectory()) {
+            showAlert(Alert.AlertType.ERROR, "Geçersiz Yol", "Belirtilen kaynak yolu geçerli bir dizin değil.");
+            System.out.println("Proje oluşturma başarısız: Geçersiz kaynak dizin yolu.");
+            return;
+        }
+
+        // 3. Project nesnesini oluştur (Artık expectedOutput'un boş olmadığından eminiz)
+        Project newProject = new Project(name, selectedConfig, input, expectedOutput, zipDirectory);
+        System.out.println("DEBUG: onCreateProjectButton - Proje nesnesi oluşturuldu. Beklenen Çıktı: '" + newProject.getExpectedOutput() + "'"); // Debug log
+
+        // 4. Projeyi kaydet (FileManager kullanarak) ve global listeleri güncelle
+        File projectFile = new File(IAEController.PROJECT_PATH);
+        List<Project> updatedList = FileManager.saveProjectIfUnique(newProject, projectFile);
+
+        // 5. Kaydetme sonucuna göre UI ve durumu güncelle
+        if (updatedList != null) {
+            IAEController.projectList = updatedList; // Statik listeyi güncelle
+            IAEController.currentProject = newProject; // Yeni oluşturulan projeyi mevcut proje yap
+
+            System.out.println("Yeni proje '" + name + "' başarıyla oluşturuldu ve kaydedildi.");
+            System.out.println("DEBUG: onCreateProjectButton - IAEController.currentProject ayarlandı. Beklenen Çıktı: '" + IAEController.currentProject.getExpectedOutput() + "'"); // Debug log
+            showAlert(Alert.AlertType.INFORMATION, "Proje Oluşturuldu", "'" + name + "' projesi başarıyla oluşturuldu.");
+
+            // Run/Compare butonlarını göster, Create butonunu gizle
+            compareButton.setVisible(true);
+            compareButton.setManaged(true);
+            runButton.setVisible(true);
+            runButton.setManaged(true);
+            createProjectButton.setVisible(false);
+            createProjectButton.setManaged(false);
+        } else {
+            // Aynı isimde proje varsa kullanıcıyı uyar
+            showAlert(Alert.AlertType.ERROR, "Tekrarlanan Proje", "'" + name + "' adında bir proje zaten mevcut. Lütfen farklı bir isim seçin.");
+            System.out.println("Proje oluşturma başarısız: Proje adı zaten mevcut.");
+            // currentProject değişmediği için UI butonlarını değiştirme
+        }
+    }
+
+
+
+
+    /*@FXML
     private void onCreateProjectButton() {
         String name = projectNameField.getText();
         Configuration selectedConfig = configurationComboBox.getValue();
@@ -102,7 +168,7 @@ public class CreateProjectController implements Initializable {
         } else {
             System.out.println("Bu isimde bir proje zaten var. Lütfen farklı bir isim seçin.");
         }
-    }
+    }*/
 
     @FXML
     private void chooseZipFileDirectory(ActionEvent event) {
@@ -132,33 +198,112 @@ public class CreateProjectController implements Initializable {
         }
     }
 
+    @FXML
+    private void browseExpectedOutputFile(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser(); // DirectoryChooser kullan
+        directoryChooser.setTitle("Select Expected Output Directory"); // Başlığı güncelle
+
+        // İsteğe bağlı: Başlangıç dizinini ayarla
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Etkinlik kaynağından pencereyi al
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        if (window == null) {
+            System.err.println("Hata: Beklenen çıktı dizin seçici için pencere alınamadı.");
+            showAlert(Alert.AlertType.ERROR,"Error", "Could not open directory chooser.");
+            return;
+        }
+
+        // Dizin seçme iletişim kutusunu göster
+        File selectedDirectory = directoryChooser.showDialog(window);
+
+        if (selectedDirectory != null) {
+            // Seçilen dizinin MUTLAK YOLUNU metin alanına ayarla
+            expectedOutputFileField.setText(selectedDirectory.getAbsolutePath());
+            System.out.println("Seçilen beklenen çıktı dizini: " + selectedDirectory.getAbsolutePath());
+        } else {
+            // Kullanıcı dizin seçmekten vazgeçti
+            System.out.println("Beklenen çıktı dizin seçimi iptal edildi.");
+            // İptal edildiğinde bir uyarı göstermek isteğe bağlıdır
+            // showAlert(AlertType.INFORMATION, "İptal Edildi", "Dizin seçimi iptal edildi.");
+        }
+    }
+
 
     @FXML
     private void onRunButtonClick(ActionEvent event) {
        IAEController.currentProject.runAllSubmission();
     }
 
+
+
     @FXML
     private void onCompareButtonClick(ActionEvent event) {
-        if (currentSubmission == null) {
-            System.out.println("No submission loaded. Please load a submission first.");
+        // 1. Proje ve submission varlığını kontrol et
+        if (IAEController.currentProject == null) {
+            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
+            System.out.println("Karşılaştırma Uyarısı: Aktif proje yok.");
             return;
         }
 
-        File expectedOutputFile = new File(expectedOutputFileField.getText());
-        if (!expectedOutputFile.exists()) {
-            System.out.println("Expected output file does not exist.");
+        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
+        if (submissions == null || submissions.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Bu proje için hiç submission bulunamadı. Lütfen önce submission'ları çalıştırın.");
+            System.out.println("Karşılaştırma Uyarısı: Submission bulunamadı veya henüz çalıştırılmadı.");
             return;
         }
 
-        boolean comparisonResult = currentSubmission.compareOutput(expectedOutputFile);
-        System.out.println("Comparison result: " + comparisonResult);
+        // 2. BEKLENEN ÇIKTIYI PROJE NESNESİNDEN AL
+        String expectedOutput = IAEController.currentProject.getExpectedOutput();
+        System.out.println("DEBUG: onCompareButtonClick - Projeden alınan beklenen çıktı: '" + expectedOutput + "'"); // Debug log
+
+        // 3. PROJEDE SAKLANAN DEĞERİN boş/null OLMADIĞINI KONTROL ET
+        if (expectedOutput == null || expectedOutput.trim().isEmpty()) {
+            // Bu hata artık projenin kendisinin eksik bilgiyle oluşturulduğu anlamına gelir
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Bu proje için tanımlanmış beklenen çıktı boş. Lütfen proje özelliklerini düzenleyin veya oluştururken doğru ayarlandığından emin olun.");
+            System.out.println("Karşılaştırma Hatası: Projede saklanan beklenen çıktı boş veya null.");
+            return; // Projenin verisi hatalıysa çık
+        }
+
+        // 4. Karşılaştırılacak submission'ı al (şimdilik ilkini alıyoruz)
+        StudentSubmission submission = submissions.get(0);
+        if (submission == null) {
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi beklenmedik şekilde null.");
+            System.err.println("Hata: 0 indeksinde null submission bulundu, proje: " + IAEController.currentProject.getProjectName());
+            return;
+        }
+
+        // 5. Projenin beklenen çıktısını kullanarak karşılaştırmayı yap
+        System.out.println("Submission için çıktı karşılaştırılıyor..."); // Mümkünse submission ID ekle
+        System.out.println("Kullanılan Beklenen Çıktı (projeden): \"" + expectedOutput + "\"");
+        boolean comparisonResult = submission.compareOutput(expectedOutput); // Doğru compareOutput çağrılıyor
+
+        // 6. Sonuçları göster
+        if (comparisonResult) {
+            showAlert(Alert.AlertType.INFORMATION, "Karşılaştırma Sonucu", "✅ Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.");
+            System.out.println("✅ Çıktı eşleşiyor.");
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Sonucu", "❌ Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor. Detaylar için hata günlüğünü kontrol edin.");
+            System.out.println("❌ Çıktı eşleşmiyor.");
+        }
     }
 
 
 
 
 
+
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    // Helper method (keep this in your controller)
+
+    // Helper method (keep this in your controller)
 
 
 }

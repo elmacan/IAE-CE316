@@ -64,6 +64,16 @@ public class Result {
               ", errorLog='" + errorLog + '\'' +
               '}';
    }
+
+   public void clearErrorLog() {
+      // errorLog null olmamalı (constructor'da başlatılıyor), ama kontrol etmek güvenli.
+      if (this.errorLog != null) {
+         this.errorLog.setLength(0); // StringBuilder'ı sıfırlar
+      } else {
+         // Bu durumun oluşmaması gerekir.
+         this.errorLog = new StringBuilder();
+      }
+   }
 }
 
 

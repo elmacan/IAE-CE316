@@ -47,7 +47,7 @@
                     <!-- Expected Output File -->
                     <Label text="Expected Output File:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                     <TextField fx:id="expectedOutputFileField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                    <Button fx:id="browseOutputButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                    <Button fx:id="browseOutputButton" onAction="#browseExpectedOutputFile" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                <rowConstraints>
                   <RowConstraints />
                   <RowConstraints />

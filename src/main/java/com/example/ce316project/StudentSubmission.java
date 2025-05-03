@@ -22,6 +22,11 @@ public class StudentSubmission {
     private File extractedDirectory;
     private Result result;
     private String studentOutput;
+
+    public File getActualOutputFile() {
+        return actualOutputFile;
+    }
+
     private File actualOutputFile;
 
 
@@ -239,7 +244,7 @@ public class StudentSubmission {
         }
     }
 
-            public boolean compareOutput(File expectedOutput) {
+           /* public boolean compareOutput(File expectedOutput) {
                 if (expectedOutput == null || actualOutputFile == null ||
                         !expectedOutput.exists() || !actualOutputFile.exists()) {
                     result.setOutputMatches(false);
@@ -279,7 +284,151 @@ public class StudentSubmission {
                     result.appendErrorLog("Comparison failed: " + e.getMessage());
                     return false;
                 }
+            }*/
+
+
+
+
+    /*public boolean compareOutput(String expectedOutputContent) {
+        if (this.result == null) {
+            this.result = new Result();
+        }
+        this.result.clearErrorLog();
+
+        // 1. Girdi Kontrolleri
+        if (expectedOutputContent == null || expectedOutputContent.trim().isEmpty()) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Beklenen çıktı boş ya da null.");
+            return false;
+        }
+
+        if (actualOutputFile == null) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("actualOutputFile null.");
+            return false;
+        }
+
+        Path actualPath = actualOutputFile.toPath();
+        if (!Files.exists(actualPath) || !Files.isRegularFile(actualPath) || !Files.isReadable(actualPath)) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Gerçek çıktı dosyası geçersiz veya okunamaz.");
+            return false;
+        }
+
+        // 2. Gerçekleşen Çıktıyı Oku
+        String actualContent;
+        try {
+            actualContent = Files.readString(actualPath, StandardCharsets.UTF_8);
+            if (actualContent.startsWith("\uFEFF")) {
+                actualContent = actualContent.substring(1);
             }
+        } catch (IOException e) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("actualOutputFile okunamadı: " + e.getMessage());
+            return false;
+        }
+
+        // 3. Normalleştirme (Whitespace ve BOM temizliği)
+        String cleanedExpected = expectedOutputContent.replace("\uFEFF", "").replaceAll("\\s+", "");
+        String cleanedActual = actualContent.replaceAll("\\s+", "");
+
+        // 4. Karşılaştır
+        if (cleanedExpected.equals(cleanedActual)) {
+            this.result.setOutputMatches(true);
+            return true;
+        } else {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Çıktılar eşleşmiyor.\n--- Beklenen ---\n" + expectedOutputContent +
+                    "\n--- Gerçek ---\n" + actualContent);
+            return false;
+        }
+    }*/
+
+    public boolean compareOutput(String expectedOutputContent) {
+        if (this.result == null) {
+            this.result = new Result();
+        }
+        this.result.clearErrorLog();
+
+        if (expectedOutputContent == null || expectedOutputContent.trim().isEmpty()) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Beklenen çıktı boş ya da null.");
+            return false;
+        }
+
+        if (actualOutputFile == null) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("actualOutputFile null.");
+            return false;
+        }
+
+        Path actualPath = actualOutputFile.toPath();
+        if (!Files.exists(actualPath) || !Files.isRegularFile(actualPath) || !Files.isReadable(actualPath)) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Gerçek çıktı dosyası geçersiz veya okunamaz.");
+            return false;
+        }
+
+        String actualContent;
+        try {
+            actualContent = Files.readString(actualPath, StandardCharsets.UTF_8);
+
+            if (actualContent.startsWith("\uFEFF")) {
+                actualContent = actualContent.substring(1);
+            }
+        } catch (IOException e) {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("actualOutputFile okunamadı: " + e.getMessage());
+            return false;
+        }
+
+
+        String cleanedExpected = expectedOutputContent.trim().replace("\r\n", "\n").replaceAll("[ \t]+", "");
+        String cleanedActual = actualContent.trim().replace("\r\n", "\n").replaceAll("[ \t]+", "");
+
+
+        if (cleanedExpected.equals(cleanedActual)) {
+            this.result.setOutputMatches(true);
+            return true;
+        } else {
+            this.result.setOutputMatches(false);
+            this.result.appendErrorLog("Çıktılar eşleşmiyor.\n--- Beklenen ---\n" + expectedOutputContent +
+                    "\n--- Gerçek ---\n" + actualContent);
+            return false;
+        }
+    }
+
+
+
+
+    public void setActualOutputFile(File actualOutputFile) { // Örnek setter
+        this.actualOutputFile = actualOutputFile;
+    }
+    // ...
+
+
+
+
+    static class ComparisonResult {
+        private boolean outputMatches;
+        private StringBuilder errorLog = new StringBuilder();
+
+        public void setOutputMatches(boolean outputMatches) {
+            this.outputMatches = outputMatches;
+        }
+        public boolean isOutputMatches() {
+            return outputMatches;
+        }
+        public void appendErrorLog(String message) {
+            errorLog.append(message).append("\n");
+        }
+        public String getErrorLog() {
+            return errorLog.toString();
+        }
+        public void clearErrorLog() {
+            errorLog.setLength(0);
+        }
+    }
 
 
 
