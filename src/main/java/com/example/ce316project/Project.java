@@ -3,6 +3,9 @@ package com.example.ce316project;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class Project {
                   System.out.println("No ZIP files found in the directory.");
                   return;
             }
+            String expectedOutputContent = getExpectedOutputContent();
 
             for (File zipFile : zipFiles) {
                   try {
@@ -118,6 +122,24 @@ public class Project {
                     ", configuration=" + projectConfig +
                     ", zipDirectory=" + zipDirectory +
                     '}';
+      }
+
+      ////expected output content string de olabilr file da
+
+      public String getExpectedOutputContent() {
+            if (expectedOutput == null || expectedOutput.trim().isEmpty()) return "";
+
+            File file = new File(expectedOutput);
+            if (file.exists() && file.isFile()) {
+                  try {
+                        return Files.readString(file.toPath(), StandardCharsets.UTF_8);
+                  } catch (IOException e) {
+                        System.out.println("Expected output dosyası okunamadı: " + e.getMessage());
+                        return "";
+                  }
+            } else {
+                  return expectedOutput; // doğrudan içerik
+            }
       }
 
 

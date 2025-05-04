@@ -270,6 +270,7 @@ public class StudentSubmission {
             try (FileWriter writer = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
                 writer.write(studentOutput);
             }
+            this.actualOutputFile= outputFile;
 
 
             if (exitCode != 0) {

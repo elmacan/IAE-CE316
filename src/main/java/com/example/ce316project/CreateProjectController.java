@@ -309,26 +309,42 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Comparison Error", "Active project is not selected.");
             return;
         }
+
         List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
         if (submissions == null || submissions.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Comparison Error", "No submissions were found or processed. Please click 'Run' button first.");
             return;
         }
 
-        String expectedOutputContent = IAEController.currentProject.getExpectedOutput();
-        if (expectedOutputContent == null) {
-            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output content missing from project settings.");
+        String expectedOutputRaw = IAEController.currentProject.getExpectedOutput();
+        if (expectedOutputRaw == null || expectedOutputRaw.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output not defined in project settings.");
             return;
         }
+
+        String expectedOutput;
+        File maybeFile = new File(expectedOutputRaw);
+        if (maybeFile.exists() && maybeFile.isFile()) {
+            try {
+                expectedOutput = Files.readString(maybeFile.toPath());
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "File Read Error", "Failed to read expected output file:\n" + e.getMessage());
+                return;
+            }
+        } else {
+            expectedOutput = expectedOutputRaw;
+        }
+
         System.out.println("Comparison process begins...");
-        for (StudentSubmission currentSubmission : submissions) {
-            if (currentSubmission != null && currentSubmission.getResult() != null) {
-                if (currentSubmission.getResult().isRunSuccessfully()) {
-                    currentSubmission.compareOutput(expectedOutputContent);
+        for (StudentSubmission submission : submissions) {
+            if (submission != null && submission.getResult() != null) {
+                if (submission.getResult().isRunSuccessfully()) {
+                    submission.compareOutput(expectedOutput);
                 }
             }
         }
         System.out.println("Comparison process finished.");
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/ResultPage.fxml"));
             Parent resultPageRoot = loader.load();
@@ -360,6 +376,61 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Interface Loading Error", "Results page could not be loaded.");
         }
     }
+
+    /*@FXML
+    private void onCompareButtonClick(ActionEvent event) {
+        if (IAEController.currentProject == null) {
+            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
+            return;
+        }
+
+        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
+        if (submissions == null || submissions.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Bu proje için hiç submission bulunamadı. Lütfen önce submission'ları çalıştırın.");
+            return;
+        }
+
+        String expectedOutputPath = IAEController.currentProject.getExpectedOutput();
+        if (expectedOutputPath == null || expectedOutputPath.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Bu proje için tanımlanmış beklenen çıktı yolu boş. Lütfen proje özelliklerini kontrol edin.");
+            return;
+        }
+
+        File expectedFile = new File(expectedOutputPath);
+        if (!expectedFile.exists()) {
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Beklenen çıktı dosyası bulunamadı:\n" + expectedFile.getAbsolutePath());
+            return;
+        }
+
+        String expectedOutput;
+        try {
+            expectedOutput = Files.readString(expectedFile.toPath());
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Dosya Okuma Hatası", "Beklenen çıktı dosyası okunamadı:\n" + e.getMessage());
+            return;
+        }
+
+        StudentSubmission submission = submissions.get(0); // İleride seçim eklenebilir
+        if (submission == null) {
+            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi null.");
+            return;
+        }
+
+        boolean comparisonResult = submission.compareOutput(expectedOutput);
+        Result result = submission.getResult();
+
+        StringBuilder message = new StringBuilder();
+        message.append("Derleme: ").append(result.isCompiledSuccessfully() ? "✅" : "❌").append("\n");
+        message.append("Çalıştırma: ").append(result.isRunSuccessfully() ? "✅" : "❌").append("\n");
+        message.append("Çıktı Eşleşmesi: ").append(result.isOutputMatches() ? "✅" : "❌").append("\n");
+
+        if (!result.getErrorLog().isEmpty()) {
+            message.append("\nHatalar:\n").append(result.getErrorLog());
+        }
+
+        Alert.AlertType alertType = result.isOutputMatches() ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
+        showAlert(alertType, "Karşılaştırma Sonucu", message.toString());
+    }*/
 
 
 
