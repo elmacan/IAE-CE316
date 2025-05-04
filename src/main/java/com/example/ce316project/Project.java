@@ -50,7 +50,9 @@ public class Project {
 
                         StudentSubmission submission = new StudentSubmission();
                         submission.setZipFile(zipFile);
-                        submission.setStudentID(zipFile.getName());
+                        String fileName=zipFile.getName();
+                        fileName = fileName.replaceAll("(?i)\\.zip$", "");
+                        submission.setStudentID(fileName);
 
                         boolean extracted = submission.extract();
                         if (!extracted) {
