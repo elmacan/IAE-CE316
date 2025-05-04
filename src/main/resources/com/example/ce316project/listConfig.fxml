@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.ListConfigController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.ListConfigController">
     <!-- ListView -->
     <ListView fx:id="configurationListView" layoutX="20.0" layoutY="20.0" prefHeight="320.0" prefWidth="560.0" />
 
     <!-- Alt kısım için HBox: Butonları yatay koyacağız -->
     <HBox alignment="CENTER" layoutX="20.0" layoutY="350.0" prefHeight="40.0" prefWidth="560.0" spacing="10">
-        <Button fx:id="backButton" prefWidth="130.0" text="Back" onAction="#onBackButton"/>
+        <Button fx:id="backButton" onAction="#onBackButton" prefHeight="26.0" prefWidth="88.0" text="Back" />
         <Button fx:id="importButton" onAction="#onImportButtonClick" prefWidth="100.0" text="Import" />
         <Button fx:id="exportButton" onAction="#onExportButtonClick" prefWidth="100.0" text="Export" />
         <Button fx:id="addConfigButton" onAction="#onAddConfigurationButtonClick" prefWidth="130.0" text="Add Configuration" />

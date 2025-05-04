@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class IAEController extends Application {
     public static List<Configuration> configurationList;
@@ -29,6 +30,8 @@ public class IAEController extends Application {
 
     public static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
     public static final String PROJECT_PATH = System.getProperty("user.home") + "/Documents/iae-app/projects.json";
+
+    public static Stack<Scene> sceneStack = new Stack<>();
 
     @Override
     public void start(Stage stage) throws IOException {

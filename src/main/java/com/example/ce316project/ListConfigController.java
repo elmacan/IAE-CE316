@@ -120,13 +120,15 @@ public class ListConfigController implements Initializable {
     @FXML
     private void onBackButton(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
-            Parent root = loader.load();
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
 
+            if (!IAEController.sceneStack.isEmpty()) {
+                stage.setScene(IAEController.sceneStack.pop()); // Önceki sahneye geçiş
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrance.fxml"));
+                Parent root = loader.load();
+                stage.setScene(new Scene(root)); // Entrance sahnesine geçiş
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
