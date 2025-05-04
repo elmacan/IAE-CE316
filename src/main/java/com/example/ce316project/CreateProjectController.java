@@ -232,7 +232,7 @@ public class CreateProjectController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(window);
 
         if (selectedFile != null) {
-            expectedOutputFileField.setText(selectedFile.getAbsolutePath());
+            argumentsArea.setText(selectedFile.getAbsolutePath());
             System.out.println("Seçilen beklenen çıktı dosyası: " + selectedFile.getAbsolutePath());
         } else {
             System.out.println("Beklenen çıktı dosya seçimi iptal edildi.");
