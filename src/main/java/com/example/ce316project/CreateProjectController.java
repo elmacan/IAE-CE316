@@ -192,32 +192,26 @@ public class CreateProjectController implements Initializable {
 
     @FXML
     private void browseExpectedOutputFile(ActionEvent event) {
-        DirectoryChooser directoryChooser = new DirectoryChooser(); // DirectoryChooser kullan
-        directoryChooser.setTitle("Select Expected Output Directory"); // Başlığı güncelle
+        FileChooser fileChooser = new FileChooser(); // Dosya seçici
+        fileChooser.setTitle("Beklenen Çıktı Dosyasını Seçin");
 
-        // İsteğe bağlı: Başlangıç dizinini ayarla
-        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        // Sadece .txt veya genel metin dosyalarını göster
+        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter allFiles = new FileChooser.ExtensionFilter("All Files (*.*)", "*.*");
+        fileChooser.getExtensionFilters().addAll(txtFilter, allFiles);
 
-        // Etkinlik kaynağından pencereyi al
+        // Başlangıç dizini olarak kullanıcının home klasörünü ayarla
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Pencere referansını al
         Window window = ((Node) event.getSource()).getScene().getWindow();
-        if (window == null) {
-            System.err.println("Hata: Beklenen çıktı dizin seçici için pencere alınamadı.");
-            showAlert(Alert.AlertType.ERROR,"Error", "Could not open directory chooser.");
-            return;
-        }
+        File selectedFile = fileChooser.showOpenDialog(window);
 
-        // Dizin seçme iletişim kutusunu göster
-        File selectedDirectory = directoryChooser.showDialog(window);
-
-        if (selectedDirectory != null) {
-            // Seçilen dizinin MUTLAK YOLUNU metin alanına ayarla
-            expectedOutputFileField.setText(selectedDirectory.getAbsolutePath());
-            System.out.println("Seçilen beklenen çıktı dizini: " + selectedDirectory.getAbsolutePath());
+        if (selectedFile != null) {
+            expectedOutputFileField.setText(selectedFile.getAbsolutePath());
+            System.out.println("Seçilen beklenen çıktı dosyası: " + selectedFile.getAbsolutePath());
         } else {
-            // Kullanıcı dizin seçmekten vazgeçti
-            System.out.println("Beklenen çıktı dizin seçimi iptal edildi.");
-            // İptal edildiğinde bir uyarı göstermek isteğe bağlıdır
-            // showAlert(AlertType.INFORMATION, "İptal Edildi", "Dizin seçimi iptal edildi.");
+            System.out.println("Beklenen çıktı dosya seçimi iptal edildi.");
         }
     }
 
