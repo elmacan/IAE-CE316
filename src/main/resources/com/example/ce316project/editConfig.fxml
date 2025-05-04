@@ -36,7 +36,7 @@
                         <ComboBox fx:id="languageTypeComboBox" prefHeight="25.0" prefWidth="299.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Imperative" />
+                                    <String fx:value="Interpreted" />
                                     <String fx:value="Compiled" />
                                 </FXCollections>
                             </items>
