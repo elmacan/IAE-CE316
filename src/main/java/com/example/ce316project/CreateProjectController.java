@@ -200,7 +200,7 @@ public class CreateProjectController implements Initializable {
     }
 
 
-    @FXML
+   /* @FXML
     private void onCompareButtonClick(ActionEvent event) {
         if (IAEController.currentProject == null) {
             showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
@@ -253,13 +253,70 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Yükleme Hatası", "Sonuç sayfası yüklenirken bir hata oluştu.");
         }
 
+    }*/
+
+
+
+    @FXML
+    private void onCompareButtonClick(ActionEvent event) {
+        if (IAEController.currentProject == null) {
+            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Active project is not selected.");
+            return;
+        }
+        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
+        if (submissions == null || submissions.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Comparison Error", "No submissions were found or processed. Please click 'Run' button first.");
+            return;
+        }
+
+        String expectedOutputContent = IAEController.currentProject.getExpectedOutput();
+        if (expectedOutputContent == null) {
+            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output content missing from project settings.");
+            return;
+        }
+        System.out.println("Comparison process begins...");
+        for (StudentSubmission currentSubmission : submissions) {
+            if (currentSubmission != null && currentSubmission.getResult() != null) {
+                if (currentSubmission.getResult().isRunSuccessfully()) {
+                    currentSubmission.compareOutput(expectedOutputContent);
+                }
+            }
+        }
+        System.out.println("Comparison process finished.");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/ResultPage.fxml"));
+            Parent resultPageRoot = loader.load();
+            ResultPageController resultController = loader.getController();
+
+            if (resultController == null) {
+                System.err.println("Error: Could not get Controller for ResultPage.fxml.");
+                showAlert(Alert.AlertType.ERROR, "Controller Error", "Failed to load results page controller.");
+                return;
+            }
+
+            Scene currentScene = ((Node) event.getSource()).getScene();
+
+            resultController.loadSubmissionResults(submissions, currentScene);
+
+            Stage stage = (Stage) currentScene.getWindow();
+            Scene resultScene = new Scene(resultPageRoot);
+            stage.setScene(resultScene);
+            stage.setTitle("Comparison Results - " + IAEController.currentProject.getProjectName());
+            stage.sizeToScene();
+            stage.centerOnScreen();
+            stage.show();
+
+            System.out.println("The results page has been successfully loaded and displayed.");
+
+        } catch (IOException e) {
+            System.err.println("I/O Error while loading ResultPage.fxml: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Interface Loading Error", "Results page could not be loaded.");
+        }
     }
 
 
 
-
-
-    // showAlert yardımcı metodu
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
