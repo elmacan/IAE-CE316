@@ -15,9 +15,9 @@
   },
   {
     "languageName": "Python",
-    "languagePath": "C:/Python/python.exe",
+    "languagePath": "python",
     "languageParameters": "",
-    "runCommand": "python main.py",
+    "runCommand": "main.py",
     "isCompiled": false
   }
 ]

@@ -40,7 +40,7 @@ public class StudentSubmission {
         public void setOutput(String output) {
             this.output = output;
         }
-        
+
     public StudentSubmission(String studentID, File zipFile) {
         this.studentID = studentID;
         this.zipFile = zipFile;
@@ -59,7 +59,7 @@ public class StudentSubmission {
 
         Thread extractionThread = new Thread(() -> {
             try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
-                String extractedFolderName = zipFile.getName().replace(".zip", "");
+                String extractedFolderName = zipFile.getName().replaceAll("(?i)\\.zip$", "");
                 extractedDirectory = new File(zipFile.getParent(), extractedFolderName);
                 if (!extractedDirectory.exists()) {
                     extractedDirectory.mkdirs();
@@ -233,17 +233,26 @@ public class StudentSubmission {
                 if (interpreter != null && !interpreter.isBlank()) {
                     parts.add(0, interpreter);
                 }
+                if (interpreter.equalsIgnoreCase("python")) {
+                    parts = new ArrayList<>();
+                    parts.add("python");
+                    if (arguments != null && !arguments.isBlank()) {
+                        parts.addAll(Arrays.asList(arguments.trim().split(" ")));
+                    }
+                } else {
+                    parts.add(0, interpreter);
+                }
             }
 
             System.out.println("Final RUN command: " + String.join(" ", parts));
 
-            // 3) ProcessBuilder ile çalıştır
+
             ProcessBuilder pb = new ProcessBuilder(parts);
             pb.directory(extractedDirectory);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
-            // 4) Çıktıyı oku
+
             InputStream is = process.getInputStream();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(is, StandardCharsets.UTF_8)
@@ -257,12 +266,12 @@ public class StudentSubmission {
             int exitCode = process.waitFor();
             studentOutput = outputBuilder.toString();
 
-            // 5) student_output.txt dosyasına yaz
+
             try (FileWriter writer = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
                 writer.write(studentOutput);
             }
 
-            // 6) Sonucu güncelle
+
             if (exitCode != 0) {
                 result.setRunSuccessfully(false);
                 result.appendErrorLog("Execution failed with exit code " + exitCode);
