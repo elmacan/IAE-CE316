@@ -214,6 +214,30 @@ public class CreateProjectController implements Initializable {
             System.out.println("Beklenen çıktı dosya seçimi iptal edildi.");
         }
     }
+    @FXML
+    private void browseArguments(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser(); // Dosya seçici
+        fileChooser.setTitle("Beklenen Çıktı Dosyasını Seçin");
+
+        // Sadece .txt veya genel metin dosyalarını göster
+        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter allFiles = new FileChooser.ExtensionFilter("All Files (*.*)", "*.*");
+        fileChooser.getExtensionFilters().addAll(txtFilter, allFiles);
+
+        // Başlangıç dizini olarak kullanıcının home klasörünü ayarla
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Pencere referansını al
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(window);
+
+        if (selectedFile != null) {
+            expectedOutputFileField.setText(selectedFile.getAbsolutePath());
+            System.out.println("Seçilen beklenen çıktı dosyası: " + selectedFile.getAbsolutePath());
+        } else {
+            System.out.println("Beklenen çıktı dosya seçimi iptal edildi.");
+        }
+    }
 
 
     @FXML

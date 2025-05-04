@@ -47,7 +47,7 @@
                     <!-- Arguments -->
                     <Label text="Arguments:" GridPane.rowIndex="4" />
                     <TextArea fx:id="argumentsArea" prefRowCount="5" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                    <Button fx:id="browseArgumentsButton" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                    <Button fx:id="browseArgumentsButton" onAction="#browseArguments" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="4" />
 
                     <!-- Expected Output File -->
                     <Label text="Expected Output File:" GridPane.rowIndex="5" />
