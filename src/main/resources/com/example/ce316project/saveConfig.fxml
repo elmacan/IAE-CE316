@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.SaveConfigController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.SaveConfigController">
 
     <children>
         <BorderPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
@@ -42,7 +42,7 @@
                         </ComboBox>
                     </HBox>
                     <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label alignment="CENTER_RIGHT" prefWidth="150" text="Compiler Path:" />
+                        <Label alignment="CENTER_RIGHT" prefWidth="150" text="Program Path:" />
                         <TextField fx:id="compilerPathField" prefHeight="25.0" prefWidth="300.0" />
                         <Button fx:id="browseCompilerButton" text="Browse" />
                     </HBox>
@@ -58,6 +58,7 @@
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Runner Command:" />
                         <TextField fx:id="runnerCommandField" prefWidth="300" />
                     </HBox>
+               <Label prefHeight="18.0" prefWidth="234.0" text="e.g.  main.exe | main.py | javac Main.java" textFill="#134b9e" />
 
 
 
@@ -70,7 +71,7 @@
                     <padding>
                         <Insets bottom="30" left="10" right="20" top="10" />
                     </padding>
-                    <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" />
+                    <Button fx:id="cancelButton" onAction="#handleCancel" text="Cancel" />
                     <Button fx:id="saveConfigButton" text="Save Config" />
                 </HBox>
             </bottom>

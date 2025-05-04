@@ -45,8 +45,12 @@ public class CreateProjectController implements Initializable {
     private Button compareButton;
     @FXML
     private Button createProjectButton;
+    @FXML
+    private Button addConfigButton;
 
     private StudentSubmission currentSubmission;
+
+    private Runnable onConfigUpdate;
 
 
     @Override
@@ -72,6 +76,30 @@ public class CreateProjectController implements Initializable {
         }
     }
 
+    @FXML
+    private void onAddConfigButton(ActionEvent event){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
+            Parent root = loader.load();
+            IAEController.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi yığına ekle
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.showAndWait(); // Wait for the saveConfig page to close
+
+            // Notify the callback after adding a configuration
+            if (onConfigUpdate != null) {
+                onConfigUpdate.run();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+    public void setOnConfigUpdate(Runnable onConfigUpdate) {
+        this.onConfigUpdate = onConfigUpdate;
+    }
 
 
     @FXML
@@ -230,11 +258,11 @@ public class CreateProjectController implements Initializable {
         String comparisonText;
 
         if (comparisonResult) {
-            comparisonText = "✅ Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.\n\n"
+            comparisonText = " Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.\n\n"
                     + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
                     + "Öğrenci Çıktısı:\n" + submission.getOutput();
         } else {
-            comparisonText = "❌ Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor.\n\n"
+            comparisonText = " Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor.\n\n"
                     + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
                     + "Öğrenci Çıktısı:\n" + submission.getOutput();
         }

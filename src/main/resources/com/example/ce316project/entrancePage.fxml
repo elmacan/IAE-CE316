@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.EntranceController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="15.0" alignment="CENTER" layoutX="100.0" layoutY="50.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.EntranceController">
+    <VBox alignment="CENTER" layoutX="100.0" layoutY="50.0" spacing="15.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <padding>
-            <Insets top="30" bottom="30" left="50" right="50"/>
+            <Insets bottom="30" left="50" right="50" top="30" />
         </padding>
 
-        <Text text="The Integrated Environment" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+        <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="The Integrated Environment" />
 
-        <Button fx:id="createNewProjectButton" text="Create a New Project" prefWidth="200" onAction="#onCreateNewProjectButtonClick"/>
-        <Button fx:id="previousProjectsButton" text="Previous Projects" prefWidth="200"/>
-        <Button fx:id="listConfigurationsButton" text="List Configurations" prefWidth="200" onAction="#onListConfigurationsButtonClick"/>
-        <Button fx:id="helpMenuButton" text="Help Menu" prefWidth="200"/>
-        <Button fx:id="userGuideButton" text="User Guide" prefWidth="200"/>
+        <Button fx:id="createNewProjectButton" onAction="#onCreateNewProjectButtonClick" prefWidth="200" text="Create a New Project" />
+        <Button fx:id="listConfigurationsButton" onAction="#onListConfigurationsButtonClick" prefWidth="200" text="List Configurations" />
+        <Button fx:id="previousProjectsButton" prefWidth="200" text="Previous Projects" />
+        <Button fx:id="helpMenuButton" prefWidth="200" text="Help Menu" />
+        <Button fx:id="userGuideButton" prefWidth="200" text="User Guide" />
     </VBox>
 
 

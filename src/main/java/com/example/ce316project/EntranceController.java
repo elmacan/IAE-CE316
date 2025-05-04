@@ -25,7 +25,9 @@ public class EntranceController {
             Pane root = fxmlLoader.load();   // Scene yerine şimdilik Pane alıyoruz
             Scene scene = new Scene(root);
 
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            IAEController.sceneStack.push(stage.getScene());
             stage.setScene(scene);
             stage.show();
 
