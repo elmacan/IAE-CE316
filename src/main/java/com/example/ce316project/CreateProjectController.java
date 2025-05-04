@@ -316,31 +316,16 @@ public class CreateProjectController implements Initializable {
             return;
         }
 
-        String expectedOutputRaw = IAEController.currentProject.getExpectedOutput();
-        if (expectedOutputRaw == null || expectedOutputRaw.trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output not defined in project settings.");
+        String expectedOutput = IAEController.currentProject.getExpectedOutputContent();
+        if (expectedOutput == null || expectedOutput.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output content could not be determined.");
             return;
-        }
-
-        String expectedOutput;
-        File maybeFile = new File(expectedOutputRaw);
-        if (maybeFile.exists() && maybeFile.isFile()) {
-            try {
-                expectedOutput = Files.readString(maybeFile.toPath());
-            } catch (IOException e) {
-                showAlert(Alert.AlertType.ERROR, "File Read Error", "Failed to read expected output file:\n" + e.getMessage());
-                return;
-            }
-        } else {
-            expectedOutput = expectedOutputRaw;
         }
 
         System.out.println("Comparison process begins...");
         for (StudentSubmission submission : submissions) {
-            if (submission != null && submission.getResult() != null) {
-                if (submission.getResult().isRunSuccessfully()) {
-                    submission.compareOutput(expectedOutput);
-                }
+            if (submission != null && submission.getResult() != null && submission.getResult().isRunSuccessfully()) {
+                submission.compareOutput(expectedOutput);
             }
         }
         System.out.println("Comparison process finished.");
@@ -357,7 +342,6 @@ public class CreateProjectController implements Initializable {
             }
 
             Scene currentScene = ((Node) event.getSource()).getScene();
-
             resultController.loadSubmissionResults(submissions, currentScene);
 
             Stage stage = (Stage) currentScene.getWindow();
@@ -376,6 +360,7 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Interface Loading Error", "Results page could not be loaded.");
         }
     }
+
 
     /*@FXML
     private void onCompareButtonClick(ActionEvent event) {
