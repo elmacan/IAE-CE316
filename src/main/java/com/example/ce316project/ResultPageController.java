@@ -120,33 +120,31 @@ public class ResultPageController {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entranceScreen.fxml"));
-            Parent entranceRoot = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/createProject.fxml"));
+            Parent createProjectRoot = loader.load();
 
-            Scene entranceScene = new Scene(entranceRoot);
+            Scene createProjectScene = new Scene(createProjectRoot);
 
-            stage.setScene(entranceScene);
-            stage.setTitle("IAE Application - Entrance");
+            stage.setScene(createProjectScene);
+            stage.setTitle("IAE Application - Create Project");
             stage.sizeToScene();
             stage.centerOnScreen();
             stage.show();
 
-            System.out.println("Returned to the main login screen.");
+            System.out.println("Returned to the Create Project screen.");
 
         } catch (IOException e) {
-            System.err.println("entranceScreen.fxml error while loading: " + e.getMessage());
+            System.err.println("createProject.fxml error while loading: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", "The main login screen could not be loaded. Is the file path correct?");
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "The Create Project screen could not be loaded. Check file path: /com/example/ce316project/createProject.fxml");
         } catch (NullPointerException e) {
-            // getResource null döndürürse (dosya yolu yanlışsa)
-            System.err.println("entranceScreen.fxml did not found (NullPointerException).Control the path.");
+            System.err.println("createProject.fxml not found (NullPointerException). Control the path.");
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "File did not found", "The main login screen file was not found.");
+            showAlert(Alert.AlertType.ERROR, "File Not Found", "The Create Project screen FXML file was not found. Expected: /com/example/ce316project/createProject.fxml");
         } catch (Exception e) {
-            // Diğer beklenmedik hatalar
-            System.err.println("Unexpected error when returning to login screen: " + e.getMessage());
+            System.err.println("Unexpected error when returning to Create Project screen: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Unexpected Error", "An error occurred while returning to the login screen.");
+            showAlert(Alert.AlertType.ERROR, "Unexpected Error", "An error occurred while returning to the Create Project screen.");
         }
     }
     @FXML

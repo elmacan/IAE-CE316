@@ -22,7 +22,7 @@
     <HBox spacing="10">
         <Button fx:id="helpButton" text="Help"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <Button fx:id="backButton" text="Back"/>
+        <Button fx:id="backButton" onAction="#onBackButtonClick" text="Back"/>
     </HBox>
 
 </VBox>
