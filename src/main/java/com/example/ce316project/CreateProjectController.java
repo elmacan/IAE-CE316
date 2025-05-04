@@ -9,10 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.stage.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +54,8 @@ public class CreateProjectController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         if (IAEController.configurationList != null) {
-            configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
+            //configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
+            configurationComboBox.setItems(IAEController.configurationList);
         }
         browseSourceButton.setOnAction(this::chooseZipFileDirectory);
     }
@@ -66,6 +64,9 @@ public class CreateProjectController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
             Parent root = loader.load();
+
+            // Set the controller as UserData
+            root.setUserData(this);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -77,28 +78,38 @@ public class CreateProjectController implements Initializable {
     }
 
     @FXML
-    private void onAddConfigButton(ActionEvent event){
+    private void onAddConfigButton(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
             IAEController.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi yığına ekle
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.showAndWait(); // Wait for the saveConfig page to close
+            Scene newScene = new Scene(root);
+            stage.setScene(newScene);
 
-            // Notify the callback after adding a configuration
-            if (onConfigUpdate != null) {
-                onConfigUpdate.run();
-            }
+            // Add a listener to detect when the stage is closed
+            stage.setOnHidden(windowEvent -> {
+                // Notify the callback after adding a configuration
+                if (onConfigUpdate != null) {
+                    onConfigUpdate.run();
+                    refreshConfigurationComboBox();
+                }
+            });
+
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
     public void setOnConfigUpdate(Runnable onConfigUpdate) {
         this.onConfigUpdate = onConfigUpdate;
+    }
+    public void refreshConfigurationComboBox() {
+        if (IAEController.configurationList != null) {
+            configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
+        }
     }
 
 

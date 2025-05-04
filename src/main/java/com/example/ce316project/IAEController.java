@@ -3,6 +3,8 @@ package com.example.ce316project;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,7 +26,8 @@ import java.util.List;
 import java.util.Stack;
 
 public class IAEController extends Application {
-    public static List<Configuration> configurationList;
+   // public static List<Configuration> configurationList;
+   public static ObservableList<Configuration> configurationList = FXCollections.observableArrayList();
     public static List<Project> projectList;
     public static Project currentProject;
 
@@ -62,7 +65,8 @@ public class IAEController extends Application {
         }
 
         // Dosyalardan yükleme
-        configurationList = FileManager.loadConfigurations(configFile);
+      //  configurationList = FileManager.loadConfigurations(configFile);
+        configurationList = FXCollections.observableArrayList(FileManager.loadConfigurations(configFile));
         projectList = FileManager.loadProjects(projectFile);
         if (projectList == null || projectList.isEmpty()) {
             System.out.println("Project list is null or empty. Initializing with an empty list.");

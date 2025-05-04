@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
@@ -117,8 +118,8 @@ public class ListConfigController implements Initializable {
             FileManager.exportConfiguration(selected, file);
         }
     }
-    @FXML
-    private void onBackButton(ActionEvent event) {
+
+   /* private void onBackButton(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
@@ -132,5 +133,28 @@ public class ListConfigController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
+   @FXML
+   private void onBackButton(ActionEvent event) {
+       try {
+           Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+           if (!IAEController.sceneStack.isEmpty()) {
+               Scene previousScene = IAEController.sceneStack.pop();
+               stage.setScene(previousScene);
+
+               Parent root = previousScene.getRoot();
+               Object controller = root.getUserData();
+               if (controller instanceof CreateProjectController) {
+                   ((CreateProjectController) controller).refreshConfigurationComboBox();
+               }
+           } else {
+               FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrance.fxml"));
+               Parent root = loader.load();
+               stage.setScene(new Scene(root));
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+   }
 }
