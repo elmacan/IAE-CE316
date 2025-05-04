@@ -65,7 +65,7 @@ public class Project {
                         }
 
                         submission.compile(projectConfig);
-                        submission.run(projectConfig, input);
+                        submission.run(projectConfig, getArgumentsContent());
 
                         addSubmission(submission);
 
@@ -141,6 +141,23 @@ public class Project {
                   return expectedOutput; // doğrudan içerik
             }
       }
+      public String getArgumentsContent() {
+            if (input == null || input.trim().isEmpty()) return "";
+
+            File file = new File(input);
+            if (file.exists() && file.isFile()) {
+                  try {
+                        return Files.readString(file.toPath(), StandardCharsets.UTF_8);
+                  } catch (IOException e) {
+                        System.out.println("Arguments dosyası okunamadı: " + e.getMessage());
+                        return "";
+                  }
+            } else {
+                  return input; // doğrudan içerik
+            }
+      }
+
+
 
 
 
