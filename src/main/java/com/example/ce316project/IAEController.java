@@ -86,7 +86,7 @@ public class IAEController extends Application {
         System.out.println("Configuration List: " + configurationList);
 
 
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
 
         stage.setTitle("Integrated Application Environment");
