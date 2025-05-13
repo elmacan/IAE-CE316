@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -31,8 +32,9 @@ public class IAEController extends Application {
     public static List<Project> projectList;
     public static Project currentProject;
 
-    public static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
-    public static final String PROJECT_PATH = System.getProperty("user.home") + "/Documents/iae-app/projects.json";
+    static String userHome = System.getProperty("user.home");
+    public static final String CONFIG_PATH = Paths.get(userHome, ".iae-app", "configs.json").toString();
+    public static final String PROJECT_PATH = Paths.get(userHome, ".iae-app", "projects.json").toString();
 
     public static Stack<Scene> sceneStack = new Stack<>();
 
