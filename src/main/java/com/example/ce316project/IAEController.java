@@ -87,6 +87,11 @@ public class IAEController extends Application {
         }
         System.out.println("Configuration List: " + configurationList);
 
+        System.out.println("Loaded Projects:");
+        for (Project p : projectList) {
+            System.out.println(p);
+        }
+
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 

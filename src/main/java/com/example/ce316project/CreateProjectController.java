@@ -142,6 +142,7 @@ public class CreateProjectController implements Initializable {
 
         // 3. Project nesnesini oluştur (Artık expectedOutput'un boş olmadığından eminiz)
         Project newProject = new Project(name, selectedConfig, input, expectedOutput, zipDirectory);
+        newProject.runAllSubmission();
         System.out.println("DEBUG: onCreateProjectButton - Proje nesnesi oluşturuldu. Beklenen Çıktı: '" + newProject.getExpectedOutput() + "'"); // Debug log
 
         // 4. Projeyi kaydet (FileManager kullanarak) ve global listeleri güncelle

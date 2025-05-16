@@ -121,6 +121,7 @@ public class Project {
                     "name='" + projectName + '\'' +
                     ", configuration=" + projectConfig +
                     ", zipDirectory=" + zipDirectory +
+                    ", submissions=" + submissions +
                     '}';
       }
 

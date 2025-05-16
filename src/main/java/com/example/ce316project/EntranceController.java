@@ -54,4 +54,16 @@ public class EntranceController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onPreviousProjectsButtonClick(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/ce316project/listProjects.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Previous Projects");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
