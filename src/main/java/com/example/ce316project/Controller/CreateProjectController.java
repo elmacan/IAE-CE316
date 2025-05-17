@@ -10,12 +10,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CreateProjectController implements Initializable {
@@ -46,6 +48,48 @@ public class CreateProjectController implements Initializable {
 
     private Runnable onConfigUpdate;
 
+
+    @FXML
+    private void goToEntrancePage(MouseEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            String fxmlPath = "/com/example/ce316project/entrancePage.fxml";
+
+            Parent entrancePageRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath), "FXML dosyası bulunamadı: " + fxmlPath));
+
+            Scene entranceScene = new Scene(entrancePageRoot);
+            stage.setScene(entranceScene);
+            stage.setTitle("Giriş Ekranı");
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Giriş ekranı yüklenirken hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+
+        }
+    }
+
+
+    // CreateProjectController.java
+    @FXML
+    private void goToConfigListPage(MouseEvent event) { // COG ikonundan
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene currentScene = stage.getScene(); //mevcut scenei al
+
+            String fxmlPath = "/com/example/ce316project/listConfig.fxml";
+            Parent configListPageRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+
+            IAEManager.pushScene(currentScene); // listConfig'e gitmeden önce createProject'i stack e ekle
+
+            Scene newScene = new Scene(configListPageRoot);
+            stage.setScene(newScene);
+            stage.setTitle("Configuration List");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,15 +123,13 @@ public class CreateProjectController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
-            IAEManager.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi yığına ekle
+            IAEManager.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi stack e ekle
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene newScene = new Scene(root);
             stage.setScene(newScene);
 
-            // Add a listener to detect when the stage is closed
             stage.setOnHidden(windowEvent -> {
-                // Notify the callback after adding a configuration
                 if (onConfigUpdate != null) {
                     onConfigUpdate.run();
                     refreshConfigurationComboBox();

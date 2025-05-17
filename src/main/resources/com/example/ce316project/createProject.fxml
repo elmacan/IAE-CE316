@@ -86,8 +86,8 @@
         </VBox>
       <Pane layoutX="-2.0" layoutY="-1.0" prefHeight="428.0" prefWidth="62.0" styleClass="bar">
          <children>
-            <FontAwesomeIconView glyphName="HOME" layoutX="24.0" layoutY="173.0" size="16.0" text="" />
-            <FontAwesomeIconView glyphName="COG" layoutX="25.0" layoutY="205.0" size="16.0" />
+            <FontAwesomeIconView glyphName="HOME" layoutX="24.0" layoutY="173.0" size="16.0" text="" onMouseClicked="#goToEntrancePage"  />
+            <FontAwesomeIconView glyphName="COG" layoutX="25.0" layoutY="205.0" size="16.0" onMouseClicked="#goToConfigListPage"/>
             <FontAwesomeIconView glyphName="FOLDER" layoutX="26.0" layoutY="239.0" size="14.0" text="" />
             <FontAwesomeIconView glyphName="ARROW_LEFT" layoutX="26.0" layoutY="271.0" size="16.0" text="" />
             <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="24.0" layoutY="39.0" size="16.0" text="" />

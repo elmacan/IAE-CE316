@@ -74,45 +74,85 @@ public class SaveConfigController {
     private void handleSaveConfig(ActionEvent event) {
         try {
             String language = languageField.getText();
-            String type = languageTypeComboBox.getValue();
+            String type = languageTypeComboBox.getValue(); // getValue() null dönebilir, kontrol edin
             String compilerPath = compilerPathField.getText();
-            String parameters = sourceFileField.getText();
+            String parameters = sourceFileField.getText(); // Bu alanın neyi temsil ettiği önemli
             String runnerCommand = runnerCommandField.getText();
-            //boolean isCompiled = isCompiledCheckBox.isSelected();
 
-            Configuration newConfig = new Configuration();
-            newConfig.setLanguageName(language);
-            newConfig.setLanguagePath(compilerPath);
-            newConfig.setLanguageParameters(parameters);
-            newConfig.setRunCommand(runnerCommand);
-            newConfig.setCompiled("Imperative".equalsIgnoreCase(type) ? false : true);
-            //newConfig.setCompiled(isCompiled);
+            if (language == null || language.trim().isEmpty()) {
+                // Kullanıcıya hata göster (Alert ile)
+                System.err.println("Language name cannot be empty.");
+                return;
+            }
+            if (type == null) {
+                System.err.println("Language type must be selected.");
+                return;
+            }
+
+
+            Configuration configToSave = (editingConfig != null) ? editingConfig : new Configuration();
+            // Eğer editingConfig null değilse, mevcut nesneyi güncelliyoruz.
+            // Böylece indexOf ile arama yapmaya gerek kalmaz ve referans korunur.
+
+            configToSave.setLanguageName(language);
+            configToSave.setLanguagePath(compilerPath);
+            configToSave.setLanguageParameters(parameters); // Bu "sourceFileField" aslında parametreleri mi tutuyor?
+            configToSave.setRunCommand(runnerCommand);
+            // "Imperative" olmayan her şey "Compiled" mı sayılacak? Daha net bir ayrım gerekebilir.
+            // Genellikle 'Compiled' ve 'Interpreted' (veya Scripted) olur.
+            configToSave.setCompiled(!"Imperative".equalsIgnoreCase(type)); // Eğer tip "Imperative" değilse compiled=true
 
             File configFile = getWritableConfigFile();
 
-            if (editingConfig != null) {
-                int index = IAEManager.configurationList.indexOf(editingConfig);
+            if (editingConfig == null) { // Yeni konfigürasyon ekleniyor
+                IAEManager.configurationList.add(configToSave);
+            } else { // Mevcut konfigürasyon düzenleniyor
+                // Eğer editingConfig doğrudan IAEManager.configurationList'teki bir referans ise,
+                // yukarıdaki setter'lar zaten ObservableList'i tetiklemiş olmalı.
+                // Eğer değilse, veya emin olmak için:
+                int index = IAEManager.configurationList.indexOf(editingConfig); // Orijinal editingConfig'i bul
                 if (index != -1) {
-                    IAEManager.configurationList.set(index, newConfig);
+                    IAEManager.configurationList.set(index, configToSave); // Güncellenmiş config ile değiştir
+                } else {
+                    // Bu durum beklenmez, düzenleme modunda config listede olmalı.
+                    // Güvenlik için yine de eklenebilir veya hata verilebilir.
+                    IAEManager.configurationList.add(configToSave);
+                    System.err.println("Warning: Editing config not found in the list, added as new.");
                 }
-            } else {
-                IAEManager.configurationList.add(newConfig);
             }
 
             FileManager.saveConfigurations(IAEManager.configurationList, configFile);
+            System.out.println("Configuration saved successfully.");
 
-            // Geri dön
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
-            Parent root = loader.load();
-            ListConfigController listController = loader.getController();
-            listController.updateList(IAEManager.configurationList);
-
+            // Bir önceki sahneye (ListConfigController'ın sahnesi olmalı) geri dön
+            Scene previousScene = IAEManager.popScene(); // Yığından al
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
 
-        } catch (Exception e) {
+            if (previousScene != null) {
+                stage.setScene(previousScene);
+                // ListConfigController'daki ListView zaten IAEManager.configurationList'e
+                // bağlı olduğu için otomatik olarak güncellenmiş olmalı.
+                // Ekstra bir updateList() çağrısına gerek yok.
+                stage.setTitle("Configuration List"); // Başlığı geri ayarla
+                stage.show();
+            } else {
+                // Bu durum normalde olmamalı, çünkü saveConfig sayfasına bir yerden gelinmiş olmalı.
+                // Güvenlik önlemi olarak giriş ekranına yönlendirilebilir.
+                System.err.println("Error: Previous scene not found in stack. Navigating to entrance.");
+                // FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
+                // Parent root = loader.load();
+                // stage.setScene(new Scene(root));
+                // stage.setTitle("Integrated Application Environment");
+                // IAEManager.clearStack();
+                // stage.show();
+                // Ya da daha iyisi, hata mesajı gösterip kullanıcıyı yönlendirmek.
+                // Şimdilik sadece konsola yazdıralım.
+            }
+
+        } catch (Exception e) { // Daha spesifik Exception'lar yakalamak daha iyi olabilir (örn: IOException)
+            System.err.println("Error saving configuration: " + e.getMessage());
             e.printStackTrace();
+            // Kullanıcıya bir Alert ile hata mesajı gösterilebilir.
         }
     }
     private File getWritableConfigFile() throws Exception {
