@@ -1,32 +1,22 @@
 package com.example.ce316project;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class IAEController extends Application {
+public class IAEManager extends Application {
    // public static List<Configuration> configurationList;
    public static ObservableList<Configuration> configurationList = FXCollections.observableArrayList();
     public static List<Project> projectList;
@@ -41,7 +31,7 @@ public class IAEController extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(IAEController.class.getResource("entrancePage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(IAEManager.class.getResource("entrancePage.fxml"));
 
         // Dosya nesnelerini oluştur
         File configFile = new File(CONFIG_PATH);

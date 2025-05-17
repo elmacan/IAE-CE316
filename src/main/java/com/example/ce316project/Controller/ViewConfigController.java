@@ -1,5 +1,8 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.Configuration;
+import com.example.ce316project.FileManager;
+import com.example.ce316project.IAEManager;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -85,9 +88,9 @@ public class ViewConfigController {
 
     @FXML
     private void onDeleteClick(ActionEvent event) {
-        IAEController.configurationList.remove(configuration);
+        IAEManager.configurationList.remove(configuration);
         File configFile = new File(System.getProperty("user.home") + "/Documents/iae-app/configs.json");
-        FileManager.saveConfigurations(IAEController.configurationList, configFile);
+        FileManager.saveConfigurations(IAEManager.configurationList, configFile);
         onBackClick(event);
     }
 

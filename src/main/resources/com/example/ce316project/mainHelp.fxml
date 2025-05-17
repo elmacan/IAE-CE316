@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.MainHelpController"
+            fx:controller="com.example.ce316project.Controller.MainHelpController"
             prefHeight="400.0" prefWidth="600.0">
 
     <TextArea fx:id="helpTextArea" wrapText="true" editable="false"

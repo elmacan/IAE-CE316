@@ -1,5 +1,7 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.IAEManager;
+import com.example.ce316project.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +28,7 @@ public class ListProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Project> projectList = IAEController.projectList;
+        List<Project> projectList = IAEManager.projectList;
 
         if (projectList != null) {
             projectListView.getItems().setAll(projectList);
@@ -81,8 +83,8 @@ public class ListProjectController implements Initializable {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            if (!IAEController.sceneStack.isEmpty()) {
-                Scene previousScene = IAEController.sceneStack.pop();
+            if (!IAEManager.sceneStack.isEmpty()) {
+                Scene previousScene = IAEManager.sceneStack.pop();
                 stage.setScene(previousScene);
 
                 Parent root = previousScene.getRoot();

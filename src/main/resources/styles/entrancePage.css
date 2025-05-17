@@ -1,0 +1,43 @@
+/*.parent{
+        -fx-background-color: linear-gradient(to right,#351059,#c18cf5);
+}*/
+.parent{
+        -fx-background-color: linear-gradient(to right,#332073,#b5b2bf);
+}
+.button {
+    -fx-background-color: linear-gradient(to bottom, #141b26, #483D8B);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 6 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-transition: all 0.2s ease-in-out; /* desteklenmez ama stil uyumlu görünür */
+}
+
+.text-yazi {
+     -fx-font-size: 28px;
+        -fx-font-weight: bold;
+        -fx-font-family: "Segoe UI", "Arial", sans-serif;
+        -fx-text-fill: #f7f9fc; /* koyu lacivert-gri ton */
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 2, 0.5, 1, 1);
+        -fx-text-alignment: center;
+}
+
+/*.button{
+    -fx-background-color: transparent;
+    -fx-border-color: #f7f8fa;
+    -fx-text-fill: #f7f8fa;
+    -fx-border-width: 2px;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+
+}
+-fx-background-color: linear-gradient(to bottom, #141b26, #483D8B);
+
+}*/
+

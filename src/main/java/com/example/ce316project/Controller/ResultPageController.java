@@ -1,5 +1,7 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.StudentResultRow;
+import com.example.ce316project.StudentSubmission;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

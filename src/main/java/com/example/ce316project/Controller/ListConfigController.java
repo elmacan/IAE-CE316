@@ -1,5 +1,8 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.Configuration;
+import com.example.ce316project.FileManager;
+import com.example.ce316project.IAEManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +17,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -28,7 +30,7 @@ public class ListConfigController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //configurationList = FileManager.loadConfigurations(new File("configs.json"));
-        List<Configuration> configurationList=IAEController.configurationList;
+        List<Configuration> configurationList= IAEManager.configurationList;
 
         if (configurationList != null) {
             configurationListView.getItems().addAll(configurationList);
@@ -95,7 +97,7 @@ public class ListConfigController implements Initializable {
 
 
             // Save the updated list to the writable config file   TEKRAR BAKCAM
-            File configFile = new File(IAEController.CONFIG_PATH);
+            File configFile = new File(IAEManager.CONFIG_PATH);
             FileManager.saveConfigurations(configurationListView.getItems(), configFile);
         }
     }
@@ -139,8 +141,8 @@ public class ListConfigController implements Initializable {
        try {
            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-           if (!IAEController.sceneStack.isEmpty()) {
-               Scene previousScene = IAEController.sceneStack.pop();
+           if (!IAEManager.sceneStack.isEmpty()) {
+               Scene previousScene = IAEManager.sceneStack.pop();
                stage.setScene(previousScene);
 
                Parent root = previousScene.getRoot();

@@ -1,5 +1,6 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,10 +15,6 @@ import javafx.stage.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,9 +50,9 @@ public class CreateProjectController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        if (IAEController.configurationList != null) {
+        if (IAEManager.configurationList != null) {
             //configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
-            configurationComboBox.setItems(IAEController.configurationList);
+            configurationComboBox.setItems(IAEManager.configurationList);
         }
         browseSourceButton.setOnAction(this::chooseZipFileDirectory);
     }
@@ -82,7 +79,7 @@ public class CreateProjectController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
-            IAEController.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi yığına ekle
+            IAEManager.sceneStack.push(((Node) event.getSource()).getScene()); // Mevcut sahneyi yığına ekle
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene newScene = new Scene(root);
@@ -107,8 +104,8 @@ public class CreateProjectController implements Initializable {
         this.onConfigUpdate = onConfigUpdate;
     }
     public void refreshConfigurationComboBox() {
-        if (IAEController.configurationList != null) {
-            configurationComboBox.setItems(FXCollections.observableArrayList(IAEController.configurationList));
+        if (IAEManager.configurationList != null) {
+            configurationComboBox.setItems(FXCollections.observableArrayList(IAEManager.configurationList));
         }
     }
 
@@ -146,16 +143,16 @@ public class CreateProjectController implements Initializable {
         System.out.println("DEBUG: onCreateProjectButton - Proje nesnesi oluşturuldu. Beklenen Çıktı: '" + newProject.getExpectedOutput() + "'"); // Debug log
 
         // 4. Projeyi kaydet (FileManager kullanarak) ve global listeleri güncelle
-        File projectFile = new File(IAEController.PROJECT_PATH);
+        File projectFile = new File(IAEManager.PROJECT_PATH);
         List<Project> updatedList = FileManager.saveProjectIfUnique(newProject, projectFile);
 
         // 5. Kaydetme sonucuna göre UI ve durumu güncelle
         if (updatedList != null) {
-            IAEController.projectList = updatedList; // Statik listeyi güncelle
-            IAEController.currentProject = newProject; // Yeni oluşturulan projeyi mevcut proje yap
+            IAEManager.projectList = updatedList; // Statik listeyi güncelle
+            IAEManager.currentProject = newProject; // Yeni oluşturulan projeyi mevcut proje yap
 
             System.out.println("New project '" + name + "' was created and saved successfully.");
-            System.out.println("DEBUG: onCreateProjectButton - IAEController.currentProject ayarlandı. Beklenen Çıktı: '" + IAEController.currentProject.getExpectedOutput() + "'"); // Debug log
+            System.out.println("DEBUG: onCreateProjectButton - IAEController.currentProject ayarlandı. Beklenen Çıktı: '" + IAEManager.currentProject.getExpectedOutput() + "'"); // Debug log
             showAlert(Alert.AlertType.INFORMATION, "Project Created", "The project '" + name + "' was created successfully.");
 
             // Run/Compare butonlarını göster, Create butonunu gizle
@@ -315,18 +312,18 @@ public class CreateProjectController implements Initializable {
 
     @FXML
     private void onCompareButtonClick(ActionEvent event) {
-        if (IAEController.currentProject == null) {
+        if (IAEManager.currentProject == null) {
             showAlert(Alert.AlertType.ERROR, "Comparison Error", "Active project is not selected.");
             return;
         }
 
-        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
+        List<StudentSubmission> submissions = IAEManager.currentProject.getSubmissions();
         if (submissions == null || submissions.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Comparison Error", "No submissions were found or processed. Please click 'Run' button first.");
             return;
         }
 
-        String expectedOutput = IAEController.currentProject.getExpectedOutputContent();
+        String expectedOutput = IAEManager.currentProject.getExpectedOutputContent();
         if (expectedOutput == null || expectedOutput.trim().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Comparison Error", "Expected output content could not be determined.");
             return;
@@ -357,7 +354,7 @@ public class CreateProjectController implements Initializable {
             Stage stage = (Stage) currentScene.getWindow();
             Scene resultScene = new Scene(resultPageRoot);
             stage.setScene(resultScene);
-            stage.setTitle("Comparison Results - " + IAEController.currentProject.getProjectName());
+            stage.setTitle("Comparison Results - " + IAEManager.currentProject.getProjectName());
             stage.sizeToScene();
             stage.centerOnScreen();
             stage.show();

@@ -1,5 +1,6 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.IAEManager;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +28,7 @@ public class EntranceController {
 
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            IAEController.sceneStack.push(stage.getScene());
+            IAEManager.sceneStack.push(stage.getScene());
             stage.setScene(scene);
             stage.show();
 

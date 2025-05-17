@@ -6,7 +6,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.ce316project.ViewConfigController"
+      fx:controller="com.example.ce316project.Controller.ViewConfigController"
       fx:id="rootVBox"
       spacing="10" alignment="TOP_LEFT" >
 

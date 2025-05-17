@@ -1,4 +1,4 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

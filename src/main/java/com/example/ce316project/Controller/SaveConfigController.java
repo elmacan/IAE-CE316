@@ -1,5 +1,8 @@
-package com.example.ce316project;
+package com.example.ce316project.Controller;
 
+import com.example.ce316project.Configuration;
+import com.example.ce316project.FileManager;
+import com.example.ce316project.IAEManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
@@ -17,8 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SaveConfigController {
 
@@ -90,21 +91,21 @@ public class SaveConfigController {
             File configFile = getWritableConfigFile();
 
             if (editingConfig != null) {
-                int index = IAEController.configurationList.indexOf(editingConfig);
+                int index = IAEManager.configurationList.indexOf(editingConfig);
                 if (index != -1) {
-                    IAEController.configurationList.set(index, newConfig);
+                    IAEManager.configurationList.set(index, newConfig);
                 }
             } else {
-                IAEController.configurationList.add(newConfig);
+                IAEManager.configurationList.add(newConfig);
             }
 
-            FileManager.saveConfigurations(IAEController.configurationList, configFile);
+            FileManager.saveConfigurations(IAEManager.configurationList, configFile);
 
             // Geri dön
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
             Parent root = loader.load();
             ListConfigController listController = loader.getController();
-            listController.updateList(IAEController.configurationList);
+            listController.updateList(IAEManager.configurationList);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
