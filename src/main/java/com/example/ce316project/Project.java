@@ -8,6 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Project {
       @SerializedName("name")
@@ -46,33 +49,46 @@ public class Project {
                   System.out.println("No ZIP files found in the directory.");
                   return;
             }
+
             String expectedOutputContent = getExpectedOutputContent();
 
+            // Thread havuzu, paralel görevler için
+            int threadCount = Runtime.getRuntime().availableProcessors(); // işlemci çekirdeği kadar thread
+            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+
             for (File zipFile : zipFiles) {
-                  try {
-                        System.out.println("Processing ZIP file: " + zipFile.getName());
+                  executor.submit(() -> {
+                        try {
+                              System.out.println("Processing ZIP file: " + zipFile.getName());
 
-                        StudentSubmission submission = new StudentSubmission();
-                        submission.setZipFile(zipFile);
-                        String fileName=zipFile.getName();
-                        fileName = fileName.replaceAll("(?i)\\.zip$", "");
-                        submission.setStudentID(fileName);
+                              StudentSubmission submission = new StudentSubmission();
+                              submission.setZipFile(zipFile);
+                              String fileName = zipFile.getName().replaceAll("(?i)\\.zip$", "");
+                              submission.setStudentID(fileName);
 
-                        boolean extracted = submission.extract();
-                        if (!extracted) {
-                              System.out.println("Failed to extract ZIP file: " + zipFile.getName());
-                              continue;
+                              if (!submission.extract()) {
+                                    System.out.println("Failed to extract ZIP file: " + zipFile.getName());
+                                    return;
+                              }
+
+                              submission.compile(projectConfig);
+                              submission.run(projectConfig, getArgumentsContent(), expectedOutputContent);
+                              synchronized (this) {
+                                    addSubmission(submission); // Listeye erişim senkronize edilmeli
+                              }
+
+                        } catch (Exception e) {
+                              System.out.println("Error processing ZIP file: " + zipFile.getName());
+                              e.printStackTrace();
                         }
+                  });
+            }
 
-                        submission.compile(projectConfig);
-                        submission.run(projectConfig, getArgumentsContent(), expectedOutputContent);
-
-                        addSubmission(submission);
-
-                  } catch (Exception e) {
-                        System.out.println("Error processing ZIP file: " + zipFile.getName());
-                        e.printStackTrace();
-                  }
+            executor.shutdown();
+            try {
+                  executor.awaitTermination(1, TimeUnit.HOURS); // tüm görevlerin bitmesini bekle
+            } catch (InterruptedException e) {
+                  e.printStackTrace();
             }
       }
 
