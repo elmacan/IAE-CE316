@@ -66,4 +66,17 @@ public class EntranceController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onHelpButtonClick(ActionEvent event) {
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/ce316project/mainHelp.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Help");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
