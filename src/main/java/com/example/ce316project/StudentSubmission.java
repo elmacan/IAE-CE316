@@ -198,7 +198,7 @@ public class StudentSubmission {
         return sourceFiles;
     }
 
-    public void run(Configuration configuration, String arguments) {
+    public void run(Configuration configuration, String arguments, String expectedOutputContent) {
         File outputFile = new File(extractedDirectory, "student_output.txt");
         try {
 
@@ -293,6 +293,12 @@ public class StudentSubmission {
             result.setRunSuccessfully(false);
             result.appendErrorLog(e.toString());
         }
+
+        String expected = expectedOutputContent != null ? expectedOutputContent.trim() : "";
+        String actual = studentOutput != null ? studentOutput.trim() : "";
+
+        boolean match = expected.equals(actual);
+        result.setOutputMatches(match);
     }
 
            /* public boolean compareOutput(File expectedOutput) {

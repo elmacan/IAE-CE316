@@ -120,7 +120,7 @@ public class ResultPageController {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/createProject.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
             Parent createProjectRoot = loader.load();
 
             Scene createProjectScene = new Scene(createProjectRoot);

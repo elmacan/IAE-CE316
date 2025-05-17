@@ -65,7 +65,7 @@ public class Project {
                         }
 
                         submission.compile(projectConfig);
-                        submission.run(projectConfig, getArgumentsContent());
+                        submission.run(projectConfig, getArgumentsContent(), expectedOutputContent);
 
                         addSubmission(submission);
 
