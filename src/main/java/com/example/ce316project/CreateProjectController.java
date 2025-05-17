@@ -161,8 +161,6 @@ public class CreateProjectController implements Initializable {
             // Run/Compare butonlarını göster, Create butonunu gizle
             compareButton.setVisible(true);
             compareButton.setManaged(true);
-            runButton.setVisible(true);
-            runButton.setManaged(true);
             createProjectButton.setVisible(false);
             createProjectButton.setManaged(false);
         } else {
@@ -252,10 +250,10 @@ public class CreateProjectController implements Initializable {
     }
 
 
-    @FXML
-    private void onRunButtonClick(ActionEvent event) {
-       IAEController.currentProject.runAllSubmission();
-    }
+    //@FXML
+    //private void onRunButtonClick(ActionEvent event) {
+      // IAEController.currentProject.runAllSubmission();
+   // }
 
 
    /* @FXML

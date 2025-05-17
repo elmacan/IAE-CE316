@@ -75,7 +75,6 @@
                     <Button fx:id="cancelButton" onAction="#onCancelButton" text="Cancel" />
                <HBox prefHeight="26.0" prefWidth="342.0" />
                     <Button fx:id="compareButton" managed="false" onAction="#onCompareButtonClick" text="Compare" visible="false" />
-                    <Button fx:id="runButton" managed="false" onAction="#onRunButtonClick" text="Run" visible="false" />
                     <Button fx:id="createProjectButton" onAction="#onCreateProjectButton" text="Create Project" />
                 </HBox>
             </children>
