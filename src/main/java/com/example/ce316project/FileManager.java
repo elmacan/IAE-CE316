@@ -51,6 +51,7 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public static List<Configuration> loadConfigurations(File file) {
