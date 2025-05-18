@@ -31,6 +31,7 @@ public class ListConfigController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //configurationList = FileManager.loadConfigurations(new File("configs.json"));
         List<Configuration> configurationList= IAEManager.configurationList;
+        configurationListView.setFixedCellSize(26);
 
         if (configurationList != null) {
             configurationListView.getItems().addAll(configurationList);

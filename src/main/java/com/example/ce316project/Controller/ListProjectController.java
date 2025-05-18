@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -29,6 +31,7 @@ public class ListProjectController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<Project> projectList = IAEManager.projectList;
+
 
         if (projectList != null) {
             projectListView.getItems().setAll(projectList);
@@ -47,7 +50,11 @@ public class ListProjectController implements Initializable {
 
                         seeResultButton.setOnAction(event -> showResultPage(event, project));
 
-                        HBox hBox = new HBox(10, projectName, seeResultButton);
+                        Region spacer = new Region();
+                        HBox.setHgrow(spacer, Priority.ALWAYS); // Flexible space
+
+                        HBox hBox = new HBox(10, projectName, spacer, seeResultButton);
+
                         setGraphic(hBox);
                     }
                 }

@@ -54,12 +54,13 @@ koyu temalı
      -fx-font-family: "Segoe UI", sans-serif;
      -fx-font-size: 14px;
      -fx-text-fill: white;
+
  }
 .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: black;
-    -fx-padding: 8;
-    -fx-font-size: 14px;
+    -fx-padding: 4 8;
+    -fx-font-size: 13px;
 }
 
 

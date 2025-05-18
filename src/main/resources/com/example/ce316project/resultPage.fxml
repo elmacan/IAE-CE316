@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ce316project.Controller.ResultPageController"
-            prefHeight="400.0" prefWidth="600.0">
-    <TableView fx:id="studentTable" prefWidth="600" prefHeight="400">
+<VBox prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../styles/resultPage.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.ResultPageController">
+    <TableView fx:id="studentTable" prefHeight="390.0" prefWidth="600">
         <columns>
-            <TableColumn fx:id="studentNumberColumn" text="Student Number" prefWidth="150"/>
-            <TableColumn fx:id="compileStatusColumn" text="Compile Status" prefWidth="150"/>
-            <TableColumn fx:id="runStatusColumn" text="Run Status" prefWidth="150"/>
-            <TableColumn fx:id="outputMatchColumn" text="Output Match" prefWidth="150"/>
+            <TableColumn fx:id="studentNumberColumn" prefWidth="150" text="Student Number" />
+            <TableColumn fx:id="compileStatusColumn" prefWidth="150" text="Compile Status" />
+            <TableColumn fx:id="runStatusColumn" prefWidth="150" text="Run Status" />
+            <TableColumn fx:id="outputMatchColumn" prefWidth="150" text="Output Match" />
         </columns>
     </TableView>
 
-    <HBox spacing="10">
-        <Button fx:id="helpButton" text="Help"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <Button fx:id="backButton" onAction="#onBackButtonClick" text="Back"/>
+    <HBox prefHeight="32.0" prefWidth="600.0" spacing="10">
+        <Pane prefHeight="40.0" prefWidth="600.0" HBox.hgrow="ALWAYS" />
     </HBox>
+   <HBox prefHeight="58.0" prefWidth="511.0">
+      <children>
+         <Pane prefHeight="32.0" prefWidth="539.0">
+            <children>
+               <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="14.0" layoutY="18.0" size="16.0" />
+            </children>
+         </Pane>
+           <Button fx:id="backButton" alignment="CENTER_RIGHT" onAction="#onBackButtonClick" text="Back" />
+      </children>
+   </HBox>
 
 </VBox>
