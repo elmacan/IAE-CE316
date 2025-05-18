@@ -89,7 +89,17 @@
             <FontAwesomeIconView glyphName="HOME" layoutX="24.0" layoutY="195.0" onMouseClicked="#onIconHome" size="16.0" text="" />
             <FontAwesomeIconView glyphName="COG" layoutX="25.0" layoutY="228.0" onMouseClicked="#onIconConfigList" size="16.0" />
             <FontAwesomeIconView glyphName="FOLDER" layoutX="25.0" layoutY="261.0" onMouseClicked="#onIconProjectlist" size="14.0" text="" />
-            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="24.0" layoutY="39.0" size="16.0" text="" />
+             <FontAwesomeIconView glyphName="FOLDER" layoutX="25.0" layoutY="261.0" onMouseClicked="#onIconProjectlist" size="14.0" text="" />
+
+             <!-- DÜZELTİLMİŞ İKON TANIMI -->
+             <FontAwesomeIconView glyphName="INFO_CIRCLE"
+                                  layoutX="24.0"
+                                  layoutY="39.0"
+                                  size="16.0"
+                                  text=""
+                                  onMouseClicked="#showHelpPage"
+                                  styleClass="icon-button" />
+             <!-- FAZLADAN "/>" KALDIRILDI -->
          </children>
       </Pane>
     </children>

@@ -26,7 +26,6 @@ public class ListConfigController implements Initializable {
     @FXML
     private ListView<Configuration> configurationListView;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //configurationList = FileManager.loadConfigurations(new File("configs.json"));
@@ -137,6 +136,7 @@ public class ListConfigController implements Initializable {
             e.printStackTrace();
         }
     }*/
+
    @FXML
    private void onBackButton(ActionEvent event) {
        try {

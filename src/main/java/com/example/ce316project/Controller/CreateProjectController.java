@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
 
 import java.io.File;
@@ -484,6 +485,42 @@ public class CreateProjectController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
+    // CreateProjectController.java
+// ...
+
+
+    // ...
+    @FXML
+    private void showHelpPage(MouseEvent event) { // Bu metodun FXML'deki INFO_CIRCLE ikonunun onMouseClicked olayına bağlı olduğundan emin olun
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/helpPages.fxml")); // helpPages.fxml yolu
+            Parent helpPageRoot = loader.load();
+
+            HelpControllers helpControllerInstance = loader.getController();
+
+            // "Create Project" sayfası için yardım konusunu belirt
+            helpControllerInstance.loadHelpContent(HelpControllers.HelpTopic.CREATE_PROJECT);
+
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Help"); // Genel başlık, FXML içindeki Label daha spesifik olacak
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+            // helpStage.initOwner(((Node)event.getSource()).getScene().getWindow()); // Opsiyonel
+
+            Scene helpScene = new Scene(helpPageRoot);
+            helpStage.setScene(helpScene);
+            helpStage.setResizable(true); // Boyutlandırılabilir
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            System.err.println("Error loading help page: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the help page."); // showAlert metodunuzun olduğundan emin olun
+        }
+    }
+// ...
+
 }
 
 

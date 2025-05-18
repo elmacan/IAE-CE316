@@ -16,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -149,6 +151,57 @@ public class ResultPageController {
             showAlert(Alert.AlertType.ERROR, "Unexpected Error", "An error occurred while returning to the Create Project screen.");
         }
     }
+
+
+    // ResultPageController.java
+// ...
+    @FXML
+    private void showResultsHelpPage(MouseEvent event) {
+        try {
+            // !!! BU SATIRI KONTROL EDİN !!!
+            // "/com/example.ce316project/helpPages.fxml" yolunun doğru olduğundan emin olun.
+            // Ekran görüntünüze göre FXML dosyanız "src/main/resources/com/example/ce316project/helpPages.fxml" altında.
+            String fxmlPath = "/com/example/ce316project/helpPages.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath)); // Satır ~160 burası olmalı
+
+            // getResource null döndürürse, loader.load() bir sonraki satırda IllegalStateException verir.
+            // Bunu önlemek için null kontrolü ekleyebiliriz:
+            if (loader.getLocation() == null) { // Veya getClass().getResource(fxmlPath) == null
+                System.err.println("FATAL ERROR: Help FXML file not found at: " + fxmlPath);
+                showAlert(Alert.AlertType.ERROR, "Internal Error", "Could not find the help page template. Path: " + fxmlPath);
+                return;
+            }
+
+            Parent helpPageRoot = loader.load(); // Eğer getLocation() null ise bu satır hata verir
+
+            HelpControllers helpCtrl = loader.getController();
+            if (helpCtrl == null) {
+                System.err.println("Error: Could not get HelpController instance from FXML: " + fxmlPath);
+                showAlert(Alert.AlertType.ERROR, "Help Error", "Failed to load help controller.");
+                return;
+            }
+
+            helpCtrl.loadHelpContent(HelpControllers.HelpTopic.SUBMISSION_RESULTS);
+
+            Stage helpStage = new Stage();
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+            // ... (geri kalan kod)
+            Scene helpScene = new Scene(helpPageRoot, 600, 400);
+            helpStage.setScene(helpScene);
+            helpStage.setResizable(true);
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            System.err.println("Error loading help page FXML: " + e.getMessage() + " (Path: /com/example/ce316project/helpPages.fxml)");
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Help Error", "Could not load the help page due to an I/O error.");
+        } catch (Exception e) { // Diğer beklenmedik hatalar için
+            System.err.println("An unexpected error occurred while showing help page: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Help Error", "An unexpected error occurred.");
+        }
+    }
+    // ...
     @FXML
     void onHelpButtonClick(ActionEvent event) {
         showAlert(Alert.AlertType.INFORMATION, "Help", "...");

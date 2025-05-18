@@ -25,7 +25,11 @@
       <children>
          <Pane prefHeight="32.0" prefWidth="539.0">
             <children>
-               <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="14.0" layoutY="18.0" size="16.0" />
+                <FontAwesomeIconView glyphName="INFO_CIRCLE"
+                                     size="22"
+                onMouseClicked="#showResultsHelpPage"
+                styleClass="icon-button" />
+
             </children>
          </Pane>
            <Button fx:id="backButton" alignment="CENTER_RIGHT" onAction="#onBackButtonClick" text="Back" />

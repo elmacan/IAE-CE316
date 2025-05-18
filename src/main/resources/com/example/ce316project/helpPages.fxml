@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Priority?>
+
+<VBox fx:id="rootHelpPane" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="700.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ce316project.Controller.HelpControllers"
+      style="-fx-background-color: #f4f6f8; -fx-padding: 20;">
+
+    <children>
+
+        <!-- Başlık -->
+        <Label fx:id="helpTitleLabel" text="Help Title" style="-fx-text-fill: #343a40;">
+            <font>
+                <Font name="Segoe UI Semibold" size="22.0"/>
+            </font>
+        </Label>
+
+        <!-- Yardım içeriği -->
+        <ScrollPane fx:id="helpScrollPane" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color: transparent;">
+            <content>
+                <TextArea fx:id="helpContentArea"
+                          editable="false"
+                          wrapText="true"
+                          style="-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-padding: 12px;
+                                 -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #dee2e6;
+                                 -fx-border-radius: 6; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;" />
+            </content>
+        </ScrollPane>
+
+        <!-- Kapat butonu -->
+        <Button fx:id="closeButton" onAction="#handleCloseButton" text="Close"
+                prefWidth="100.0" prefHeight="40.0"
+                style="-fx-background-color: #495057; -fx-text-fill: white; -fx-font-size: 14px;
+                       -fx-font-weight: bold; -fx-background-radius: 6;">
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+        </Button>
+
+    </children>
+</VBox>
