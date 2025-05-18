@@ -62,6 +62,11 @@ public class Configuration {
             throw new IllegalStateException("languagePath not defined!");
         }
 
+        // Derleme parametreleri ekleniyor(sıralaması bazı diller için kritik
+        if (languageParameters != null && !languageParameters.isEmpty()) {
+            command.append(" ").append(languageParameters);
+        }
+
         // source file ekleniyor
         if (sourceFileNames != null && !sourceFileNames.isEmpty()) {
             for (String sourceFileName : sourceFileNames) {
@@ -75,10 +80,7 @@ public class Configuration {
             throw new IllegalArgumentException("Source file list cannot be empty!");
         }
 
-        // Derleme parametreleri ekleniyor
-        if (languageParameters != null && !languageParameters.isEmpty()) {
-            command.append(" ").append(languageParameters);
-        }
+
 
         return command.toString();
 

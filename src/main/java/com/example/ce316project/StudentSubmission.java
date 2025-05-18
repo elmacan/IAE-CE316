@@ -228,50 +228,53 @@ public class StudentSubmission {
                 }
             }
 
-            if(!configuration.isCompiled()) {
+            if (!configuration.isCompiled()) {
                 String interpreter = configuration.getLanguagePath();
+                List<String> paramList = new ArrayList<>();
+
                 if (interpreter != null && !interpreter.isBlank()) {
-                    parts.add(0, interpreter);
+                    paramList.add(interpreter);
                 }
-                if (interpreter.equalsIgnoreCase("python")) {
-                    parts = new ArrayList<>();
-                    parts.add("python");
-                    if (arguments != null && !arguments.isBlank()) {
-                        parts.addAll(Arrays.asList(arguments.trim().split(" ")));
-                    }
-                } else {
-                    parts.add(0, interpreter);
+
+                if (configuration.getLanguageParameters() != null && !configuration.getLanguageParameters().isBlank()) {
+                    String[] flags = configuration.getLanguageParameters().trim().split("\\s+");
+                    paramList.addAll(Arrays.asList(flags));
                 }
+
+                if (runCommand != null && !runCommand.isBlank()) {
+                    paramList.add(runCommand.trim());
+                }
+
+                if (arguments != null && !arguments.isBlank()) {
+                    paramList.addAll(Arrays.asList(arguments.trim().split("\\s+")));
+                }
+
+                parts = paramList;
             }
 
             System.out.println("Final RUN command: " + String.join(" ", parts));
-
 
             ProcessBuilder pb = new ProcessBuilder(parts);
             pb.directory(extractedDirectory);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
-
             InputStream is = process.getInputStream();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(is, StandardCharsets.UTF_8)
-            );
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             StringBuilder outputBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
                 outputBuilder.append(line).append(System.lineSeparator());
             }
+
             int exitCode = process.waitFor();
             studentOutput = outputBuilder.toString();
-
 
             try (FileWriter writer = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
                 writer.write(studentOutput);
             }
-            this.actualOutputFile= outputFile;
-
+            this.actualOutputFile = outputFile;
 
             if (exitCode != 0) {
                 result.setRunSuccessfully(false);
@@ -409,7 +412,7 @@ public class StudentSubmission {
 
         if (expectedOutputContent == null || expectedOutputContent.trim().isEmpty()) {
             this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Beklenen çıktı boş ya da null.");
+            this.result.appendErrorLog("The expected output is empty or null.");
             return false;
         }
 
@@ -422,7 +425,7 @@ public class StudentSubmission {
         Path actualPath = actualOutputFile.toPath();
         if (!Files.exists(actualPath) || !Files.isRegularFile(actualPath) || !Files.isReadable(actualPath)) {
             this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Gerçek çıktı dosyası geçersiz veya okunamaz.");
+            this.result.appendErrorLog("The actual output file is invalid or unreadable.");
             return false;
         }
 
@@ -435,7 +438,7 @@ public class StudentSubmission {
             }
         } catch (IOException e) {
             this.result.setOutputMatches(false);
-            this.result.appendErrorLog("actualOutputFile okunamadı: " + e.getMessage());
+            this.result.appendErrorLog("actualOutputFile can not read: " + e.getMessage());
             return false;
         }
 
@@ -449,8 +452,7 @@ public class StudentSubmission {
             return true;
         } else {
             this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Çıktılar eşleşmiyor.\n--- Beklenen ---\n" + expectedOutputContent +
-                    "\n--- Gerçek ---\n" + actualContent);
+            this.result.appendErrorLog("The outputs did not match");
             return false;
         }
     }
