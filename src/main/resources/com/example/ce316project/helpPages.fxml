@@ -7,23 +7,27 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.Priority?>
+<?import java.net.URL?>
 
 <VBox fx:id="rootHelpPane" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="700.0" spacing="20.0"
+      style="-fx-background-color: #f4f6f8; -fx-padding: 20;"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.ce316project.Controller.HelpControllers"
-      style="-fx-background-color: #f4f6f8; -fx-padding: 20;">
+      fx:controller="com.example.ce316project.Controller.HelpControllers">
+
+    <stylesheets>
+        <!-- entrancePage.css DOSYASININ DOĞRU YOLUNU BURAYA YAZIN -->
+        <!-- helpPages.fxml (com/example/ce316project/ altında) ve entrancePage.css (styles/ altında) -->
+        <!-- Doğru göreceli yol: @../../styles/entrancePage.css -->
+        <URL value="@../../../styles/entrancePage.css"/>
+    </stylesheets>
 
     <children>
-
-        <!-- Başlık -->
         <Label fx:id="helpTitleLabel" text="Help Title" style="-fx-text-fill: #343a40;">
             <font>
                 <Font name="Segoe UI Semibold" size="22.0"/>
             </font>
         </Label>
 
-        <!-- Yardım içeriği -->
         <ScrollPane fx:id="helpScrollPane" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS"
                     style="-fx-background-color: transparent;">
             <content>
@@ -38,13 +42,11 @@
 
         <!-- Kapat butonu -->
         <Button fx:id="closeButton" onAction="#handleCloseButton" text="Close"
-                prefWidth="100.0" prefHeight="40.0"
-                style="-fx-background-color: #495057; -fx-text-fill: white; -fx-font-size: 14px;
-                       -fx-font-weight: bold; -fx-background-radius: 6;">
+                styleClass="entrance-button-alt" prefWidth="100.0" >
+
             <VBox.margin>
                 <Insets top="10.0"/>
             </VBox.margin>
         </Button>
-
     </children>
 </VBox>
