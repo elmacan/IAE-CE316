@@ -458,6 +458,24 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the configuration list page.");
         }
     }
+    @FXML
+    public void onIconProjectlist(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listProjects.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) createProjectButton.getScene().getWindow();
+            IAEManager.sceneStack.push(stage.getScene());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the configuration list page.");
+        }
+    }
+
+
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);

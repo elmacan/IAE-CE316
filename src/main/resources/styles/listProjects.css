@@ -1,0 +1,43 @@
+.button {
+     -fx-background-color: linear-gradient(to bottom, #141b26, #483D8B);
+     -fx-text-fill: white;
+     -fx-font-size: 10px;
+     -fx-font-weight: bold;
+     -fx-font-family: "Segoe UI", sans-serif;
+     -fx-padding: 5 11;
+     -fx-background-radius: 8;
+     -fx-border-radius: 8;
+     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 2);
+     -fx-cursor: hand;
+     -fx-border-color: transparent;
+     -fx-transition: all 0.2s ease-in-out; /* desteklenmez ama stil uyumlu görünür */
+ }
+  açık temalı
+  .list-view {
+      -fx-background-color: transparent;
+      -fx-control-inner-background: rgba(255,255,255,0.05);
+      -fx-border-color: #999;
+      -fx-border-radius: 6;
+      -fx-background-radius: 6;
+      -fx-padding: 4;
+      -fx-font-family: "Segoe UI", sans-serif;
+      -fx-font-size: 14px;
+      -fx-text-fill: white;
+  }
+ .list-cell {
+     -fx-background-color: transparent;
+     -fx-text-fill: black;
+     -fx-padding: 8;
+     -fx-font-size: 14px;
+ }
+
+
+ .list-cell:selected {
+     -fx-background-color: linear-gradient(to right, #3f51b5, #5c6bc0);
+     -fx-text-fill: white;
+ }
+
+
+ .list-cell:hover {
+     -fx-background-color: #444;
+ }
