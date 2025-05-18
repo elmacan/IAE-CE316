@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.ce316project.Controller.CompareOutputController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Expected Output:" />
+            <TextArea fx:id="expectedOutputArea" editable="false" />
+            <Label text="Actual Output:" />
+            <TextArea fx:id="actualOutputArea" editable="false" />
+            <Label text="Error Log:" />
+            <TextArea fx:id="errorLogArea" editable="false" />
+        </VBox>
+    </children>
+</AnchorPane>

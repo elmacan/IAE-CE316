@@ -351,11 +351,14 @@ public class CreateProjectController implements Initializable {
                 return;
             }
 
-            Scene currentScene = ((Node) event.getSource()).getScene();
-            resultController.loadSubmissionResults(submissions, currentScene);
+            resultController.loadSubmissionResults(
+                    IAEManager.currentProject,
+                    IAEManager.currentProject.getSubmissions(),
+                    ((Node) event.getSource()).getScene()
+            );
 
-            Stage stage = (Stage) currentScene.getWindow();
             Scene resultScene = new Scene(resultPageRoot);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(resultScene);
             stage.setTitle("Comparison Results - " + IAEManager.currentProject.getProjectName());
             stage.sizeToScene();

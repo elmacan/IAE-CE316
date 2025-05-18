@@ -66,13 +66,12 @@ public class ListProjectController implements Initializable {
 
     private void showResultPage(ActionEvent event, Project selectedProject) {
         try {
-
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/resultPage.fxml"));
             Parent root = loader.load();
 
             ResultPageController controller = loader.getController();
-            controller.loadSubmissionResults(selectedProject.getSubmissions(),
+            // Burada projeyi ve onun submissionlarını birlikte gönderiyoruz
+            controller.loadSubmissionResults(selectedProject, selectedProject.getSubmissions(),
                     ((Node) event.getSource()).getScene());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -87,7 +86,7 @@ public class ListProjectController implements Initializable {
     }
 
 
-   @FXML
+    @FXML
     private void onBackButton(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

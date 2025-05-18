@@ -1,5 +1,6 @@
 package com.example.ce316project.Controller;
 
+import com.example.ce316project.Project;
 import com.example.ce316project.StudentResultRow;
 import com.example.ce316project.StudentSubmission;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -31,8 +29,11 @@ public class ResultPageController {
     @FXML private TableColumn<StudentResultRow, String> compileStatusColumn;
     @FXML private TableColumn<StudentResultRow, String> runStatusColumn;
     @FXML private TableColumn<StudentResultRow, String> outputMatchColumn;
+    @FXML
+    private TextArea expectedOutputArea;
     @FXML private Button backButton;
     @FXML private Button helpButton;
+    private Project selectedProject;
 
     private ObservableList<StudentResultRow> resultData = FXCollections.observableArrayList();
 
@@ -72,6 +73,72 @@ public class ResultPageController {
         studentTable.setItems(resultData);
     }
 
+    @FXML
+    private void handleRowClick(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            StudentResultRow selectedRow = studentTable.getSelectionModel().getSelectedItem();
+            if (selectedRow != null) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/comparison_view.fxml"));
+                    Parent root = loader.load();
+
+                    CompareOutputController controller = loader.getController();
+                    StudentSubmission submission = selectedRow.getSubmission();
+
+                    // Sadece bu satır değişti:
+                    controller.loadOutputComparison(selectedProject, submission);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Output Comparison");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void loadSubmissionResults(Project project, List<StudentSubmission> submissionList, Scene previous) {
+        this.previousScene = previous;
+        this.selectedProject = project; // ← Projeyi burada saklıyoruz
+
+        if (submissionList == null) {
+            System.err.println("A null list received to the loadSubmissionResults.");
+            resultData.clear();
+            return;
+        }
+
+        List<StudentSubmission> sortedSubmissions;
+        try {
+            sortedSubmissions = submissionList.stream()
+                    .filter(s -> s != null && s.getStudentID() != null)
+                    .sorted(Comparator.comparing(StudentSubmission::getStudentID,
+                            Comparator.nullsLast(String::compareToIgnoreCase)))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.err.println("Error while sorting submissions: " + e.getMessage());
+            e.printStackTrace();
+            sortedSubmissions = submissionList;
+            showAlert(Alert.AlertType.WARNING, "Sorting error", "An error occurred while sorting by student number. The list is displayed out of order.");
+        }
+
+        resultData.clear();
+        for (StudentSubmission submission : sortedSubmissions) {
+            if (submission != null && submission.getResult() != null) {
+                resultData.add(new StudentResultRow(
+                        submission.getStudentID() != null ? submission.getStudentID() : "Unknown ID",
+                        submission.getResult().isCompiledSuccessfully(),
+                        submission.getResult().isRunSuccessfully(),
+                        submission.getResult().isOutputMatches(),
+                        submission // StudentSubmission objesi
+                ));
+            } else {
+                System.err.println("Warning: Null reference or result found in sorted list.");
+            }
+        }
+    }
+
     public void loadSubmissionResults(List<StudentSubmission> submissionList, Scene previous) {
         this.previousScene = previous;
 
@@ -105,7 +172,8 @@ public class ResultPageController {
                         submission.getStudentID() != null ? submission.getStudentID() : "Unknown ID",
                         submission.getResult().isCompiledSuccessfully(),
                         submission.getResult().isRunSuccessfully(),
-                        submission.getResult().isOutputMatches()
+                        submission.getResult().isOutputMatches(),
+                        submission
                 ));
             } else {
                 System.err.println("Warning: Null reference or result found in sorted list.");
