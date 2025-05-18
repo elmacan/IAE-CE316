@@ -19,7 +19,7 @@
         <Button fx:id="createNewProjectButton" onAction="#onCreateNewProjectButtonClick" prefWidth="200.0" text="Create a New Project" />
         <Button fx:id="listConfigurationsButton" onAction="#onListConfigurationsButtonClick" prefWidth="200" text="List Configurations" />
         <Button fx:id="previousProjectsButton" onAction="#onPreviousProjectsButtonClick" prefWidth="200" text="Previous Projects" />
-        <Button fx:id="helpMenuButton" onAction="#onHelpButtonClick" prefWidth="200" text="Help Menu" />
+        <Button  fx:id="helpButtonEntrance" onAction="#showMainMenuHelp" text="Help Menu" prefWidth="200.0" styleClass="entrance-button-alt"/>
     </VBox>
 
 

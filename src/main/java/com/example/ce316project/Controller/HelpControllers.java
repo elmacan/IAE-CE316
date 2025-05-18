@@ -18,13 +18,12 @@ public class HelpControllers {
 
     public enum HelpTopic {
         CREATE_PROJECT,
-        LIST_CONFIG,
+
         MAIN_MENU,
-        PROJECT_LIST,
+
         SUBMISSION_RESULTS,
         SAVE_EDIT_CONFIG,
-        EDIT_CONFIGURATION,
-        VIEW_RESULTS
+        VIEW_CONFIG_DETAILS,
         // Diğer konular...
     }
 
@@ -37,11 +36,6 @@ public class HelpControllers {
                 title = "Create New Project - User Guide";
                 content = getCreateProjectHelpText();
                 break;
-            case LIST_CONFIG:
-                title = "Manage Configurations - User Guide";
-                content = getListConfigHelpText();
-                break;
-
             case SUBMISSION_RESULTS:
                 title = "Submission Results - User Guide";
                 content = getSubmissionResultsHelpText();
@@ -49,6 +43,14 @@ public class HelpControllers {
             case SAVE_EDIT_CONFIG:
                 title = "Add/Edit Configuration - User Guide";
                 content = getSaveEditConfigHelpText();
+                break;
+            case VIEW_CONFIG_DETAILS:
+                title = "View Configuration Details - Guide";
+                content = getViewConfigDetailsHelpText();
+                break;
+            case MAIN_MENU:
+                title = "Main Menu & Overview - Guide";
+                content = getMainMenuHelpText();
                 break;
 
             default:
@@ -108,31 +110,6 @@ public class HelpControllers {
         """;
     }
 
-    private String getListConfigHelpText() {
-        return """
-        ℹ️ Manage Configurations - User Guide
-
-        This page allows you to view, add, import, and export language configurations.
-        A configuration defines how the application handles source code for a specific
-        programming language or environment.
-
-        Key Elements of a Configuration:
-        - Language Name: A user-friendly name (e.g., "Java 17 OpenJDK").
-        - Language/Compiler Path: The command to invoke the compiler or interpreter (e.g., "javac", "python", "C:\\MinGW\\bin\\g++.exe"). If it's in the system PATH, just the command name is usually sufficient.
-        - Language Parameters (Compilation Flags): Arguments passed to the compiler (e.g., "-std=c++17", "-cp .").
-        - Run Command: The command to execute the compiled program or script. Use placeholders like {mainFile} for the student's primary source file (without extension) or {executableName} for the compiled output. Example for Java: "java {mainFile}". Example for C: "./{executableName}".
-        - Compiled: A checkbox indicating if the language requires a separate compilation step before running.
-
-        Actions:
-        - Add Configuration: Opens a form to define a new configuration.
-        - Import: Allows you to load configurations from a .json file. Useful for sharing setups.
-        - Export: (After selecting a configuration from the list) Saves the selected configuration to a .json file.
-        - Back: Returns to the previous screen.
-        - (Future: Edit/Delete existing configurations directly from the list).
-        """;
-    }
-
-
 
     private String getSubmissionResultsHelpText() {
         return """
@@ -187,6 +164,72 @@ public class HelpControllers {
              - `{mainFile}`: Student's main file name (no extension).
              - `{executableName}`: Name of compiled output (e.g., "main.exe").
         """;
+    }
+
+
+    private String getViewConfigDetailsHelpText() {
+        return """
+        View Configuration Details - Guide
+        
+        Language Name:
+           - The user-friendly name for this configuration.
+
+        Language Path (Compiler/Interpreter Path):
+           - The command or full file path for the language's compiler or interpreter
+             (e.g., "python").
+
+        Parameters (Compilation/Interpretation Flags):
+           - Any command-line arguments or flags passed to the compiler or interpreter.
+
+        Run Command:
+           - The command template used to execute the code.
+           - May use placeholders like `{mainFile}` (for the student's main file name)
+             or `{executableName}` (for compiled output).
+           - Example: "python {mainFile}.py", "java {mainFile}".
+
+        Is Compiled:
+           - "Yes": The language requires a separate compilation step.
+           - "No": The language is interpreted.
+        """;
+    }
+
+
+    // HelpControllers.java
+    private String getMainMenuHelpText() {
+        return """
+
+    Welcome to the Integrated Assignment Environment (IAE)!
+
+    This application helps you manage and evaluate student programming assignments.
+    From this Main Menu, you can navigate to various sections of the application.
+
+    --- AVAILABLE ACTIONS ---
+
+    🔘 Create New Project:
+       - Click this to start setting up a new programming assignment for evaluation.
+       - You will be guided to define project details, select language configurations,
+         specify student submission locations, and provide expected outputs.
+
+    🔘 List Configurations:
+       - Access this section to view, add, or modify settings for different
+         programming languages (e.g., Java, Python, C++). These configurations
+         determine how student code is compiled and executed.
+
+    🔘 Previous Projects:
+       - Select this option to view a list of projects you have created earlier.
+       - From the list, you can typically view project details and submission results.
+
+    🔘 Help (This Button/Icon):
+       - Displays this general help guide, providing an overview of the application
+         and navigation for the Main Menu.
+
+    --- GENERAL NAVIGATION TIPS ---
+    - Sidebar Icons (on other pages): Look for icons on the left sidebar of other screens
+      for quick navigation back to Home (), Configuration List (), Project List (), etc.
+    - Contextual Help (ℹ): On specific pages, an 'i' icon provides help relevant to that page.
+
+    We hope you find this application useful for managing your assignments:)
+    """;
     }
 
 
