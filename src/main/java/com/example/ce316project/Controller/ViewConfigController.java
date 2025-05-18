@@ -93,7 +93,7 @@ public class ViewConfigController {
     @FXML
     private void onDeleteClick(ActionEvent event) {
         IAEManager.configurationList.remove(configuration);
-        File configFile = new File(System.getProperty("user.home") + "/Documents/iae-app/configs.json");
+        File configFile = new File(IAEManager.CONFIG_PATH);
         FileManager.saveConfigurations(IAEManager.configurationList, configFile);
         onBackClick(event);
     }
