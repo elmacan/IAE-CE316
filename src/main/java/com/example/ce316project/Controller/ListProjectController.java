@@ -1,4 +1,6 @@
 package com.example.ce316project.Controller;
+import java.util.Objects; // Objects.requireNonNull için
+import javafx.scene.control.Alert;
 
 import com.example.ce316project.IAEManager;
 import com.example.ce316project.Project;
@@ -85,7 +87,7 @@ public class ListProjectController implements Initializable {
     }
 
 
-    @FXML
+   @FXML
     private void onBackButton(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -100,7 +102,7 @@ public class ListProjectController implements Initializable {
                     ((CreateProjectController) controller).refreshConfigurationComboBox();
                 }
             } else {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrance.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
                 Parent root = loader.load();
                 stage.setScene(new Scene(root));
             }
@@ -108,6 +110,8 @@ public class ListProjectController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 
     public void updateList(List<Project> updatedProjects) {
         projectListView.getItems().setAll(updatedProjects);

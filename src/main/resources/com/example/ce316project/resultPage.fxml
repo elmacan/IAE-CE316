@@ -26,7 +26,9 @@
          <Pane prefHeight="32.0" prefWidth="539.0">
             <children>
                 <FontAwesomeIconView glyphName="INFO_CIRCLE"
-                                     size="22"
+                                     size="18"
+                                     layoutX="14.0"
+                                     layoutY="25.0"
                 onMouseClicked="#showResultsHelpPage"
                 styleClass="icon-button" />
 
