@@ -74,6 +74,7 @@ public class CreateProjectController implements Initializable {
         }
     }
 
+
     @FXML
     private void onAddConfigButton(ActionEvent event) {
         try {
@@ -245,6 +246,7 @@ public class CreateProjectController implements Initializable {
             System.out.println("Beklenen çıktı dosya seçimi iptal edildi.");
         }
     }
+
 
 
     //@FXML
@@ -424,7 +426,38 @@ public class CreateProjectController implements Initializable {
         showAlert(alertType, "Karşılaştırma Sonucu", message.toString());
     }*/
 
+    @FXML
+    public void onIconHome(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
+            Parent root = loader.load();
 
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) createProjectButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the entrance page.");
+        }
+    }
+
+    @FXML
+    public void onIconConfigList(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) createProjectButton.getScene().getWindow();
+            IAEManager.sceneStack.push(stage.getScene());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the configuration list page.");
+        }
+    }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
