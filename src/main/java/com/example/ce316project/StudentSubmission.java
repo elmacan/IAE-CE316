@@ -201,11 +201,9 @@ public class StudentSubmission {
     public void run(Configuration configuration, String arguments, String expectedOutputContent) {
         File outputFile = new File(extractedDirectory, "student_output.txt");
         try {
-
             String runCommand = configuration.generateRunCommand(arguments);
             List<String> parts = new ArrayList<>(Arrays.asList(runCommand.split(" ")));
 
-            // 2) extractedDirectory içinden bulmamız gereken parçaları tespit et ve tam yola çevir
             File[] files = extractedDirectory.listFiles();
             if (files == null) files = new File[0];
 
@@ -228,50 +226,53 @@ public class StudentSubmission {
                 }
             }
 
-            if(!configuration.isCompiled()) {
+            if (!configuration.isCompiled()) {
                 String interpreter = configuration.getLanguagePath();
+                List<String> paramList = new ArrayList<>();
+
                 if (interpreter != null && !interpreter.isBlank()) {
-                    parts.add(0, interpreter);
+                    paramList.add(interpreter);
                 }
-                if (interpreter.equalsIgnoreCase("python")) {
-                    parts = new ArrayList<>();
-                    parts.add("python");
-                    if (arguments != null && !arguments.isBlank()) {
-                        parts.addAll(Arrays.asList(arguments.trim().split(" ")));
-                    }
-                } else {
-                    parts.add(0, interpreter);
+
+                if (configuration.getLanguageParameters() != null && !configuration.getLanguageParameters().isBlank()) {
+                    String[] flags = configuration.getLanguageParameters().trim().split("\\s+");
+                    paramList.addAll(Arrays.asList(flags));
                 }
+
+                if (runCommand != null && !runCommand.isBlank()) {
+                    paramList.add(runCommand.trim());
+                }
+
+                if (arguments != null && !arguments.isBlank()) {
+                    paramList.addAll(Arrays.asList(arguments.trim().split("\\s+")));
+                }
+
+                parts = paramList;
             }
 
             System.out.println("Final RUN command: " + String.join(" ", parts));
-
 
             ProcessBuilder pb = new ProcessBuilder(parts);
             pb.directory(extractedDirectory);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
-
             InputStream is = process.getInputStream();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(is, StandardCharsets.UTF_8)
-            );
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             StringBuilder outputBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
                 outputBuilder.append(line).append(System.lineSeparator());
             }
+
             int exitCode = process.waitFor();
             studentOutput = outputBuilder.toString();
-
 
             try (FileWriter writer = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
                 writer.write(studentOutput);
             }
-            this.actualOutputFile= outputFile;
-
+            this.actualOutputFile = outputFile;
 
             if (exitCode != 0) {
                 result.setRunSuccessfully(false);
@@ -299,6 +300,7 @@ public class StudentSubmission {
 
         boolean match = expected.equals(actual);
         result.setOutputMatches(match);
+
     }
 
            /* public boolean compareOutput(File expectedOutput) {
