@@ -12,6 +12,7 @@ public class HelpControllers {
     @FXML
     private Label helpTitleLabel;
 
+    private String currentLoadedTitle = "Help";
     @FXML
     private TextArea helpContentArea;
 
@@ -20,7 +21,8 @@ public class HelpControllers {
         LIST_CONFIG,
         MAIN_MENU,
         PROJECT_LIST,
-        SUBMISSION_RESULTS, // BU DEĞERİN VAR OLDUĞUNDAN EMİN OLUN
+        SUBMISSION_RESULTS,
+        SAVE_EDIT_CONFIG,
         EDIT_CONFIGURATION,
         VIEW_RESULTS
         // Diğer konular...
@@ -40,14 +42,25 @@ public class HelpControllers {
                 content = getListConfigHelpText();
                 break;
 
-            case SUBMISSION_RESULTS: // YENİ EKLENEN CASE
+            case SUBMISSION_RESULTS:
                 title = "Submission Results - User Guide";
                 content = getSubmissionResultsHelpText();
+                break;
+            case SAVE_EDIT_CONFIG:
+                title = "Add/Edit Configuration - User Guide";
+                content = getSaveEditConfigHelpText();
                 break;
 
             default:
                 System.out.println("Warning: Help topic '" + topic + "' not explicitly handled. Displaying default message.");
                 break;
+        }
+        this.currentLoadedTitle = title;
+
+        if (helpTitleLabel != null) {
+            helpTitleLabel.setText(title);
+        } else {
+            System.err.println("HelpControllers: helpTitleLabel is null! Check FXML fx:id for the title Label.");
         }
 
         if (helpTitleLabel != null) {
@@ -61,93 +74,41 @@ public class HelpControllers {
         }
     }
 
-    // --- CREATE PROJECT SAYFASI İÇİN DETAYLI YARDIM METNİ ---
+    public String getLoadedTitleForStage() {
+        return this.currentLoadedTitle;
+    }
+
+
     private String getCreateProjectHelpText() {
         return """
-        Create New Project - Step-by-Step Guide
-
-        This screen is where you define a new project to evaluate student programming assignments.
-        Carefully fill in each section to ensure accurate processing.
-
         --- SECTION 1: PROJECT IDENTIFICATION ---
-
-          Project Name:
            - Purpose: Give your project a unique and easily identifiable name.
-           - Example: "CS101 - Assignment 3 - Sorting Algorithms"
-           - Note: The system will prevent you from creating a project with an existing name.
-
+       
         --- SECTION 2: EXECUTION SETUP ---
-
-          Select Configuration:
-           - Purpose: Choose how the student submissions will be compiled (if applicable) and run.
-           - Options: Select from a predefined list of language configurations (e.g., "Java JDK 17", "Python 3.9", "GCC C++11").
+           - Purpose: Choose how the student submissions will be compiled and run.
+           - Options: Select from a predefined list of language configurations.
            - Need a new one?
              - Click the "Add" button directly next to the ComboBox. This will take you to the "Add New Configuration" screen.
-             - Alternatively, use the Gear icon () on the left sidebar to navigate to the "Manage Configurations" page.
-
+       
         --- SECTION 3: STUDENT SUBMISSIONS ---
-
-          Zip Directory:
-           - Purpose: Specify the location of student submissions.
            - Action: Click the "Browse" button. A directory chooser dialog will appear.
            - Requirement: Select the FOLDER that contains all student submissions. Each student's work MUST be in a separate .zip file located directly within this chosen folder (not in subfolders).
-           - Example: If you select "C:\\Users\\YourName\\Desktop\\Submissions", the system will look for .zip files like "C:\\Users\\YourName\\Desktop\\Submissions\\student1.zip", "C:\\Users\\YourName\\Desktop\\Submissions\\student2.zip", etc.
-
+          
         --- SECTION 4: PROGRAM INPUTS & OUTPUTS ---
-
-          Arguments (Optional):
-           - Purpose: Provide any command-line arguments that need to be passed to the student programs when they are executed.
-           - How to use:
              - Direct Input: Type the arguments directly into the text area. If there are multiple arguments, separate them with spaces, just as you would on a command line (e.g., "input.txt 100 verbose").
              - From File: Click the "Browse" button next to this field to select a .txt file. The content of this file (all lines) will be used as the arguments.
-           - Note: If the programs do not require any arguments, leave this field blank.
 
-          Expected Output File:
-           - Purpose: Provide the "gold standard" output. The system will compare each student's program output against the content of this file.
+          Expected Output File
            - Action: Click the "Browse" button. A file chooser dialog will appear.
            - Requirement: Select a plain text file (.txt) that contains the exact output your reference solution (or the assignment's correct solution) produces for the given inputs/arguments.
-           - Importance: This is crucial for automated grading and comparison.
 
         --- SECTION 5: ACTIONS ---
-
-        🔘 Page Buttons:
-           - Create Project:
              - Prerequisite: All mandatory fields (Project Name, Configuration, Zip Directory, Expected Output File) must be filled.
-             - Action: Clicking this initiates the project creation process:
-               1. The project settings are saved.
-               2. The system finds all .zip files in the specified Zip Directory.
-               3. Each .zip file is extracted.
-               4. Student code is compiled (if necessary) and run using the selected configuration and provided arguments.
-               5. The actual output from each student's program is captured.
-               6. (Comparison happens on the Results page or can be triggered after this step)
-             - Result: You will be notified if the project is created successfully or if there's an issue (e.g., duplicate project name).
-                        After successful creation, the "Compare" button usually becomes active.
-
-           - Cancel:
-             - Action: Discards any information entered on this page and returns you to the application's main entrance screen. No project will be created.
-
-           - Compare:
-             - Visibility: This button typically becomes visible and enabled only AFTER a project has been successfully created and its submissions have been processed (compiled/run).
-             - Action: Navigates you to the "Results Page," where you can see a detailed breakdown of each student's performance, including whether their output matched the expected output.
-
-        --- NAVIGATION (LEFT SIDEBAR) ---
-
-        ⚙️ Icons:
-           - Home : Takes you back to the main entrance page of the application.
-           - Config List : Opens the screen for managing language configurations (add, view, import, export).
-           - Project List : Shows a list of all previously created projects, allowing you to load and review them.
-           - Help : Displays this help guide for the current "Create Project" page.
-
-        --- TROUBLESHOOTING & TIPS ---
-       ️    Missing Information: If you miss any required field, the system will prompt you.
-      ️     Invalid Paths: Ensure that the Zip Directory and Expected Output File paths are correct and accessible.
-       ️    System PATH: For compiled languages, ensure the necessary compilers (e.g., `javac`, `gcc`, `g++`) and for interpreted languages, the interpreters (e.g., `python`) are correctly installed and added to your system's PATH environment variable. The application relies on these being callable from the command line.
-       ️    ZIP Structure: Student .zip files should ideally contain their source code directly, or in a clearly defined structure that your selected configuration's run command can handle.
+             -After successful creation, the "Compare" button usually becomes active.
         """;
     }
 
     private String getListConfigHelpText() {
-        // Önceki cevaptaki gibi veya daha detaylı bir metin
         return """
         ℹ️ Manage Configurations - User Guide
 
@@ -172,72 +133,60 @@ public class HelpControllers {
     }
 
 
-    // HelpControllers.java
-// ... (diğer getXXXHelpText metodlarınızdan sonra) ...
 
     private String getSubmissionResultsHelpText() {
         return """
-    📊 Submission Results - Understanding the Report
+        Submission Results - Quick Guide
+    
+          This page shows the evaluation outcome for each student's submission in the current project.
+    
+          --- TABLE COLUMNS ---
+    
+           Student ID:
+             - Identifier for the submission (usually from the ZIP file name).
+    
+           Compile Status:
+             - "Success": Code compiled without errors.
+             - "Fail": Compilation errors occurred.
+             - "N/A": No separate compilation step (e.g., Python).
+    
+           Run Status:
+             - "Success": Program executed(completion).
+             - "Fail": Program crashed during execution (runtime error).
+             - "N/A": Not run, typically due to a compile fail.
+    
+           Output Match:
+             - "Match/Pass": Student's output is identical to the expected output.
+             - "Mismatch/Fail": Student's output differs from the expected output.
+             - "N/A": Not compared, usually because the program didn't run successfully.
+            """;
+    }
 
-    This screen provides a detailed report of how each student's submission performed
-    after being processed by the system (compiled, run, and output compared).
+    private String getSaveEditConfigHelpText() {
+        return """
+         Add/Edit Configuration - Quick Guide
 
-    --- TABLE COLUMNS EXPLAINED ---
+        Language Name:
+           - A unique name for this setup.
+           - This name appears in project configuration dropdowns. (Required)
 
-    👤 Student Number / Submission ID:
-       - This column identifies the individual student or submission.
-       - Typically, this is derived from the name of the .zip file submitted by the student
-         (e.g., if the file was "12345.zip", this might show "12345").
+        Language Type:
+           - Choose the category:
+             - "Compiled": Needs a compile step (e.g., Java, C++).
+             - "Interpreted": Runs directly (e.g., Python).
 
-    🛠️ Compile Status:
-       - Indicates if the student's source code compiled successfully.
-       - "Success": The code compiled without any errors, and an executable (if applicable) was generated.
-       - "Fail": The compilation process encountered errors.
-         (Future Enhancement: Clicking or hovering might show specific compiler error messages).
-       - "N/A" (Not Applicable): This appears if the selected language configuration is for an
-         interpreted language (like Python) that doesn't have a separate, explicit compilation step
-         handled by an external compiler command.
+        Program Path:
+           - Command or full path to the compiler/interpreter (e.g., "javac", "python", "C:\\path\\to\\g++.exe").
+           - Use "Browse" to find the file.
 
-    🏃 Run Status:
-       - Shows whether the compiled program (or interpreted script) executed without runtime errors.
-       - "Success": The program started and ran to completion as expected.
-       - "Fail": The program started but crashed due to a runtime error (e.g., NullPointerException, division by zero, file not found error within the student's code, timeout).
-         (Future Enhancement: Clicking or hovering might show runtime error messages or logs).
-       - "N/A": This will typically appear if the "Compile Status" was "Fail," as an uncompiled
-         program cannot be run. It might also appear if the run command itself was invalid.
+        Parameters (Optional)
 
-    ⚖️ Output Match:
-       - This is the core of the evaluation. It compares the actual output produced by the
-         student's program against the "Expected Output File" you provided when creating the project.
-       - "Match" (or "Pass"): The student's program output is identical to the expected output.
-       - "Mismatch" (or "Fail"): The student's program output differs from the expected output.
-         Even a single character difference (including whitespace or line endings, depending on
-         the comparison logic) can result in a mismatch.
-       - "N/A": This usually appears if the "Run Status" was "Fail," meaning the program didn't
-         produce a complete output to compare, or if there was no expected output file defined.
-
-    --- ACTIONS & NAVIGATION ---
-
-    ⬅️ Back Button:
-       - Located at the bottom right of the screen.
-       - Clicking this button will take you back to the "Project List" screen, where you
-         selected this project to view its results.
-
-    ℹ️ Help Icon (This Icon):
-       - Displays this help information, explaining how to interpret the submission results table.
-
-    --- TIPS FOR INTERPRETATION ---
-    - Ideal Scenario: "Success" in Compile, "Success" in Run, and "Match" in Output.
-    - Compilation Failures: Usually syntax errors or missing dependencies in student code.
-    - Runtime Failures: Often logical errors, unhandled exceptions, or incorrect resource handling
-      within the student's program.
-    - Output Mismatches: Can be due to algorithmic errors, incorrect formatting, or subtle
-      differences in how the output is generated.
-
-    For a more in-depth analysis of a specific student's failure, you might need to
-    manually inspect their code and the error logs/outputs generated by the system,
-    if such detailed logging is available or has been implemented.
-    """;
+        Runner Command:
+           - Command to execute the code after compilation (if any).
+           - Use placeholders:
+             - `{mainFile}`: Student's main file name (no extension).
+             - `{executableName}`: Name of compiled output (e.g., "main.exe").
+        """;
     }
 
 

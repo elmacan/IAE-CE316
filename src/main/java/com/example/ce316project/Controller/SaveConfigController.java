@@ -8,13 +8,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -149,6 +152,78 @@ public class SaveConfigController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // SaveConfigController.java
+// ... (importlar aynı kalır) ...
+
+    @FXML
+    private void showSaveConfigHelpPage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/helpPages.fxml"));
+            Parent helpPageRoot = loader.load();
+
+            HelpControllers helpCtrl = loader.getController();
+            if (helpCtrl == null) {
+                // ... (hata yönetimi) ...
+                return;
+            }
+            helpCtrl.loadHelpContent(HelpControllers.HelpTopic.SAVE_EDIT_CONFIG);
+
+            Stage helpStage = new Stage();
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+
+            Window ownerWindow = null;
+            Node sourceNode = (Node) event.getSource();
+            if (languageField != null && languageField.getScene() != null && languageField.getScene().getWindow() != null) {
+                ownerWindow = languageField.getScene().getWindow();
+            } else if (sourceNode != null && sourceNode.getScene() != null && sourceNode.getScene().getWindow() != null) {
+                ownerWindow = sourceNode.getScene().getWindow();
+            }
+
+            if (ownerWindow != null) {
+                helpStage.initOwner(ownerWindow);
+            } else {
+                System.err.println(this.getClass().getSimpleName() + ": Could not determine owner window for help page.");
+            }
+
+            if (helpCtrl.getLoadedTitleForStage() != null) {
+                helpStage.setTitle(helpCtrl.getLoadedTitleForStage());
+            } else {
+                helpStage.setTitle("Help");
+            }
+
+            double helpWidth = 700;
+            double helpHeight = 400;
+            Scene helpScene = new Scene(helpPageRoot, helpWidth, helpHeight);
+            helpStage.setScene(helpScene);
+            helpStage.setResizable(true);
+
+            // --- DEĞİŞİKLİK BURADA ---
+            final Window finalOwnerWindow = ownerWindow; // ownerWindow'ı final bir değişkene kopyala
+
+            if (finalOwnerWindow != null) { // Lambda içinde finalOwnerWindow'ı kullan
+                helpStage.setOnShown(e -> {
+                    helpStage.setX(finalOwnerWindow.getX() + (finalOwnerWindow.getWidth() - helpStage.getWidth()) / 2);
+                    helpStage.setY(finalOwnerWindow.getY() + (finalOwnerWindow.getHeight() - helpStage.getHeight()) / 2);
+                });
+            } else {
+                helpStage.centerOnScreen();
+            }
+            // --- ---
+
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            // ... (hata yönetimi) ...
+        } // ...
+    }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

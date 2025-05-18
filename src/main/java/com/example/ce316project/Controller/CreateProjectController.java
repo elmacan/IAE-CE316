@@ -492,7 +492,7 @@ public class CreateProjectController implements Initializable {
 
 
     // ...
-    @FXML
+   /* @FXML
     private void showHelpPage(MouseEvent event) { // Bu metodun FXML'deki INFO_CIRCLE ikonunun onMouseClicked olayına bağlı olduğundan emin olun
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/helpPages.fxml")); // helpPages.fxml yolu
@@ -518,7 +518,101 @@ public class CreateProjectController implements Initializable {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Could not load the help page."); // showAlert metodunuzun olduğundan emin olun
         }
+    }*/
+
+
+    @FXML
+    private void showHelpPage(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/helpPages.fxml"));
+            Parent helpPageRoot = loader.load();
+
+            HelpControllers helpCtrl = loader.getController();
+            if (helpCtrl == null) {
+                System.err.println("CreateProjectController: Error - Could not get HelpController instance.");
+                showAlert(Alert.AlertType.ERROR, "Help Error", "Failed to load help controller.");
+                return;
+            }
+
+            // "Create Project" sayfası için spesifik yardım konusunu yükle
+            helpCtrl.loadHelpContent(HelpControllers.HelpTopic.CREATE_PROJECT);
+
+            // Yeni bir Stage (pencere) oluştur
+            Stage helpStage = new Stage();
+            helpStage.initModality(Modality.APPLICATION_MODAL); // Ana pencereyi bloke et
+
+            // Sahip pencereyi (owner) ayarla
+            Window ownerWindow = null;
+            Node sourceNode = null;
+
+            if (event != null && event.getSource() instanceof Node) {
+                sourceNode = (Node) event.getSource(); // Tıklanan ikon
+            }
+
+            // Önce olay kaynağından (tıklanan ikon) ana pencereyi almayı dene
+            if (sourceNode != null && sourceNode.getScene() != null && sourceNode.getScene().getWindow() != null) {
+                ownerWindow = sourceNode.getScene().getWindow();
+            }
+            // Eğer olay kaynağından alınamazsa, formdaki bilinen bir elemandan (projectNameField) almayı dene
+            else if (projectNameField != null && projectNameField.getScene() != null && projectNameField.getScene().getWindow() != null) {
+                ownerWindow = projectNameField.getScene().getWindow();
+            }
+            // Başka bir bilinen eleman üzerinden de fallback eklenebilir, örn: createProjectButton
+
+            if (ownerWindow != null) {
+                helpStage.initOwner(ownerWindow);
+            } else {
+                System.err.println(this.getClass().getSimpleName() + ": Could not determine owner window for help page. Centering on screen.");
+            }
+
+            // Pencere başlığını HelpController'dan al
+            if (helpCtrl.getLoadedTitleForStage() != null) {
+                helpStage.setTitle(helpCtrl.getLoadedTitleForStage());
+            } else {
+                helpStage.setTitle("Create Project - Help"); // Varsayılan başlık
+            }
+
+            // Yardım penceresi için istenen boyutlar
+            double helpWidth = 750;  // İstediğiniz genişlik
+            double helpHeight = 400; // İstediğiniz yükseklik (içeriğinize göre ayarlayın)
+            Scene helpScene = new Scene(helpPageRoot, helpWidth, helpHeight);
+            helpStage.setScene(helpScene);
+            helpStage.setResizable(true); // Kullanıcı boyutlandırabilsin
+
+            // Pencereyi göstermeden ÖNCE pozisyonunu ayarlamak için final değişken
+            final Window finalOwnerWindow = ownerWindow;
+
+            if (finalOwnerWindow != null) {
+                // Sahip pencerenin merkezine göre pozisyonla (pencere gösterildikten sonra)
+                helpStage.setOnShown(e -> {
+                    // Bu kontrol, pencere gösterildiğinde boyutların kesinleşmiş olmasını sağlar
+                    if (helpStage.isShowing() && finalOwnerWindow.isShowing()) {
+                        helpStage.setX(finalOwnerWindow.getX() + (finalOwnerWindow.getWidth() - helpStage.getWidth()) / 2);
+                        helpStage.setY(finalOwnerWindow.getY() + (finalOwnerWindow.getHeight() - helpStage.getHeight()) / 2);
+                    }
+                });
+            } else {
+                // Sahip pencere bulunamazsa ekranın ortasına yerleştir
+                helpStage.centerOnScreen();
+            }
+
+            helpStage.showAndWait(); // Pencere kapanana kadar bekle
+
+        } catch (IOException e) {
+            System.err.println("CreateProjectController: Error loading help page FXML - " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Help Error", "Could not load the help page.");
+        } catch (Exception e) { // Diğer olası hatalar için
+            System.err.println("CreateProjectController: Unexpected error showing help - " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Help Error", "An unexpected error occurred while showing help.");
+        }
     }
+    // --- ---
+
+
+
+
 // ...
 
 }

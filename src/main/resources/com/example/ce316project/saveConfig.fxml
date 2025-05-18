@@ -82,7 +82,7 @@
         </BorderPane>
       <Pane layoutX="-1.0" layoutY="-8.0" prefHeight="407.0" prefWidth="62.0" styleClass="bar">
          <children>
-            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="25.0" layoutY="41.0" size="16" />
+            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="25.0" layoutY="41.0" size="16"  onMouseClicked="#showSaveConfigHelpPage" styleClass="sidebar-icon" fill="white"/>
             <FontAwesomeIconView glyphName="HOME" layoutX="26.0" layoutY="180.0" onMouseClicked="#onIconHome" size="16.0" />
             <FontAwesomeIconView glyphName="COG" layoutX="26.0" layoutY="213.0" onMouseClicked="#onIconConfigList" size="16.0" />
             <FontAwesomeIconView glyphName="FOLDER" layoutX="26.0" layoutY="248.0" onMouseClicked="#onIconProjectlist" size="14" />
