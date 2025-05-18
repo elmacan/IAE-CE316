@@ -8,19 +8,20 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="350.0" prefWidth="750.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
+<AnchorPane prefHeight="350.0" prefWidth="750.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
 
     <children>
-        <BorderPane layoutX="84.0" prefHeight="425.0" prefWidth="666.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <BorderPane layoutX="84.0" layoutY="23.2" prefHeight="376.0" prefWidth="666.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="23.0">
 
             <center>
-                <VBox alignment="CENTER" prefHeight="358.0" prefWidth="665.0" spacing="15">
+                <VBox alignment="CENTER" prefHeight="330.0" prefWidth="666.0" spacing="15">
                     <padding>
                         <Insets bottom="20" left="20" right="20" top="50" />
                     </padding>
@@ -28,7 +29,10 @@
 
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Language:" />
-                        <TextField fx:id="languageField" prefHeight="25.0" prefWidth="297.0" />
+                        <TextField fx:id="languageField" prefHeight="25.0" prefWidth="297.0">
+                     <tooltip>
+                        <Tooltip text="Language Name is a label. Use it to name your configuration. It won’t affect how your code is compiled or run." />
+                     </tooltip></TextField>
                     </HBox>
 
 
@@ -45,22 +49,30 @@
                     </HBox>
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Program Path:" />
-                        <TextField fx:id="compilerPathField" prefHeight="25.0" prefWidth="300.0" />
+                        <TextField fx:id="compilerPathField" prefHeight="25.0" prefWidth="300.0">
+                     <tooltip>
+                        <Tooltip text="If it's in your system PATH, you can just use the command name (e.g., gcc, python)" />
+                     </tooltip></TextField>
                         <Button fx:id="browseCompilerButton" text="Browse" />
                     </HBox>
 
 
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Parameters:" />
-                        <TextField fx:id="sourceFileField" prefWidth="300" />
+                        <TextField fx:id="sourceFileField" prefWidth="300">
+                     <tooltip>
+                        <Tooltip text="Optional: Flags passed to the compiler/interpreter (e.g., -o main.exe )" />
+                     </tooltip></TextField>
                     </HBox>
 
 
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Runner Command:" />
-                        <TextField fx:id="runnerCommandField" prefWidth="300" />
+                        <TextField fx:id="runnerCommandField" prefWidth="300">
+                     <tooltip>
+                        <Tooltip text="For interpreted languages, enter only the file name (e.g. main.py).&#10;For compiled languages, enter the full command (e.g. java Main)." />
+                     </tooltip></TextField>
                     </HBox>
-               <Label prefHeight="18.0" prefWidth="234.0" text="e.g.  main.exe | main.py | java Main.java" textFill="#134b9e" />
 
 
 
@@ -82,12 +94,14 @@
         </BorderPane>
       <Pane layoutX="-1.0" layoutY="-8.0" prefHeight="407.0" prefWidth="62.0" styleClass="bar">
          <children>
-            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="25.0" layoutY="41.0" size="16"  onMouseClicked="#showSaveConfigHelpPage" styleClass="sidebar-icon" fill="white"/>
+            <FontAwesomeIconView fill="white" glyphName="INFO_CIRCLE" layoutX="25.0" layoutY="41.0" onMouseClicked="#showSaveConfigHelpPage" size="16" styleClass="sidebar-icon" />
             <FontAwesomeIconView glyphName="HOME" layoutX="26.0" layoutY="180.0" onMouseClicked="#onIconHome" size="16.0" />
             <FontAwesomeIconView glyphName="COG" layoutX="26.0" layoutY="213.0" onMouseClicked="#onIconConfigList" size="16.0" />
             <FontAwesomeIconView glyphName="FOLDER" layoutX="26.0" layoutY="248.0" onMouseClicked="#onIconProjectlist" size="14" />
          </children>
       </Pane>
+      <Label layoutX="99.0" layoutY="4.0" prefHeight="39.0" prefWidth="394.0" text="Please read the Info section before adding a configuration. " textFill="#1318b1" />
+      <FontAwesomeIconView glyphName="EXCLAMATION_TRIANGLE" layoutX="84.0" layoutY="28.0" selectionFill="#b91717" text="" />
     </children>
 
 

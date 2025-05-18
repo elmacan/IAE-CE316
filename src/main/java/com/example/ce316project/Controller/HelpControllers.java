@@ -144,6 +144,7 @@ public class HelpControllers {
          Add/Edit Configuration - Quick Guide
 
         Language Name:
+           - Not used during compilation or execution.
            - A unique name for this setup.
            - This name appears in project configuration dropdowns. (Required)
 
@@ -153,16 +154,42 @@ public class HelpControllers {
              - "Interpreted": Runs directly (e.g., Python).
 
         Program Path:
-           - Command or full path to the compiler/interpreter (e.g., "javac", "python", "C:\\path\\to\\g++.exe").
-           - Use "Browse" to find the file.
+           - If it's in your system PATH, you can just use the command name (e.g., gcc, python).
+           - Or use Browse to select the full path (e.g., C:\\Compilers\\gcc.exe)
 
         Parameters (Optional)
+            Extra command-line flags for the compiler/interpreter.
+            These are placed before the source files in compile commands.
+                Examples:
+                    C: -o main.exe
+                    Java: -d out
+                    Python: -O
 
         Runner Command:
-           - Command to execute the code after compilation (if any).
-           - Use placeholders:
-             - `{mainFile}`: Student's main file name (no extension).
-             - `{executableName}`: Name of compiled output (e.g., "main.exe").
+           For interpreted languages, enter only the file name (e.g. main.py)
+           For compiled languages, enter the full command (e.g. java Main).
+           
+           
+                🔹 C
+                Language [C]
+                Language Type [Compiled]
+                Program Path [gcc]
+                Parameters [-o main.exe]
+                Runner Command [main.exe]
+                
+                🔹 Java
+                Language [Java]
+                Language Type [Compiled]
+                Program Path [javac]
+                Parameters [-d out(Optional)]
+                Runner Command [java -cp out Main]
+                
+                🔹 Python
+                 Language [Python]
+                 Language Type [Interpreted]
+                 Program Path [python]
+                 Parameters	[-O (optional)]
+                 Runner Command	[main.py]
         """;
     }
 
