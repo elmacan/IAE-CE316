@@ -438,7 +438,7 @@ public class CreateProjectController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the entrance page.");
+            System.out.println("Navigation Error Failed to load the entrance page.");
         }
     }
 
@@ -455,7 +455,7 @@ public class CreateProjectController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the configuration list page.");
+            System.out.println("Navigation Error Failed to load the entrance page.");
         }
     }
     @FXML
@@ -471,7 +471,7 @@ public class CreateProjectController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the configuration list page.");
+            System.out.println("Navigation Error Failed to load the entrance page.");
         }
     }
 

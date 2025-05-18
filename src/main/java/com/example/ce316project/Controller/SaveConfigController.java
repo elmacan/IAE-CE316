@@ -4,6 +4,7 @@ import com.example.ce316project.Configuration;
 import com.example.ce316project.FileManager;
 import com.example.ce316project.IAEManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.Scene;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -146,6 +148,55 @@ public class SaveConfigController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onIconHome(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/entrancePage.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) saveConfigButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Navigation Error Failed to load the entrance page.");
+        }
+    }
+
+    @FXML
+    public void onIconConfigList(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listConfig.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) saveConfigButton.getScene().getWindow();
+            IAEManager.sceneStack.push(stage.getScene());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Navigation Error Failed to load the entrance page.");
+        }
+    }
+    @FXML
+    public void onIconProjectlist(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listProjects.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the new scene
+            Stage stage = (Stage) saveConfigButton.getScene().getWindow();
+            IAEManager.sceneStack.push(stage.getScene());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Navigation Error Failed to load the entrance page.");
         }
     }
 }

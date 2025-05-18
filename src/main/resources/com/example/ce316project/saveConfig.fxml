@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
@@ -10,15 +11,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
+<AnchorPane prefHeight="350.0" prefWidth="750.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
 
     <children>
-        <BorderPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <BorderPane layoutX="84.0" prefHeight="425.0" prefWidth="666.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
             <center>
-                <VBox alignment="CENTER" spacing="15">
+                <VBox alignment="CENTER" prefHeight="358.0" prefWidth="665.0" spacing="15">
                     <padding>
                         <Insets bottom="20" left="20" right="20" top="50" />
                     </padding>
@@ -58,7 +60,7 @@
                         <Label alignment="CENTER_RIGHT" prefWidth="150" text="Runner Command:" />
                         <TextField fx:id="runnerCommandField" prefWidth="300" />
                     </HBox>
-               <Label prefHeight="18.0" prefWidth="234.0" text="e.g.  main.exe | main.py | javac Main.java" textFill="#134b9e" />
+               <Label prefHeight="18.0" prefWidth="234.0" text="e.g.  main.exe | main.py | java Main.java" textFill="#134b9e" />
 
 
 
@@ -72,11 +74,20 @@
                         <Insets bottom="30" left="10" right="20" top="10" />
                     </padding>
                     <Button fx:id="cancelButton" onAction="#handleCancel" text="Cancel" />
+               <Pane prefHeight="26.0" prefWidth="437.0" />
                     <Button fx:id="saveConfigButton" text="Save Config" />
                 </HBox>
             </bottom>
 
         </BorderPane>
+      <Pane layoutX="-1.0" layoutY="-8.0" prefHeight="407.0" prefWidth="62.0" styleClass="bar">
+         <children>
+            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="25.0" layoutY="41.0" size="16" />
+            <FontAwesomeIconView glyphName="HOME" layoutX="26.0" layoutY="180.0" onMouseClicked="#onIconHome" size="16.0" />
+            <FontAwesomeIconView glyphName="COG" layoutX="26.0" layoutY="213.0" onMouseClicked="#onIconConfigList" size="16.0" />
+            <FontAwesomeIconView glyphName="FOLDER" layoutX="26.0" layoutY="248.0" onMouseClicked="#onIconProjectlist" size="14" />
+         </children>
+      </Pane>
     </children>
 
 
