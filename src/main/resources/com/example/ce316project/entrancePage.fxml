@@ -14,7 +14,7 @@
         </padding>
       <FontAwesomeIconView glyphName="GROUP" size="50" />
 
-        <Text style="-fx-font-size: 28px; -fx-font-weight: bold;" styleClass="text-yazi" text="The Integrated Assignment Enivronment" wrappingWidth="368.8992340564728" />
+        <Text style="-fx-font-size: 28px; -fx-font-weight: bold;" styleClass="text-yazi" text="The Integrated Assignment Environment" wrappingWidth="368.8992340564728" />
 
         <Button fx:id="createNewProjectButton" onAction="#onCreateNewProjectButtonClick" prefWidth="200.0" text="Create a New Project" />
         <Button fx:id="listConfigurationsButton" onAction="#onListConfigurationsButtonClick" prefWidth="200" text="List Configurations" />

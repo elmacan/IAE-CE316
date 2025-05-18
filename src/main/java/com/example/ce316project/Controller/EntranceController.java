@@ -57,15 +57,14 @@ public class EntranceController {
     }
     @FXML
     private void onPreviousProjectsButtonClick(ActionEvent event) {
-        try {
+        try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/listProjects.fxml"));
-            Parent root = loader.load();
+            Parent root= loader.load();
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Previous Projects");
-            stage.setScene(new Scene(root));
+            stage.setTitle("Project List");
             stage.show();
-        } catch (IOException e) {
+        }catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -73,15 +72,12 @@ public class EntranceController {
     private void onHelpButtonClick(ActionEvent event) {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/mainHelp.fxml"));
-            Parent root = loader.load();
+            Parent root= loader.load();
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-
-            stage.setTitle("Help Menu");
-            stage.setScene(new Scene(root));
+            stage.setTitle("Project List");
             stage.show();
-        }
-        catch (IOException e){
+        }catch(IOException e) {
             e.printStackTrace();
         }
     }
