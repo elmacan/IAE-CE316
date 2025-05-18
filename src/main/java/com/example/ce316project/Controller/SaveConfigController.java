@@ -37,8 +37,7 @@ public class SaveConfigController {
     @FXML private Button saveConfigButton;
 
     private Configuration editingConfig = null;
-
-    private static final String CONFIG_PATH = System.getProperty("user.home") + "/Documents/iae-app/configs.json";
+    
     //private static final File CONFIG_FILE = new File("C:\\Users\\msi\\IdeaProjects\\IAE-CE316\\configs.json"); hatıra kalsın eheh :D
 
     @FXML
@@ -121,7 +120,7 @@ public class SaveConfigController {
         }
     }
     private File getWritableConfigFile() throws Exception {
-        File writableFile = new File(CONFIG_PATH);
+        File writableFile = new File(IAEManager.CONFIG_PATH);
 
         // Check if the file already exists; if not, copy it from resources
         if (!writableFile.exists()) {
