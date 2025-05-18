@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.ce316project.Controller.ViewConfigController"
-      fx:id="rootVBox"
-      spacing="10" alignment="TOP_LEFT" >
-
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
-
-    <Label fx:id="configurationDetailsLabel"
-           text="Configuration Details"
-           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-
-    <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT"/>
-            <ColumnConstraints hgrow="ALWAYS"/>
-        </columnConstraints>
-
-        <Label text="Language Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <Label fx:id="languageNameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
-
-        <Label text="Language Path:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <Label fx:id="languagePathLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
-
-        <Label text="Compile Parameters:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <Label fx:id="languageParamsLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
-
-        <Label text="Run Command:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <Label fx:id="runCommandLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
-
-        <Label text="Is Compiled:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <Label fx:id="isCompiledLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
-    </GridPane>
-
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Edit" onAction="#onEditClick" />
-        <Button text="Delete" onAction="#onDeleteClick"/>
-        <Button text="Back" onAction="#onBackClick"/>
-    </HBox>
-</VBox>
-
+<AnchorPane prefHeight="250.0" prefWidth="451.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.ViewConfigController">
+   <children>
+      <VBox fx:id="rootVBox" alignment="TOP_LEFT" layoutX="44.0" prefHeight="274.0" prefWidth="484.0" spacing="10" stylesheets="@../../../styles/saveConfig.css">
+      
+          <padding>
+              <Insets bottom="20" left="20" right="20" top="20" />
+          </padding>
+      
+          <Label fx:id="configurationDetailsLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Configuration Details" />
+      
+          <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+              <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" />
+                  <ColumnConstraints hgrow="ALWAYS" />
+              </columnConstraints>
+      
+              <Label text="Language Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+              <Label fx:id="languageNameLabel" maxWidth="Infinity" styleClass="detailText" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      
+              <Label text="Language Path:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+              <Label fx:id="languagePathLabel" maxWidth="Infinity" styleClass="detailText" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      
+              <Label text="Parameters:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+              <Label fx:id="languageParamsLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      
+              <Label text="Run Command:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+              <Label fx:id="runCommandLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      
+              <Label text="Is Compiled:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+              <Label fx:id="isCompiledLabel" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+          </GridPane>
+         <Pane prefHeight="63.0" prefWidth="444.0" />
+      
+          <HBox prefHeight="66.0" prefWidth="444.0" spacing="10">
+              <Button onAction="#onEditClick" styleClass="detailButton" text="Edit" />
+              <Button onAction="#onDeleteClick" styleClass="detailButton" text="Delete" />
+              <Button onAction="#onBackClick" styleClass="detailButton" text="Back" />
+          </HBox>
+      </VBox>
+      <Pane layoutX="-2.0" layoutY="-2.0" prefHeight="281.0" prefWidth="46.0" styleClass="bar">
+         <children>
+            <FontAwesomeIconView glyphName="INFO_CIRCLE" layoutX="16.0" layoutY="35.0" size="16.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
