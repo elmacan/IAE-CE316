@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="350.0" prefWidth="750.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
+<AnchorPane prefHeight="350.0" prefWidth="750.0" stylesheets="@../../../styles/saveConfig.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project.Controller.SaveConfigController">
 
     <children>
         <BorderPane layoutX="84.0" layoutY="23.2" prefHeight="376.0" prefWidth="666.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="23.0">

@@ -19,10 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Window;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -80,6 +77,19 @@ public class SaveConfigController {
             String language = languageField.getText();
             String type = languageTypeComboBox.getValue();
             String compilerPath = compilerPathField.getText();
+
+            // validate compiler path if not empty
+            if (!compilerPath.isBlank() && !validateLanguagePath(compilerPath)) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Compiler/Interpreter",
+                        "The path you entered is not valid.\n\n");
+
+
+                compilerPathField.clear();
+                compilerPathField.requestFocus();
+                return; // stop save operation
+            }
+
+
             String parameters = sourceFileField.getText();
             String runnerCommand = runnerCommandField.getText();
             //boolean isCompiled = isCompiledCheckBox.isSelected();
@@ -119,6 +129,59 @@ public class SaveConfigController {
             e.printStackTrace();
         }
     }
+
+    private boolean validateLanguagePath(String languagePath) {
+        if (languagePath == null || languagePath.isBlank()) return false;
+
+        //Dosya uzantısı kontrolü
+        String[] disallowedExtensions = {".png", ".jpg", ".jpeg", ".pdf", ".doc", ".docx", ".xlsx", ".ppt", ".gif", ".bmp"};
+        for (String ext : disallowedExtensions) {
+            if (languagePath.toLowerCase().endsWith(ext)) {
+                return false;
+            }
+        }
+
+        File file = new File(languagePath);
+        if (file.exists() && file.isFile() && file.canExecute()) {
+            return true;
+        }
+
+        // Komut satırı üzerinden kontrol
+        try {
+            ProcessBuilder pb = new ProcessBuilder(languagePath, "--version");
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append(System.lineSeparator());
+            }
+
+            int exitCode = process.waitFor();
+            String out = output.toString().toLowerCase();
+
+            return exitCode == 0 &&
+                    out.length() > 0 &&
+                    !out.contains("not recognized") &&
+                    !out.contains("command not found") &&
+                    !out.contains("access is denied") &&
+                    !out.contains("error") &&
+                    !out.contains("cannot be found") &&
+                    !out.contains("microsoft") &&
+                    !out.contains("adobe") &&
+                    !out.contains("viewer") &&
+                    !out.contains("photo") &&
+                    !out.contains("image");
+        } catch (IOException | InterruptedException e) {
+            return false;
+        }
+    }
+
+
+
+
     private File getWritableConfigFile() throws Exception {
         File writableFile = new File(IAEManager.CONFIG_PATH);
 
