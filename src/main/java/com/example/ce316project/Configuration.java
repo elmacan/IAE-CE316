@@ -11,25 +11,23 @@ public class Configuration {
     private boolean isCompiled;   //true
     private String fileExtansion;
     public static List<String> sourceExtensions = new ArrayList<>(List.of(
-            ".c",     // C
-            ".cpp",   // C++
-            ".java",  // Java
-            ".py",    // Python
-            ".js",    // JavaScript
-            ".cs",    // C#
-            ".go",    // Go
-            ".rb",    // Ruby
-            ".php",   // PHP
-            ".ts",    // TypeScript
-            ".kt",    // Kotlin
-            ".swift", // Swift
-            ".rs",    // Rust
-            ".r",     // R
-            ".sh",    // Shell/Bash
-            ".pl",    // Perl
-            ".m",     // MATLAB
-            ".sql"    // SQL
+            ".c",      // C
+            ".cpp",    // C++
+            ".java",   // Java
+            ".py",     // Python
+            ".js",     // JavaScript (Node.js)
+            ".ts",     // TypeScript
+            ".rs",     // Rust
+            ".go",     // Go
+            ".kt",     // Kotlin
+            ".sh",     // Bash / Shell
+            ".php",    // PHP
+            ".pl",     // Perl
+            ".scala",  // Scala
+            ".pas",    // Pascal
+            ".jl"      // Julia
     ));
+
 
 
 

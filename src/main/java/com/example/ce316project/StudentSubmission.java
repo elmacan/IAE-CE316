@@ -131,7 +131,28 @@ public class StudentSubmission {
                 throw new IllegalStateException("No source files found! Compilation is not possible.");
             }
 
+            /*if (!configuration.isCompiled()) {
+                System.out.println("This language does not require compilation.");
+                result.setCompiledSuccessfully(true);
+                return;
+            }*/
+
             if (!configuration.isCompiled()) {
+                // Eğer yorumlanan bir config seçildiyse ama kaynak dosyalar derleyiciye aitse → uyar
+                List<String> compiledExtensions = List.of(".c", ".cpp", ".java", ".rs", ".go", ".kt", ".ts", ".pas", ".scala");
+
+                boolean hasCompiledFile = sourceFiles.stream()
+                        .anyMatch(file -> compiledExtensions.stream()
+                                .anyMatch(ext -> file.getName().toLowerCase().endsWith(ext)));
+
+                if (hasCompiledFile) {
+                    result.setCompiledSuccessfully(false);
+                    result.appendErrorLog("Config mismatch: Interpreted config selected, but compiled language files found.");
+                    System.out.println("Compile blocked: mismatched configuration (interpreted config + compiled files)");
+                    return;
+                }
+
+                // Gerçekten yorumlanan bir projeyse
                 System.out.println("This language does not require compilation.");
                 result.setCompiledSuccessfully(true);
                 return;
@@ -304,105 +325,6 @@ public class StudentSubmission {
         result.setOutputMatches(match);
     }
 
-           /* public boolean compareOutput(File expectedOutput) {
-                if (expectedOutput == null || actualOutputFile == null ||
-                        !expectedOutput.exists() || !actualOutputFile.exists()) {
-                    result.setOutputMatches(false);
-                    result.appendErrorLog("One or both output files are missing.");
-                    return false;
-                }
-
-                try (
-                        BufferedReader expectedReader = new BufferedReader(new FileReader(expectedOutput));
-                        BufferedReader actualReader = new BufferedReader(new FileReader(actualOutputFile))
-                ) {
-                    String expectedLine;
-                    String actualLine;
-
-                    while ((expectedLine = expectedReader.readLine()) != null && (actualLine = actualReader.readLine()) != null) {
-
-                        if (!expectedLine.trim().equals(actualLine.trim())) {
-                            result.setOutputMatches(false);
-                            result.appendErrorLog("Output does not match expected output.");
-                            return false;
-                        }
-                    }
-
-
-                    if (expectedReader.readLine() != null || actualReader.readLine() != null) {   //eğer dosyaların boyutları birbirinden farklıysa,
-                        result.setOutputMatches(false);                                           //yani birinin okuması daha önce biterse
-                        result.appendErrorLog("Output lengths are different.");
-                        return false;
-                    }
-
-                    result.setOutputMatches(true);
-                    return true;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    result.setOutputMatches(false);
-                    result.appendErrorLog("Comparison failed: " + e.getMessage());
-                    return false;
-                }
-            }*/
-
-
-
-
-    /*public boolean compareOutput(String expectedOutputContent) {
-        if (this.result == null) {
-            this.result = new Result();
-        }
-        this.result.clearErrorLog();
-
-        // 1. Girdi Kontrolleri
-        if (expectedOutputContent == null || expectedOutputContent.trim().isEmpty()) {
-            this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Beklenen çıktı boş ya da null.");
-            return false;
-        }
-
-        if (actualOutputFile == null) {
-            this.result.setOutputMatches(false);
-            this.result.appendErrorLog("actualOutputFile null.");
-            return false;
-        }
-
-        Path actualPath = actualOutputFile.toPath();
-        if (!Files.exists(actualPath) || !Files.isRegularFile(actualPath) || !Files.isReadable(actualPath)) {
-            this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Gerçek çıktı dosyası geçersiz veya okunamaz.");
-            return false;
-        }
-
-        // 2. Gerçekleşen Çıktıyı Oku
-        String actualContent;
-        try {
-            actualContent = Files.readString(actualPath, StandardCharsets.UTF_8);
-            if (actualContent.startsWith("\uFEFF")) {
-                actualContent = actualContent.substring(1);
-            }
-        } catch (IOException e) {
-            this.result.setOutputMatches(false);
-            this.result.appendErrorLog("actualOutputFile okunamadı: " + e.getMessage());
-            return false;
-        }
-
-        // 3. Normalleştirme (Whitespace ve BOM temizliği)
-        String cleanedExpected = expectedOutputContent.replace("\uFEFF", "").replaceAll("\\s+", "");
-        String cleanedActual = actualContent.replaceAll("\\s+", "");
-
-        // 4. Karşılaştır
-        if (cleanedExpected.equals(cleanedActual)) {
-            this.result.setOutputMatches(true);
-            return true;
-        } else {
-            this.result.setOutputMatches(false);
-            this.result.appendErrorLog("Çıktılar eşleşmiyor.\n--- Beklenen ---\n" + expectedOutputContent +
-                    "\n--- Gerçek ---\n" + actualContent);
-            return false;
-        }
-    }*/
 
     public boolean compareOutput(String expectedOutputContent) {
         if (this.result == null) {
