@@ -250,69 +250,6 @@ public class CreateProjectController implements Initializable {
 
 
 
-    //@FXML
-    //private void onRunButtonClick(ActionEvent event) {
-      // IAEController.currentProject.runAllSubmission();
-   // }
-
-
-   /* @FXML
-    private void onCompareButtonClick(ActionEvent event) {
-        if (IAEController.currentProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
-            return;
-        }
-
-        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
-        if (submissions == null || submissions.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Bu proje için hiç submission bulunamadı. Lütfen önce submission'ları çalıştırın.");
-            return;
-        }
-
-        String expectedOutput = IAEController.currentProject.getExpectedOutput();
-        if (expectedOutput == null || expectedOutput.trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Beklenen çıktı tanımlı değil. Lütfen proje ayarlarını kontrol edin.");
-            return;
-        }
-
-
-        StudentSubmission submission = submissions.get(0);
-        if (submission == null) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi null.");
-            return;
-        }
-
-        boolean comparisonResult = submission.compareOutput(expectedOutput);
-        String comparisonText;
-
-        if (comparisonResult) {
-            comparisonText = " Çıktı, projede tanımlanan beklenen çıktı ile eşleşiyor.\n\n"
-                    + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
-                    + "Öğrenci Çıktısı:\n" + submission.getOutput();
-        } else {
-            comparisonText = " Çıktı, projede tanımlanan beklenen çıktı ile eşleşmiyor.\n\n"
-                    + "Beklenen Çıktı:\n" + expectedOutput + "\n\n"
-                    + "Öğrenci Çıktısı:\n" + submission.getOutput();
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ResultPage.fxml"));
-            Parent root = loader.load();
-
-
-            Stage stage = new Stage();
-            stage.setTitle("Karşılaştırma Sonuçları");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Yükleme Hatası", "Sonuç sayfası yüklenirken bir hata oluştu.");
-        }
-
-    }*/
-
-
-
     @FXML
     private void onCompareButtonClick(ActionEvent event) {
         if (IAEManager.currentProject == null) {
@@ -341,12 +278,12 @@ public class CreateProjectController implements Initializable {
         System.out.println("Comparison process finished.");
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/ResultPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/resultPage.fxml"));
             Parent resultPageRoot = loader.load();
             ResultPageController resultController = loader.getController();
 
             if (resultController == null) {
-                System.err.println("Error: Could not get Controller for ResultPage.fxml.");
+                System.err.println("Error: Could not get Controller for resultPage.fxml.");
                 showAlert(Alert.AlertType.ERROR, "Controller Error", "Failed to load results page controller.");
                 return;
             }
@@ -375,60 +312,6 @@ public class CreateProjectController implements Initializable {
     }
 
 
-    /*@FXML
-    private void onCompareButtonClick(ActionEvent event) {
-        if (IAEController.currentProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Aktif proje bulunamadı. Lütfen bir proje oluşturun veya yükleyin.");
-            return;
-        }
-
-        List<StudentSubmission> submissions = IAEController.currentProject.getSubmissions();
-        if (submissions == null || submissions.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Karşılaştırma Uyarısı", "Bu proje için hiç submission bulunamadı. Lütfen önce submission'ları çalıştırın.");
-            return;
-        }
-
-        String expectedOutputPath = IAEController.currentProject.getExpectedOutput();
-        if (expectedOutputPath == null || expectedOutputPath.trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Bu proje için tanımlanmış beklenen çıktı yolu boş. Lütfen proje özelliklerini kontrol edin.");
-            return;
-        }
-
-        File expectedFile = new File(expectedOutputPath);
-        if (!expectedFile.exists()) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "Beklenen çıktı dosyası bulunamadı:\n" + expectedFile.getAbsolutePath());
-            return;
-        }
-
-        String expectedOutput;
-        try {
-            expectedOutput = Files.readString(expectedFile.toPath());
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Dosya Okuma Hatası", "Beklenen çıktı dosyası okunamadı:\n" + e.getMessage());
-            return;
-        }
-
-        StudentSubmission submission = submissions.get(0); // İleride seçim eklenebilir
-        if (submission == null) {
-            showAlert(Alert.AlertType.ERROR, "Karşılaştırma Hatası", "İlk submission nesnesi null.");
-            return;
-        }
-
-        boolean comparisonResult = submission.compareOutput(expectedOutput);
-        Result result = submission.getResult();
-
-        StringBuilder message = new StringBuilder();
-        message.append("Derleme: ").append(result.isCompiledSuccessfully() ? "✅" : "❌").append("\n");
-        message.append("Çalıştırma: ").append(result.isRunSuccessfully() ? "✅" : "❌").append("\n");
-        message.append("Çıktı Eşleşmesi: ").append(result.isOutputMatches() ? "✅" : "❌").append("\n");
-
-        if (!result.getErrorLog().isEmpty()) {
-            message.append("\nHatalar:\n").append(result.getErrorLog());
-        }
-
-        Alert.AlertType alertType = result.isOutputMatches() ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
-        showAlert(alertType, "Karşılaştırma Sonucu", message.toString());
-    }*/
 
     @FXML
     public void onIconHome(){
@@ -489,39 +372,6 @@ public class CreateProjectController implements Initializable {
         alert.showAndWait();
     }
 
-
-    // CreateProjectController.java
-// ...
-
-
-    // ...
-   /* @FXML
-    private void showHelpPage(MouseEvent event) { // Bu metodun FXML'deki INFO_CIRCLE ikonunun onMouseClicked olayına bağlı olduğundan emin olun
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ce316project/helpPages.fxml")); // helpPages.fxml yolu
-            Parent helpPageRoot = loader.load();
-
-            HelpControllers helpControllerInstance = loader.getController();
-
-            // "Create Project" sayfası için yardım konusunu belirt
-            helpControllerInstance.loadHelpContent(HelpControllers.HelpTopic.CREATE_PROJECT);
-
-            Stage helpStage = new Stage();
-            helpStage.setTitle("Help"); // Genel başlık, FXML içindeki Label daha spesifik olacak
-            helpStage.initModality(Modality.APPLICATION_MODAL);
-            // helpStage.initOwner(((Node)event.getSource()).getScene().getWindow()); // Opsiyonel
-
-            Scene helpScene = new Scene(helpPageRoot);
-            helpStage.setScene(helpScene);
-            helpStage.setResizable(true); // Boyutlandırılabilir
-            helpStage.showAndWait();
-
-        } catch (IOException e) {
-            System.err.println("Error loading help page: " + e.getMessage());
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the help page."); // showAlert metodunuzun olduğundan emin olun
-        }
-    }*/
 
 
     @FXML
@@ -611,12 +461,7 @@ public class CreateProjectController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Help Error", "An unexpected error occurred while showing help.");
         }
     }
-    // --- ---
 
-
-
-
-// ...
 
 }
 
