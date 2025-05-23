@@ -1,7 +1,7 @@
 # The Integrated Assignment Environment (IAE-CE316)
 
 **IAE** is a JavaFX-based application designed to automate the evaluation of student programming assignments. It simplifies the process of managing, compiling, running, and comparing student submissions against expected outputs. This project is developed as part of the **Programming Paradigm** course.
-
+- You can find Project Description [in this folder](docs/ProjectDescription.pdf).
 ---
 
 ## Features
@@ -20,6 +20,21 @@
     - Detailed user guides for creating projects, managing configurations, and viewing results.
 
 ---
+### 🖼 Screenshots
+
+You can find more screenshots [in this folder](docs/screenshots/).
+Here are a few main views of the application:
+
+#### Main Page
+<img src="docs/screenshots/entrancePage.PNG" width="600">
+
+
+#### Configuration Creation Page  
+<img src="docs/screenshots/saveConfig.PNG" width="600">
+
+#### Result Page
+<img src="docs/screenshots/studentsubmissions.PNG" width="600">
+
 
 ## ⚙️ How It Works
 
@@ -80,11 +95,15 @@ OR
 - If the program is installed and added to your system's environment variables, you can just write the command name (e.g., python, gcc).
   Otherwise, use the Browse button to provide the full path to the compiler or interpreter.
 
+- The system supports commands structured as:  
+  &lt;compiler path&gt; + &lt;parameters&gt; + &lt;source files&gt;
+
+- This system supports a wide range of popular compiled and interpreted programming languages, including:  
+  C, C++, Java, Python, Node.js, TypeScript, Rust, Go, Kotlin, Bash, PHP, Perl, Scala, Pascal, Julia
 
 🛈 Run command:
 - For interpreted languages, just enter the file name (e.g. main.py)
 - For compiled languages, enter the full command (e.g. java Main)
-
 
 
 
@@ -149,12 +168,6 @@ These files are automatically created when the application is used.
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Java 17+ or Java 23
-- Maven
-- JavaFX 17.0.6
-
 ### Build & Run
 
 ```bash
@@ -168,5 +181,5 @@ Or run directly via your IDE.
 
 ## 📄 License
 
-This project is for educational use only under the MIT License.
+This project is **not open-source** and is intended for educational demonstration only. 
 

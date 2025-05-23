@@ -142,7 +142,14 @@ public class HelpControllers {
     private String getSaveEditConfigHelpText() {
         return """
          Add/Edit Configuration - Quick Guide
-
+        
+        The system supports a wide range of popular compiled and interpreted programming languages, including:
+            C, C++, Java, Python, Node.js, TypeScript, Rust, Go, Kotlin, Bash, PHP, Perl, Scala, Pascal, Julia
+                
+        The system supports commands structured as:
+            <compiler path> + <parameters> + <source files>
+        
+        
         Language Name:
            - Not used during compilation or execution.
            - A unique name for this setup.

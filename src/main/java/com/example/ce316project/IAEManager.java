@@ -86,12 +86,11 @@ public class IAEManager extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
 
-        stage.setTitle("Integrated Application Environment");
+        stage.setTitle("The Integrated Assignment Environment");
         stage.setScene(scene);
         stage.show();
 
-        // Configuration configuration=new Configuration("c","gcc","-o elma.exe","elma.exe",true);
-        // Configuration config2=new Configuration("java","javac","","java Armut",true);
+
 
 
     }
